@@ -1,3 +1,5 @@
+#define NPY_SIMD 512
+#define NPY_SIMD_F64 1
 typedef __m512i v_s32;
 
 #define v_load_si128(a) _mm_loadu_si512((const __m512i*)(a))

@@ -1,1 +1,6 @@
 build*
+CMakeFiles*
+CMakeCache*
+*vcxproj*
+*.sln
+cmake_install.*

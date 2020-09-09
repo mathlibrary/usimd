@@ -1,3 +1,7 @@
+
+#define NPY_SIMD 128
+#define NPY_SIMD_F64 1
+
 typedef _m128i v_s32;
 
 #define v_load_si128(a) _mm_loadu_si128((const __m128i*)(a))

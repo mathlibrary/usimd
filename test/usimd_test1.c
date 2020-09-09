@@ -1,6 +1,5 @@
 #include<stdio.h>
 #include "../src/usimd.h"
-#define NPY_SIMD 0
 void usimd_add(const int *a, const int *b, int *c, int len)
 {
 #if NPY_SIMD
@@ -20,8 +19,7 @@ void usimd_add(const int *a, const int *b, int *c, int len)
 int main()
 {
 	dispatch();
-  #define NPY_SIMD 1
-  int a[8] = {1,2,3,4,5,6,7,8};
+	int a[8] = {1,2,3,4,5,6,7,8};
 	int b[8] = {1,2,3,4,5,6,7,8};
 	int c[8];
 	usimd_add(a, b, c, 8);

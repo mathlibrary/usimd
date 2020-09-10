@@ -4,3 +4,7 @@ CMakeCache*
 *vcxproj*
 *.sln
 cmake_install.*
+Demo.dir
+.vs
+x64
+Debug

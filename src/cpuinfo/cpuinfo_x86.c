@@ -1,4 +1,4 @@
-
+#include "cpuinfo_utils.h"
 enum v_x86_cpu_features
 {
     V_CPU_FEATURE_NONE = 0,
@@ -50,7 +50,7 @@ enum v_x86_cpu_features
     V_CPU_FEATURE_AVX512_ICL        = 106
 };
 
-int v_x86_cpu_have[107];
+
 
 #if defined(__x86_64__) || defined(__amd64__) || defined(__x86_64) || defined(_M_AMD64) || defined( __i386__ ) || defined(i386) || defined(_M_IX86)
 #ifdef _MSC_VER
@@ -105,34 +105,34 @@ v_cpu_cpuid(int reg[4], int func_id)
 #endif
 }
 
-static void
-v_x86_init_features(void)
+void
+v_init_features()
 {
-    memset(v_x86_cpu_have, 0, sizeof(v_x86_cpu_have[0]) * 107);
+    memset(v_cpu_have, 0, sizeof(v_cpu_have[0]) * 107);
 
     // validate platform support
     int reg[] = {0, 0, 0, 0};
     v_cpu_cpuid(reg, 0);
     if (reg[0] == 0) {
-       v_x86_cpu_have[V_CPU_FEATURE_MMX]  = 1;
-       v_x86_cpu_have[V_CPU_FEATURE_SSE]  = 1;
-       v_x86_cpu_have[V_CPU_FEATURE_SSE2] = 1;
+       v_cpu_have[V_CPU_FEATURE_MMX]  = 1;
+       v_cpu_have[V_CPU_FEATURE_SSE]  = 1;
+       v_cpu_have[V_CPU_FEATURE_SSE2] = 1;
        #ifdef defined(__x86_64__) || defined(__amd64__) || defined(__x86_64) || defined(_M_AMD64)
-           v_x86_cpu_have[V_CPU_FEATURE_SSE3] = 1;
+           v_cpu_have[V_CPU_FEATURE_SSE3] = 1;
        #endif
        return;
     }
 
     v_cpu_cpuid(reg, 1);
-    v_x86_cpu_have[V_CPU_FEATURE_MMX]    = (reg[3] & (1 << 23)) != 0;
-    v_x86_cpu_have[V_CPU_FEATURE_SSE]    = (reg[3] & (1 << 25)) != 0;
-    v_x86_cpu_have[V_CPU_FEATURE_SSE2]   = (reg[3] & (1 << 26)) != 0;
-    v_x86_cpu_have[V_CPU_FEATURE_SSE3]   = (reg[2] & (1 << 0))  != 0;
-    v_x86_cpu_have[V_CPU_FEATURE_SSSE3]  = (reg[2] & (1 << 9))  != 0;
-    v_x86_cpu_have[V_CPU_FEATURE_SSE41]  = (reg[2] & (1 << 19)) != 0;
-    v_x86_cpu_have[V_CPU_FEATURE_POPCNT] = (reg[2] & (1 << 23)) != 0;
-    v_x86_cpu_have[V_CPU_FEATURE_SSE42]  = (reg[2] & (1 << 20)) != 0;
-    v_x86_cpu_have[V_CPU_FEATURE_F16C]   = (reg[2] & (1 << 29)) != 0;
+    v_cpu_have[V_CPU_FEATURE_MMX]    = (reg[3] & (1 << 23)) != 0;
+    v_cpu_have[V_CPU_FEATURE_SSE]    = (reg[3] & (1 << 25)) != 0;
+    v_cpu_have[V_CPU_FEATURE_SSE2]   = (reg[3] & (1 << 26)) != 0;
+    v_cpu_have[V_CPU_FEATURE_SSE3]   = (reg[2] & (1 << 0))  != 0;
+    v_cpu_have[V_CPU_FEATURE_SSSE3]  = (reg[2] & (1 << 9))  != 0;
+    v_cpu_have[V_CPU_FEATURE_SSE41]  = (reg[2] & (1 << 19)) != 0;
+    v_cpu_have[V_CPU_FEATURE_POPCNT] = (reg[2] & (1 << 23)) != 0;
+    v_cpu_have[V_CPU_FEATURE_SSE42]  = (reg[2] & (1 << 20)) != 0;
+    v_cpu_have[V_CPU_FEATURE_F16C]   = (reg[2] & (1 << 29)) != 0;
 
     // check OSXSAVE
     if ((reg[2] & (1 << 27)) == 0)
@@ -141,70 +141,70 @@ v_x86_init_features(void)
     int xcr = v_cpu_getxcr0();
     if ((xcr & 6) != 6)
         return;
-    v_x86_cpu_have[V_CPU_FEATURE_AVX]    = (reg[2] & (1 << 28)) != 0;
-    if (!v_x86_cpu_have[V_CPU_FEATURE_AVX])
+    v_cpu_have[V_CPU_FEATURE_AVX]    = (reg[2] & (1 << 28)) != 0;
+    if (!v_cpu_have[V_CPU_FEATURE_AVX])
         return;
-    v_x86_cpu_have[V_CPU_FEATURE_FMA3]   = (reg[2] & (1 << 12)) != 0;
+    v_cpu_have[V_CPU_FEATURE_FMA3]   = (reg[2] & (1 << 12)) != 0;
 
     // second call to the cpuid to get extended AMD feature bits
     v_cpu_cpuid(reg, 0x80000001);
-    v_x86_cpu_have[V_CPU_FEATURE_XOP]    = (reg[2] & (1 << 11)) != 0;
-    v_x86_cpu_have[V_CPU_FEATURE_FMA4]   = (reg[2] & (1 << 16)) != 0;
+    v_cpu_have[V_CPU_FEATURE_XOP]    = (reg[2] & (1 << 11)) != 0;
+    v_cpu_have[V_CPU_FEATURE_FMA4]   = (reg[2] & (1 << 16)) != 0;
 
     // third call to the cpuid to get extended AVX2 & AVX512 feature bits
     v_cpu_cpuid(reg, 7);
-    v_x86_cpu_have[V_CPU_FEATURE_AVX2]   = (reg[1] & (1 << 5))  != 0;
-    if (!v_x86_cpu_have[V_CPU_FEATURE_AVX2])
+    v_cpu_have[V_CPU_FEATURE_AVX2]   = (reg[1] & (1 << 5))  != 0;
+    if (!v_cpu_have[V_CPU_FEATURE_AVX2])
         return;
     // detect AVX2 & FMA3
-    v_x86_cpu_have[V_CPU_FEATURE_FMA]    = v_x86_cpu_have[V_CPU_FEATURE_FMA3];
+    v_cpu_have[V_CPU_FEATURE_FMA]    = v_cpu_have[V_CPU_FEATURE_FMA3];
 
     // check AVX512 OS support
     if ((xcr & 0xe6) != 0xe6)
         return;
-    v_x86_cpu_have[V_CPU_FEATURE_AVX512F]  = (reg[1] & (1 << 16)) != 0;
-    v_x86_cpu_have[V_CPU_FEATURE_AVX512CD] = (reg[1] & (1 << 28)) != 0;
-    if (v_x86_cpu_have[V_CPU_FEATURE_AVX512F] && v_x86_cpu_have[V_CPU_FEATURE_AVX512CD]) {
+    v_cpu_have[V_CPU_FEATURE_AVX512F]  = (reg[1] & (1 << 16)) != 0;
+    v_cpu_have[V_CPU_FEATURE_AVX512CD] = (reg[1] & (1 << 28)) != 0;
+    if (v_cpu_have[V_CPU_FEATURE_AVX512F] && v_cpu_have[V_CPU_FEATURE_AVX512CD]) {
         // Knights Landing
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512PF]        = (reg[1] & (1 << 26)) != 0;
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512ER]        = (reg[1] & (1 << 27)) != 0;
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512_KNL]      = v_x86_cpu_have[V_CPU_FEATURE_AVX512ER] &&
-                                                         v_x86_cpu_have[V_CPU_FEATURE_AVX512PF];
+        v_cpu_have[V_CPU_FEATURE_AVX512PF]        = (reg[1] & (1 << 26)) != 0;
+        v_cpu_have[V_CPU_FEATURE_AVX512ER]        = (reg[1] & (1 << 27)) != 0;
+        v_cpu_have[V_CPU_FEATURE_AVX512_KNL]      = v_cpu_have[V_CPU_FEATURE_AVX512ER] &&
+                                                         v_cpu_have[V_CPU_FEATURE_AVX512PF];
         // Knights Mill
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512VPOPCNTDQ] = (reg[2] & (1 << 14)) != 0;
-        v_x86_cpu_have[V_CPU_FEATURE_AVX5124VNNIW]    = (reg[3] & (1 << 2))  != 0;
-        v_x86_cpu_have[V_CPU_FEATURE_AVX5124FMAPS]    = (reg[3] & (1 << 3))  != 0;
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512_KNM]      = v_x86_cpu_have[V_CPU_FEATURE_AVX512_KNL] &&
-                                                         v_x86_cpu_have[V_CPU_FEATURE_AVX5124FMAPS] &&
-                                                         v_x86_cpu_have[V_CPU_FEATURE_AVX5124VNNIW] &&
-                                                         v_x86_cpu_have[V_CPU_FEATURE_AVX512VPOPCNTDQ];
+        v_cpu_have[V_CPU_FEATURE_AVX512VPOPCNTDQ] = (reg[2] & (1 << 14)) != 0;
+        v_cpu_have[V_CPU_FEATURE_AVX5124VNNIW]    = (reg[3] & (1 << 2))  != 0;
+        v_cpu_have[V_CPU_FEATURE_AVX5124FMAPS]    = (reg[3] & (1 << 3))  != 0;
+        v_cpu_have[V_CPU_FEATURE_AVX512_KNM]      = v_cpu_have[V_CPU_FEATURE_AVX512_KNL] &&
+                                                         v_cpu_have[V_CPU_FEATURE_AVX5124FMAPS] &&
+                                                         v_cpu_have[V_CPU_FEATURE_AVX5124VNNIW] &&
+                                                         v_cpu_have[V_CPU_FEATURE_AVX512VPOPCNTDQ];
 
         // Skylake-X
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512DQ]        = (reg[1] & (1 << 17)) != 0;
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512BW]        = (reg[1] & (1 << 30)) != 0;
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512VL]        = (reg[1] & (1 << 31)) != 0;
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512_SKX]      = v_x86_cpu_have[V_CPU_FEATURE_AVX512BW] &&
-                                                         v_x86_cpu_have[V_CPU_FEATURE_AVX512DQ] &&
-                                                         v_x86_cpu_have[V_CPU_FEATURE_AVX512VL];
+        v_cpu_have[V_CPU_FEATURE_AVX512DQ]        = (reg[1] & (1 << 17)) != 0;
+        v_cpu_have[V_CPU_FEATURE_AVX512BW]        = (reg[1] & (1 << 30)) != 0;
+        v_cpu_have[V_CPU_FEATURE_AVX512VL]        = (reg[1] & (1 << 31)) != 0;
+        v_cpu_have[V_CPU_FEATURE_AVX512_SKX]      = v_cpu_have[V_CPU_FEATURE_AVX512BW] &&
+                                                         v_cpu_have[V_CPU_FEATURE_AVX512DQ] &&
+                                                         v_cpu_have[V_CPU_FEATURE_AVX512VL];
         // Cascade Lake
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512VNNI]      = (reg[2] & (1 << 11)) != 0;
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512_CLX]      = v_x86_cpu_have[V_CPU_FEATURE_AVX512_SKX] &&
-                                                         v_x86_cpu_have[V_CPU_FEATURE_AVX512VNNI];
+        v_cpu_have[V_CPU_FEATURE_AVX512VNNI]      = (reg[2] & (1 << 11)) != 0;
+        v_cpu_have[V_CPU_FEATURE_AVX512_CLX]      = v_cpu_have[V_CPU_FEATURE_AVX512_SKX] &&
+                                                         v_cpu_have[V_CPU_FEATURE_AVX512VNNI];
 
         // Cannon Lake
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512IFMA]      = (reg[1] & (1 << 21)) != 0;
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512VBMI]      = (reg[2] & (1 << 1))  != 0;
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512_CNL]      = v_x86_cpu_have[V_CPU_FEATURE_AVX512_SKX] &&
-                                                         v_x86_cpu_have[V_CPU_FEATURE_AVX512IFMA] &&
-                                                         v_x86_cpu_have[V_CPU_FEATURE_AVX512VBMI];
+        v_cpu_have[V_CPU_FEATURE_AVX512IFMA]      = (reg[1] & (1 << 21)) != 0;
+        v_cpu_have[V_CPU_FEATURE_AVX512VBMI]      = (reg[2] & (1 << 1))  != 0;
+        v_cpu_have[V_CPU_FEATURE_AVX512_CNL]      = v_cpu_have[V_CPU_FEATURE_AVX512_SKX] &&
+                                                         v_cpu_have[V_CPU_FEATURE_AVX512IFMA] &&
+                                                         v_cpu_have[V_CPU_FEATURE_AVX512VBMI];
         // Ice Lake
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512VBMI2]     = (reg[2] & (1 << 6))  != 0;
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512BITALG]    = (reg[2] & (1 << 12)) != 0;
-        v_x86_cpu_have[V_CPU_FEATURE_AVX512_ICL]      = v_x86_cpu_have[V_CPU_FEATURE_AVX512_CLX] &&
-                                                         v_x86_cpu_have[V_CPU_FEATURE_AVX512_CNL] &&
-                                                         v_x86_cpu_have[V_CPU_FEATURE_AVX512VBMI2] &&
-                                                         v_x86_cpu_have[V_CPU_FEATURE_AVX512BITALG] &&
-                                                         v_x86_cpu_have[V_CPU_FEATURE_AVX512VPOPCNTDQ];
+        v_cpu_have[V_CPU_FEATURE_AVX512VBMI2]     = (reg[2] & (1 << 6))  != 0;
+        v_cpu_have[V_CPU_FEATURE_AVX512BITALG]    = (reg[2] & (1 << 12)) != 0;
+        v_cpu_have[V_CPU_FEATURE_AVX512_ICL]      = v_cpu_have[V_CPU_FEATURE_AVX512_CLX] &&
+                                                         v_cpu_have[V_CPU_FEATURE_AVX512_CNL] &&
+                                                         v_cpu_have[V_CPU_FEATURE_AVX512VBMI2] &&
+                                                         v_cpu_have[V_CPU_FEATURE_AVX512BITALG] &&
+                                                         v_cpu_have[V_CPU_FEATURE_AVX512VPOPCNTDQ];
     }
 }
 #endif

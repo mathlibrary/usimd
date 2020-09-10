@@ -1,8 +1,9 @@
 #include<stdio.h>
-#include "../src/usimd.h"
+#include "usimd.h"
 void usimd_add(const int *a, const int *b, int *c, int len)
 {
 #if NPY_SIMD
+	printf("enter SIMD\n");
 	for (int i=0; i < len/4; i++) {
 		v_s32 v1 = v_load_si128(a+i*4);
 		v_s32 v2 = v_load_si128(b+i*4);

@@ -12,8 +12,6 @@ set(PROJECT_VERSION "1.0")
 aux_source_directory(. DIR_SRCS)
 # 添加 cpuinfo 子目录
 add_subdirectory(cpuinfo)
-# 添加 simd 子目录
-add_subdirectory(simd)
 # 生成链接库
 add_library (usimd ${DIR_SRCS})
 # 添加链接库

@@ -1,3 +1,4 @@
+#include "cpuinfo_utils.h"
 enum v_arm_cpu_features
 {
     // ARM
@@ -16,8 +17,6 @@ enum v_arm_cpu_features
     // ARMv8.2 single&half-precision multiply
     V_CPU_FEATURE_ASIMDFHM          = 7
 };
-
-int v_arm_cpu_have[8];
 
 #include <string.h>
 #include <stdio.h>
@@ -57,11 +56,9 @@ get_feature(char *search)
 	return(0);
 }
 
-
-static void
-v_arm_init_features(void) {
-    if(get_feature("neon")) v_arm_cpu_have[V_CPU_FEATURE_NEON] = 1;
-    if(get_feature("vfpv4")) v_arm_cpu_have[V_CPU_FEATURE_NEON_VFPV4] = 1;
-    if(get_feature("asimd")) v_arm_cpu_have[V_CPU_FEATURE_ASIMD] = 1;
+void v_init_features() {
+    if(get_feature("neon")) v_cpu_have[V_CPU_FEATURE_NEON] = 1;
+    if(get_feature("vfpv4")) v_cpu_have[V_CPU_FEATURE_NEON_VFPV4] = 1;
+    if(get_feature("asimd")) v_cpu_have[V_CPU_FEATURE_ASIMD] = 1;
 }
 

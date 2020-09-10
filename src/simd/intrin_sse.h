@@ -1,4 +1,4 @@
-
+#include <emmintrin.h>
 #define NPY_SIMD 128
 #define NPY_SIMD_F64 1
 

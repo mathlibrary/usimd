@@ -1,3 +1,4 @@
+#include <immintrin.h>
 #define NPY_SIMD 256
 #define NPY_SIMD_F64 1
 typedef __m256i v_s32;

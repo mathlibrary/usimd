@@ -1,3 +1,4 @@
+#include<immintrin.h>
 #define NPY_SIMD 512
 #define NPY_SIMD_F64 1
 typedef __m512i v_s32;

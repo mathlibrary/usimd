@@ -10,7 +10,7 @@ void v_cpu_init() {
       #define V_HAVE_AVX512F
     } else if(v_cpu_have[14] != 0) {
       printf("AVX2\n");
-      #define V_HAVE_AVX2 1
+      #define V_HAVE_AVX2
     } else if(v_cpu_have[3] != 0) {
       printf("SSE2\n");
       #define V_HAVE_SSE2

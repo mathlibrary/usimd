@@ -1,4 +1,4 @@
-
+#include<arm_neon.h>
 #define NPY_SIMD 128
 #ifdef __aarch64__
     #define NPY_SIMD_F64 1

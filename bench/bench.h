@@ -4,7 +4,6 @@
 #ifdef __CYGWIN32__
 #include <sys/time.h>
 #endif
-#include "common.h"
 
 #if defined(__WIN32__) || defined(__WIN64__)
 

@@ -8,3 +8,5 @@ Demo.dir
 .vs
 x64
 Debug
+*.exe
+*.o

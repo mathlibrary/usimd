@@ -1,6 +1,4 @@
-#include<stdio.h>
 #include <immintrin.h>
-#include "../bench/bench.h"
 double compute_pi_native(int dt) {
     double pi = 0.0;
     double delta = 1.0 / dt;
@@ -10,6 +8,7 @@ double compute_pi_native(int dt) {
     }
     return pi*4.0;
 }
+
 //SIMD
 double compute_pi_omp_avx(int dt) {
     double pi = 0.0;
@@ -81,19 +80,4 @@ double compute_pi_omp_avx_loop(int dt) {
    _mm256_store_pd(tmp, vpi);
    pi += tmp[0] + tmp[1] + tmp[2] + tmp[3];
    return pi * 4.0;*/
-}
-
-int main()
-{
-    int scale = 100*1024*1024;
-    begin();
-    printf("result: %f", compute_pi_native(100*1024*1024));
-    end(scale);
-    begin();
-    printf("result: %f\n", compute_pi_omp_avx(scale));
-    end(scale);
-    begin();
-    printf("result: %f\n", compute_pi_omp_avx_loop(scale));
-    end(scale);
-    return 0;
 }

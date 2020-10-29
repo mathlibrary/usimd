@@ -6,7 +6,7 @@
 #endif
 
 #if defined(__WIN32__) || defined(__WIN64__)
-
+#include <windows.h>
 #ifndef DELTA_EPOCH_IN_MICROSECS
 #define DELTA_EPOCH_IN_MICROSECS 11644473600000000ULL
 #endif
@@ -39,7 +39,7 @@ int gettimeofday(struct timeval *tv, void *tz){
 
 struct timeval start, stop;
 
-double getSeconds()
+double getsecs()
 {
     double time = (double)(stop.tv_sec - start.tv_sec) + 
     (double)((stop.tv_usec - start.tv_usec)) * 1.e-6;
@@ -52,4 +52,10 @@ void begin() {
 
 void end() {
     gettimeofday(&stop, (struct timezone*)0);
+}
+
+void getMFlops(int scale, double time) {
+  fprintf(stderr,
+	    " %10.2f MFlops %10.6f sec\n",
+	    4. * (double)scale / time * 1.e-6, time);
 }

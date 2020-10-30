@@ -1,7 +1,7 @@
 #!/bin/bash
 x86_platform="x86"
 arm_platform="arm"
-if [[ "$*" = ${x86_platform} ]]; then
+if [[ "$*" != ${arm_platform} ]]; then
 #    echo "SSE2 Open"
 #    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DNPY_HAVE_SSE2 -o main
 #    ./main.exe

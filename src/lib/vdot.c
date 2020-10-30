@@ -1,6 +1,6 @@
-//#include "common.h"
+#include "common.h"
 
-FLOAT usimd_dot(int n, FLOAT *x, int inc_x, FLOAT *y, int inc_y)
+FLOAT_T usimd_dot(int n, FLOAT_T *x, int inc_x, FLOAT_T *y, int inc_y)
 {
 	int i=0;
 	int ix=0,iy=0;
@@ -8,7 +8,7 @@ FLOAT usimd_dot(int n, FLOAT *x, int inc_x, FLOAT *y, int inc_y)
 #if defined(DSDOT)
 	double dot = 0.0 ;
 #else
-	FLOAT  dot = 0.0 ;
+	FLOAT_T  dot = 0.0 ;
 #endif
 
 	if ( n < 0 )  return(dot);

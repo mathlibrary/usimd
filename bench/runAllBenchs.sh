@@ -1,7 +1,7 @@
 #!/bin/bash
 x86_platform="x86"
 arm_platform="arm"
-if [[ "$1" = ${x86_platform} ]]; then
+if [[ "$1" != ${arm_platform} ]]; then
 #    echo "SSE2 Open"
 #    gcc bench.c -DNPY_HAVE_SSE2 -o bench
 #    ./bench.exe

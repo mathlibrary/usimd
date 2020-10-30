@@ -3,6 +3,7 @@
 #include"../src/lib/vpi.c"
 #include"../src/lib/vsum.c"
 #include"../src/lib/vdot.c"
+#include"../src/lib/vsqrt.c"
 
 void TestVadd(CuTest *tc) {
 	float input1[8] = {1,2,3,4,5,6,7,8};
@@ -37,11 +38,22 @@ void TestVdot(CuTest *tc) {
 	CuAssertDblEquals(tc,actual, expected, 1e-6);
 }
 
+void TestVsqrt(CuTest *tc) {
+	float input1[8] = {100,4,9,16,25,36,49,64};
+	usimd_sqrt(input1, 8);
+	float expected[] = {10,2,3,4,5,6,7,8};
+	for(int i=0;i<8;i++) 
+	{
+		CuAssertDblEquals(tc,input1[i], expected[i], 1e-6);
+	}
+}
+
 CuSuite* USIMDGetSuite() {
 	CuSuite* suite = CuSuiteNew();
 	SUITE_ADD_TEST(suite, TestVadd);
 	SUITE_ADD_TEST(suite, TestVPi);
 	SUITE_ADD_TEST(suite, TestVsum);
 	SUITE_ADD_TEST(suite, TestVdot);
+	SUITE_ADD_TEST(suite, TestVsqrt);
 	return suite;
 }

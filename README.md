@@ -1,4 +1,4 @@
-# USIMD-Best practices for platform-wide performance optimization
+# Best practices for cross platform performance optimization
 
 Background: As we all know, the compiler will automatically optimize the parallelizable code blocks according to the parallel instruction set of the platform, but this optimization limit is very large, in most cases it will not produce the best instruction pipeline, and cannot maximize the X86/ARM CPU Ability, so the current mainstream approach is to manually write assembly/Intrinsic to generate the optimal parallel code segment. However, writing a set of codes for each instruction set architecture is very poor in maintainability and scalability. As these codes increases,  
 The cost of community maintenance is getting higher, there is an urgent need for a general-purpose instruction set optimization technical solution that can be promoted. This project is the basically the fork of numpy's usimd work, The distribution mechanism has modified in order to seperate from numpy, The test system uses cuTest and the bench system born from openblas.

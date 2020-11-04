@@ -1,11 +1,10 @@
 # Best practices for cross platform performance optimization
 
-Background: As we all know, the compiler will automatically optimize the parallelizable code blocks according to the parallel instruction set of the platform, but this optimization limit is very large, in most cases it will not produce the best instruction pipeline, and cannot maximize the X86/ARM CPU Ability, so the current mainstream approach is to manually write assembly/Intrinsic to generate the optimal parallel code segment. However, writing a set of codes for each instruction set architecture is very poor in maintainability and scalability. As these codes increases,  
-The cost of community maintenance is getting higher, there is an urgent need for a general-purpose instruction set optimization technical solution that can be promoted. This project is the basically the fork of numpy's usimd work, The distribution mechanism has modified in order to seperate from numpy, The test system uses cuTest and the bench system born from openblas.
+Background: As we all know, the compiler will automatically optimize the parallelizable code blocks according to the parallel instruction set of the platform, but this optimization limit is very large, in most cases it will not produce the best instruction pipeline, and cannot maximize the X86/ARM CPU Ability, so the current mainstream approach is to manually write assembly/Intrinsic to generate the optimal parallel code segment. However, writing a set of codes for each instruction set architecture is very poor in maintainability and scalability. As these codes increases, The cost of community maintenance is getting higher, there is an urgent need for a general-purpose instruction set optimization technical solution that can be promoted. This project is the basically the fork of numpy's usimd work, The distribution mechanism has modified in order to seperate from numpy, The test system uses cuTest and the bench system born from openblas.
 
-## Origin: the beginning of the birth of USIMD
+## Origin: The birth of USIMD
 
-If the product of all elements of a vector is required, it is easy to write the following C language code
+If the product of all elements of a vector is required, it is easy to write the following C language code.
 
 ```c
 int MultiplyIntList(int const *l1, int n)
@@ -76,8 +75,7 @@ int MultiplyIntList(int const *l1, int n)
 }
 ```
 
-The performance of the code has also been improved on the X86 platform, but X86 is not limited to the SSE instruction set, there are also SSE2/SSE3/SSE4.1, followed by the doubling of the register size, and many instructions such as AVX2, AVX512, etc. 
-AVX512 has a serious [split version](https://en.wikipedia.org/wiki/AVX-512). It can be seen that fragmentation is very serious. Refer to the following picture:
+The performance of the code has also been improved on the X86 platform, but X86 is not limited to the SSE instruction set, there are also SSE2/SSE3/SSE4.1, followed by the doubling of the register size, and many instructions such as AVX2, AVX512, etc. AVX512 has a serious [split version](https://en.wikipedia.org/wiki/AVX-512). It can be seen that fragmentation is very serious. Refer to the following picture:
 
 ![](./Intel-SIMD.png)
 
@@ -143,12 +141,10 @@ int MultiplyIntList(int const *l1, int n)
 
 This piece of code can cross X86/ARM/PowerPC, and has got the best SIMD performance optimization on all platforms! ! !
 
-## Rise: USIMD grows
+## Rise: The grows of USIMD 
 
 Numpy is an open source numerical computing extension of Python. This tool can be used to store and process large matrices. It is much more efficient than Python's own nested list structure. It supports a large number of dimensional arrays and matrix operations. In addition, it also provides a large number of mathematical function libraries for array operations. It is more familiar to everyone. 
-[Numpy’s credit](https://numpy.org/case-studies/blackhole-image/) was generated for the first black hole photo above, and it is also widely used in machine learning image processing. Before the introduction of USIMD,
-there are a large number of optimized implementations of SSE and AVX. The maintenance of these codes has brought serious technical debt to the community. An important contributor to OpenCV [Sayed Adel](https://github.com/seiko2plus) brought universal intrinsics in order to improve the data parallelization efficiency in Numpy, he proposed [NEP38](https://numpy.org/neps/nep-0038-SIMD-optimizations.html) and implemented it at [Related 
-Function](https://github.com/numpy/numpy/pull/13516), you can find this in [document]( https://numpy.org/devdocs/reference/simd/simd-optimizations.html).
+[Numpy’s credit](https://numpy.org/case-studies/blackhole-image/) was generated for the first black hole photo above, and it is also widely used in machine learning image processing. Before the introduction of USIMD,there are a large number of optimized implementations of SSE and AVX. The maintenance of these codes has brought serious technical debt to the community. An important contributor to OpenCV [Sayed Adel](https://github.com/seiko2plus) brought universal intrinsics in order to improve the data parallelization efficiency in Numpy, he proposed [NEP38](https://numpy.org/neps/nep-0038-SIMD-optimizations.html) and implemented it at [Related Function](https://github.com/numpy/numpy/pull/13516), you can find this in [document]( https://numpy.org/devdocs/reference/simd/simd-optimizations.html).
 
 ## Benefit: USIMD
 

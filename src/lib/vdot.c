@@ -4,19 +4,13 @@ FLOAT_T usimd_dot(int n, FLOAT_T *x, int inc_x, FLOAT_T *y, int inc_y)
 {
 	int i=0;
 	int ix=0,iy=0;
-
-#if defined(DSDOT)
-	double dot = 0.0 ;
-#else
 	FLOAT_T  dot = 0.0 ;
-#endif
-
 	if ( n < 0 )  return(dot);
 
 	if ( (inc_x == 1) && (inc_y == 1) )
 	{
         int n1 = n & -4;
-#if NPY_SIMD && !defined(DSDOT)
+#if NPY_SIMD && !defined(DOUBLE_T)
         const int vstep = npyv_nlanes_f32;
         const int unrollx4 = n & (-vstep * 4);
         const int unrollx  = n &  -vstep;
@@ -51,7 +45,7 @@ FLOAT_T usimd_dot(int n, FLOAT_T *x, int inc_x, FLOAT_T *y, int inc_y)
             i += vstep;
         }
         dot = npyv_sum_f32(vsum0);
-#elif defined(DSDOT)
+#elif defined(DOUBLE_T)
 		for (; i < n1; i += 4)
 		{
 			dot += (double) y[i] * (double) x[i]
@@ -71,7 +65,7 @@ FLOAT_T usimd_dot(int n, FLOAT_T *x, int inc_x, FLOAT_T *y, int inc_y)
 		while(i < n)
 		{
 
-#if defined(DSDOT)
+#if defined(DOUBLE_T)
 			dot += (double) y[i] * (double) x[i] ;
 #else
 			dot += y[i] * x[i] ;
@@ -87,7 +81,7 @@ FLOAT_T usimd_dot(int n, FLOAT_T *x, int inc_x, FLOAT_T *y, int inc_y)
 	while(i < n)
 	{
 
-#if defined(DSDOT)
+#if defined(DOUBLE_T)
 		dot += (double) y[iy] * (double) x[ix] ;
 #else
 		dot += y[iy] * x[ix] ;

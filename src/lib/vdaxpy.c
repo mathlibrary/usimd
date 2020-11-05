@@ -1,12 +1,12 @@
 
-//#include "common.h"
-static void daxpy(int n, FLOAT *x, FLOAT *y, FLOAT *alpha)
+#include "common.h"
+static void daxpy(int n, FLOAT_T *x, FLOAT_T *y, FLOAT_T *alpha)
 {
     int n1 = n & -16;
     int register i = 0;
-    FLOAT a = *alpha;
+    FLOAT_T a = *alpha;
 #if NPY_SIMD
-#ifdef DOUBLE
+#ifdef DOUBLE_T
     npyv_f64 __alpha, tmp;
     __alpha = npyv_setall_f64(*alpha);
     const int vstep = npyv_nlanes_f64;

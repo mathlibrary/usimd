@@ -1,8 +1,12 @@
+/**/
 #include"../src/lib/vadd.c"
 #include"../src/lib/vpi.c"
 #include"../src/lib/vsum.c"
 #include"../src/lib/vdot.c"
 #include"../src/lib/vsqrt.c"
+
+#include"../src/lib/vmuladd.c"
+
 #include "bench.h"
 
 void bench_pi() 
@@ -29,18 +33,18 @@ void bench_pi()
 void bench_add() 
 {
     int scale = 1000000;
-    float *input1;
-    float *input2;
-    float *output;
+    FLOAT_T *input1;
+    FLOAT_T *input2;
+    FLOAT_T *output;
     int loops = 10;
     double timeg;
-    if (( input1 = (float *)malloc(sizeof(float) * scale)) == NULL){
+    if (( input1 = (FLOAT_T *)malloc(sizeof(FLOAT_T) * scale)) == NULL){
         fprintf(stderr,"Out of Memory!!\n");exit(1);
     }
-    if (( input2 = (float *)malloc(sizeof(float) * scale)) == NULL){
+    if (( input2 = (FLOAT_T *)malloc(sizeof(FLOAT_T) * scale)) == NULL){
         fprintf(stderr,"Out of Memory!!\n");exit(1);
     }
-    if (( output = (float *)malloc(sizeof(float) * scale)) == NULL){
+    if (( output = (FLOAT_T *)malloc(sizeof(FLOAT_T) * scale)) == NULL){
         fprintf(stderr,"Out of Memory!!\n");exit(1);
     }
     printf("bench add:\n");
@@ -59,10 +63,10 @@ void bench_add()
 void bench_sum() 
 {
     int scale = 1000000;
-    float *input;
+    FLOAT_T *input;
     int loops = 10;
     double timeg;
-    if (( input = (float *)malloc(sizeof(float) * scale)) == NULL){
+    if (( input = (FLOAT_T *)malloc(sizeof(FLOAT_T) * scale)) == NULL){
         fprintf(stderr,"Out of Memory!!\n");exit(1);
     }
     printf("bench sum:\n");
@@ -81,21 +85,21 @@ void bench_sum()
 void bench_dot() 
 {
     int scale = 1000000;
-    float *input1;
-    float *input2;
+    FLOAT_T *input1;
+    FLOAT_T *input2;
     int loops = 10;
     double timeg;
-    if (( input1 = (float *)malloc(sizeof(float) * scale)) == NULL){
+    if (( input1 = (FLOAT_T *)malloc(sizeof(FLOAT_T) * scale)) == NULL){
         fprintf(stderr,"Out of Memory!!\n");exit(1);
     }
-    if (( input2 = (float *)malloc(sizeof(float) * scale)) == NULL){
+    if (( input2 = (FLOAT_T *)malloc(sizeof(FLOAT_T) * scale)) == NULL){
         fprintf(stderr,"Out of Memory!!\n");exit(1);
     }
     printf("bench dot:\n");
     for (int l=0; l<loops; l++)
     {
         begin();
-        float actual = usimd_dot(8,input1, 1, input2, 1);
+        FLOAT_T actual = usimd_dot(8,input1, 1, input2, 1);
         end();
         timeg += getsecs();
     }
@@ -107,10 +111,10 @@ void bench_dot()
 void bench_sqrt() 
 {
     int scale = 1000000;
-    float *input;
+    FLOAT_T *input;
     int loops = 10;
     double timeg;
-    if (( input = (float *)malloc(sizeof(float) * scale)) == NULL){
+    if (( input = (FLOAT_T *)malloc(sizeof(FLOAT_T) * scale)) == NULL){
         fprintf(stderr,"Out of Memory!!\n");exit(1);
     }
     printf("bench sqrt:\n");
@@ -126,12 +130,52 @@ void bench_sqrt()
     printf("###############################\n");
 }
 
+void bench_muladd(int scale) 
+{
+    FLOAT_T *input1;
+    FLOAT_T *input2;
+    FLOAT_T *input3;
+    int loops = 10;
+    double timeg;
+    if (( input1 = (FLOAT_T *)malloc(sizeof(FLOAT_T) * scale)) == NULL){
+        fprintf(stderr,"Out of Memory!!\n");exit(1);
+    }
+    if (( input2 = (FLOAT_T *)malloc(sizeof(FLOAT_T) * scale)) == NULL){
+        fprintf(stderr,"Out of Memory!!\n");exit(1);
+    }
+    if (( input3 = (FLOAT_T *)malloc(sizeof(FLOAT_T) * scale)) == NULL){
+        fprintf(stderr,"Out of Memory!!\n");exit(1);
+    }
+    printf("bench muladd:\n");
+    for (int l=0; l<loops; l++)
+    {
+        begin();
+        usimd_muladd(input1, input2, input3, scale);
+        end();
+        timeg += getsecs();
+    }
+    timeg /= loops;
+    getMFlops(scale, timeg);
+    printf("###############################\n");
+}
+
 int main()
 {
+    int scale = 1e6;
+    int scalex2 = 2e6;
+    int scalex4 = 4e6;
+    int scalex8 = 8e6;
+    /*
+        start benching
     bench_pi();
     bench_add();
     bench_sum();
     bench_dot();
     bench_sqrt();
+    */
+    bench_muladd(scale);
+    bench_muladd(scalex2);
+    bench_muladd(scalex4);
+    bench_muladd(scalex8);
     return 0;
 }

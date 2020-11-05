@@ -5,11 +5,14 @@ if [[ "$*" != ${arm_platform} ]]; then
 #    echo "SSE2 Open"
 #    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DNPY_HAVE_SSE2 -o main
 #    ./main.exe
-    echo "AVX2 Open"
+    echo "AVX2 enabled + Single-precision"
     gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DNPY_HAVE_AVX -DNPY_HAVE_AVX2 -mavx2 -o main
     ./main.exe
+    echo "AVX2 enabled + Double-precision"
+    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DDOUBLE_T -DNPY_HAVE_AVX -DNPY_HAVE_AVX2 -mavx2 -o main
+    ./main.exe
 else
-    echo "Neon Open"
+    echo "Neon enabled"
     gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DNPY_HAVE_NEON -o main
     ./main
 fi

@@ -11,7 +11,7 @@ FLOAT_T usimd_sum(int n, FLOAT_T *x, int inc_x)
 	if (inc_x == 1)
 	{
 #if NPY_SIMD
-#ifdef DOUBLE
+#ifdef DOUBLE_T
 		const int vstep = npyv_nlanes_f64;
 		const int unrollx2 = n & (-vstep * 2);
 		const int unrollx = n & -vstep;

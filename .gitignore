@@ -10,3 +10,4 @@ x64
 Debug
 *.exe
 *.o
+settings.json

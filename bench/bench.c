@@ -146,7 +146,7 @@ void bench_muladd(int scale)
     if (( input3 = (FLOAT_T *)malloc(sizeof(FLOAT_T) * scale)) == NULL){
         fprintf(stderr,"Out of Memory!!\n");exit(1);
     }
-    printf("bench muladd:\n");
+    printf("bench muladd with scale: %d\n", scale);
     for (int l=0; l<loops; l++)
     {
         begin();
@@ -167,12 +167,13 @@ int main()
     int scalex8 = 8e6;
     /*
         start benching
+    */
     bench_pi();
     bench_add();
     bench_sum();
     bench_dot();
     bench_sqrt();
-    */
+    
     bench_muladd(scale);
     bench_muladd(scalex2);
     bench_muladd(scalex4);

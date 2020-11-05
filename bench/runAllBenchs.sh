@@ -54,9 +54,10 @@ function NEONFloatBench() {
 
 function main() {
     if [[ "$1" != ${arm_platform} ]]; then
-        #AVX2FloatBench
-        X86BaselineDoubleBench
-        AVX2DoubleBench
+        X86BaselineFloatBench
+        AVX2FloatBench
+        #X86BaselineDoubleBench
+        #AVX2DoubleBench
     else
         NEONFloatBench
     fi

@@ -71,11 +71,11 @@ void bench_dot(int scale)
     FLOAT_T *input2 = getFinput(scale);
     int loops = 10;
     double timeg;
-    printf("bench dot:\n");
+    printf("bench dot with scale %d:\n", scale);
     for (int l=0; l<loops; l++)
     {
         begin();
-        FLOAT_T actual = usimd_dot(8,input1, 1, input2, 1);
+        FLOAT_T actual = usimd_dot(scale,input1, 1, input2, 1);
         end();
         timeg += getsecs();
     }
@@ -150,10 +150,12 @@ int main()
     bench_pi();
     bench_add(scale);
     bench_sum(scale);
-    bench_dot(scale);
     bench_sqrt(scale);
     bench_muladd(scale);
-    */
     bench_axpy(scalex8);
+    */
+    bench_dot(scalex2);
+    bench_dot(scalex4);
+    bench_dot(scalex8);
     return 0;
 }

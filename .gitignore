@@ -11,3 +11,4 @@ Debug
 *.exe
 *.o
 settings.json
+*.vscode

@@ -26,9 +26,15 @@ function ARMBaselineDoubleBench() {
     ./bench.exe
 }
 
-function SSE2Bench() {
+function SSE2FloatBench() {
     echo "SSE2 enabled + float"
     gcc bench.c -DNPY_HAVE_SSE2 -mavx2 -o bench
+    ./bench.exe
+}
+
+function SSE2DoubleBench() {
+    echo "SSE2 enabled + double"
+    gcc bench.c -DDOUBLE_T -DNPY_HAVE_SSE2 -DNPY_HAVE_FMA3 -DNPY_HAVE_SSE3 -mfma -o bench
     ./bench.exe
 }
 
@@ -50,14 +56,17 @@ function NEONFloatBench() {
     ./bench
 }
 
-
-
 function main() {
     if [[ "$1" != ${arm_platform} ]]; then
-        X86BaselineFloatBench
-        AVX2FloatBench
+        #X86BaselineDoubleBench
+        #SSE2DoubleBench
         #X86BaselineDoubleBench
         #AVX2DoubleBench
+        
+        #X86BaselineFloatBench
+        #SSE2FloatBench
+        X86BaselineFloatBench
+        AVX2FloatBench
     else
         NEONFloatBench
     fi

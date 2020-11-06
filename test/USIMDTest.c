@@ -7,6 +7,7 @@
 #include"../src/lib/vsum.c"
 #include"../src/lib/vdot.c"
 #include"../src/lib/vsqrt.c"
+#include "../src/lib/vdaxpy.c"
 
 void TestVadd(CuTest *tc) {
 	FLOAT_T input1[8] = {1,2,3,4,5,6,7,8};
@@ -63,6 +64,18 @@ void TestVmuladd(CuTest *tc) {
 	}
 }
 
+void TestVdaxpy(CuTest *tc) {
+	FLOAT_T input1[16] = {1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8};
+	FLOAT_T input2[16] = {1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8};
+	FLOAT_T alpha = 2;
+	usimd_daxpy(16, input1, input2,&alpha);
+	FLOAT_T expected[16] = {3,6,9,12,15,18,21,24,3,6,9,12,15,18,21,24};
+	for(int i=0;i<16;i++)
+	{
+		CuAssertDblEquals(tc,expected[i],input2[i] , 1e-6);
+	}
+}
+
 CuSuite* USIMDGetSuite() {
 	CuSuite* suite = CuSuiteNew();
 	SUITE_ADD_TEST(suite, TestVadd);
@@ -71,5 +84,6 @@ CuSuite* USIMDGetSuite() {
 	SUITE_ADD_TEST(suite, TestVsum);
 	SUITE_ADD_TEST(suite, TestVdot);
 	SUITE_ADD_TEST(suite, TestVsqrt);
+	SUITE_ADD_TEST(suite, TestVdaxpy);
 	return suite;
 }

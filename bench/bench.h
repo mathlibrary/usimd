@@ -58,4 +58,17 @@ void getMFlops(int scale, double time) {
   fprintf(stderr,
 	    " %10.2f MFlops %10.6f sec\n",
 	    4. * (double)scale / time * 1.e-6, time);
+  printf("###############################\n");
+}
+
+FLOAT_T * getFinput(int scale) {
+    FLOAT_T *input;
+    if (( input = (FLOAT_T *)malloc(sizeof(FLOAT_T) * scale)) == NULL){
+        fprintf(stderr,"Out of Memory!!\n");exit(1);
+    }
+    for (int i = 0; i < scale; i++)
+    {
+      input[i] = ((FLOAT_T)rand() / (FLOAT_T)RAND_MAX) - 0.5;
+    }
+    return input;
 }

@@ -1,48 +1,68 @@
 
 #include "common.h"
-static void daxpy(int n, FLOAT_T *x, FLOAT_T *y, FLOAT_T *alpha)
+#include "../simd/simd.h"
+
+void usimd_daxpy(int n, FLOAT_T *data0, FLOAT_T *data1, FLOAT_T *alpha)
 {
-    int n1 = n & -16;
-    int register i = 0;
+    int i = n;
     FLOAT_T a = *alpha;
 #if NPY_SIMD
 #ifdef DOUBLE_T
-    npyv_f64 __alpha, tmp;
-    __alpha = npyv_setall_f64(*alpha);
-    const int vstep = npyv_nlanes_f64;
-    for (; i < n; i += vstep)
-    {
-        tmp = npyv_muladd_f64(__alpha, npyv_load_f64(x + i), npyv_load_f64(y + i));
-        npyv_storeu_f64(y + i, tmp);
-    }
+	int vstep = npyv_nlanes_f64;
+	int vstepx4 = vstep*4;
+    npyv_f64 __alpha = npyv_setall_f64(*alpha);
+	for (; i >= vstepx4; i -= vstepx4, data0 += vstepx4, data1 += vstepx4) {
+        npyv_f64 a0 = npyv_load_f64(data0);
+		npyv_f64 b0 = npyv_load_f64(data1);
+        npyv_f64 a1 = npyv_load_f64(data0 + vstep);
+		npyv_f64 b1 = npyv_load_f64(data1 + vstep);
+        npyv_f64 a2 = npyv_load_f64(data0 + vstep * 2);
+		npyv_f64 b2 = npyv_load_f64(data1 + vstep * 2);
+		npyv_f64 a3 = npyv_load_f64(data0 + vstep * 3);
+		npyv_f64 b3 = npyv_load_f64(data1 + vstep * 3);
+		npyv_f64 ab0 = npyv_muladd_f64(__alpha, a0, b0);
+        npyv_f64 ab1 = npyv_muladd_f64(__alpha, a1, b1);
+        npyv_f64 ab2 = npyv_muladd_f64(__alpha, a2, b2);
+        npyv_f64 ab3 = npyv_muladd_f64(__alpha, a3, b3);
+		npyv_store_f64(data1 , ab0);
+		npyv_store_f64(data1 + vstep, ab1);
+		npyv_store_f64(data1 + vstep * 2, ab2);
+        npyv_store_f64(data1 + vstep * 3, ab3);
+	}
 #else
-    npyv_f32 __alpha, tmp;
-    __alpha = npyv_setall_f32(*alpha);
-    const int vstep = npyv_nlanes_f32;
-    for (; i < n; i += vstep)
-    {
-        tmp = npyv_muladd_f32(__alpha, npyv_load_f32(x + i), npyv_load_f32(y + i));
-        npyv_storeu_f32(y + i, tmp);
-    }
+	int vstep = npyv_nlanes_f32;
+	int vstepx4 = vstep*4;
+    npyv_f32 __alpha = npyv_setall_f32(*alpha);
+	for (; i >= vstepx4; i -= vstepx4, data0 += vstepx4, data1 += vstepx4) {
+        npyv_f32 a0 = npyv_load_f32(data0);
+		npyv_f32 b0 = npyv_load_f32(data1);
+        npyv_f32 a1 = npyv_load_f32(data0 + vstep);
+		npyv_f32 b1 = npyv_load_f32(data1 + vstep);
+        npyv_f32 a2 = npyv_load_f32(data0 + vstep * 2);
+		npyv_f32 b2 = npyv_load_f32(data1 + vstep * 2);
+		npyv_f32 a3 = npyv_load_f32(data0 + vstep * 3);
+		npyv_f32 b3 = npyv_load_f32(data1 + vstep * 3);
+		npyv_f32 ab0 = npyv_muladd_f32(__alpha, a0, b0);
+        npyv_f32 ab1 = npyv_muladd_f32(__alpha, a1, b1);
+        npyv_f32 ab2 = npyv_muladd_f32(__alpha, a2, b2);
+        npyv_f32 ab3 = npyv_muladd_f32(__alpha, a3, b3);
+		npyv_store_f32(data1 , ab0);
+		npyv_store_f32(data1 + vstep, ab1);
+		npyv_store_f32(data1 + vstep * 2, ab2);
+        npyv_store_f32(data1 + vstep * 3, ab3);
+	}
 #endif
 #else
-    while (i < n)
+    for (; i >= 4; i -= 4, data0 += 4, data1 += 4)
     {
-        y[i] += a * x[i];
-        y[i + 1] += a * x[i + 1];
-        y[i + 2] += a * x[i + 2];
-        y[i + 3] += a * x[i + 3];
-        y[i + 4] += a * x[i + 4];
-        y[i + 5] += a * x[i + 5];
-        y[i + 6] += a * x[i + 6];
-        y[i + 7] += a * x[i + 7];
-        i += 8;
+        data1[0] += a * data0[0];
+        data1[1] += a * data0[1];
+        data1[2] += a * data0[2];
+        data1[3] += a * data0[3];
     }
 #endif
-    i = n1;
-    while (i < n)
+    for (; i > 0; --i, ++data0, ++data1)
     {
-        y[i] += a * x[i];
-        i++;
+        *data1 += a * (*data0);
     }
 }

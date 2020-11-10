@@ -10,7 +10,7 @@ FLOAT_T usimd_sum(int n, FLOAT_T *x, int inc_x)
 	n *= inc_x;
 	if (inc_x == 1)
 	{
-#if NPY_SIMD && (!defined(DOUBLE_T) || (defined(DOUBLE_T) && NPY_SIMD_F64 && NPY_SIMD > 128) )
+#if NPY_SIMD && VEC_LT256
 #if defined(DOUBLE_T)
 		const int vstep = npyv_nlanes_f64;
 		const int unrollx4 = n & (-vstep * 4);

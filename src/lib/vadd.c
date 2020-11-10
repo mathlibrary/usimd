@@ -5,7 +5,7 @@
 void usimd_add(const FLOAT_T *a, const FLOAT_T *b, FLOAT_T *c, int len)
 {
     int i=0;
-#if NPY_SIMD
+#if NPY_SIMD && VEC_LT256
 #ifdef DOUBLE_T
 	int vsteps = npyv_nlanes_f64;
 	int n = len & -vsteps;

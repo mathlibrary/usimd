@@ -12,7 +12,10 @@ if [[ "$*" != ${arm_platform} ]]; then
     gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DDOUBLE_T -DNPY_HAVE_AVX -DNPY_HAVE_AVX2 -mavx2 -o main
     ./main.exe
 else
-    echo "Neon enabled"
-    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DNPY_HAVE_NEON -o main
-    ./main
+    echo "Neon enabled + Single-precision"
+    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DNPY_HAVE_NEON -o main.o
+    ./main.o
+    echo "Neon enabled + Double-precision"
+    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DDOUBLE_T -DNPY_HAVE_NEON -o main.o
+    ./main.o
 fi

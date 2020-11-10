@@ -1,33 +1,11 @@
 /**/
 #include"../src/lib/vadd.c"
-#include"../src/lib/vpi.c"
 #include"../src/lib/vsum.c"
 #include"../src/lib/vdot.c"
-#include"../src/lib/vsqrt.c"
 #include"../src/lib/vmuladd.c"
 #include"../src/lib/vdaxpy.c"
 
 #include "bench.h"
-
-void bench_pi() 
-{
-    int scale = 100*1024*1024;
-    printf("bench pi native:\n");
-    begin();
-    compute_pi_native(scale);
-    end();
-    getMFlops(scale, getsecs());
-    printf("bench pi avx:\n");
-    begin();
-    compute_pi_omp_avx(scale);
-    end();
-    getMFlops(scale, getsecs());
-    printf("bench pi avx+loop:\n");
-    begin();
-    compute_pi_omp_avx_loop(scale);
-    end();
-    getMFlops(scale, getsecs());
-}
 
 void bench_add(int scale) 
 {
@@ -83,23 +61,6 @@ void bench_dot(int scale)
     getMFlops(scale, timeg);
 }
 
-void bench_sqrt(int scale) 
-{
-    FLOAT_T *input = getFinput(scale);
-    int loops = 10;
-    double timeg;
-    printf("bench sqrt:\n");
-    for (int l=0; l<loops; l++)
-    {
-        begin();
-        usimd_sqrt(input, scale);
-        end();
-        timeg += getsecs();
-    }
-    timeg /= loops;
-    getMFlops(scale, timeg);
-}
-
 void bench_muladd(int scale) 
 {
     FLOAT_T *input1 = getFinput(scale);
@@ -119,7 +80,7 @@ void bench_muladd(int scale)
     getMFlops(scale, timeg);
 }
 
-void bench_axpy(int scale) 
+void bench_axpy(int scale)
 {
     FLOAT_T *input1 = getFinput(scale);
     FLOAT_T *input2 = getFinput(scale);
@@ -145,17 +106,12 @@ int main()
     int scalex4 = 4e6;
     int scalex8 = 8e6;
     /*
-    start benching
-
-    bench_pi();
+        start benching
+    */
     bench_add(scale);
     bench_sum(scale);
-    bench_sqrt(scale);
     bench_muladd(scale);
     bench_axpy(scalex8);
-    */
-    bench_dot(scalex2);
-    bench_dot(scalex4);
-    bench_dot(scalex8);
+    
     return 0;
 }

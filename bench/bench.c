@@ -14,7 +14,7 @@ void bench_add(int scale)
     FLOAT_T *output = getFinput(scale);
     int loops = 10;
     double timeg;
-    printf("bench add with scale %d:\n", scale);
+    printf("%s with scale %d:\n", __FUNCTION__, scale);
     for (int l=0; l<loops; l++)
     {
         begin();
@@ -31,7 +31,7 @@ void bench_sum(int scale)
     FLOAT_T *input = getFinput(scale);
     int loops = 10;
     double timeg;
-    printf("bench sum with scale %d:\n", scale);
+    printf("%s with scale %d:\n", __FUNCTION__, scale);
     for (int l=0; l<loops; l++)
     {
         begin();
@@ -49,7 +49,7 @@ void bench_dot(int scale)
     FLOAT_T *input2 = getFinput(scale);
     int loops = 10;
     double timeg;
-    printf("bench dot with scale %d:\n", scale);
+    printf("%s with scale %d:\n", __FUNCTION__, scale);
     for (int l=0; l<loops; l++)
     {
         begin();
@@ -68,7 +68,7 @@ void bench_muladd(int scale)
     FLOAT_T *input3 = getFinput(scale);
     int loops = 10;
     double timeg;
-    printf("bench muladd with scale: %d\n", scale);
+    printf("%s with scale %d:\n", __FUNCTION__, scale);
     for (int l=0; l<loops; l++)
     {
         begin();
@@ -87,7 +87,7 @@ void bench_axpy(int scale)
     FLOAT_T alpha = 3.5;
     int loops = 10;
     double timeg;
-    printf("bench axpy with scale: %d\n", scale);
+    printf("%s with scale %d:\n", __FUNCTION__, scale);
     for (int l=0; l<loops; l++)
     {
         begin();
@@ -114,5 +114,8 @@ int main()
     bench_muladd(scalex8);
     bench_axpy(scalex4);
     bench_axpy(scalex8);
+    bench_dot(scalex4);
+    bench_dot(scalex8);
+    
     return 0;
 }

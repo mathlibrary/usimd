@@ -15,20 +15,20 @@ FLOAT_T usimd_sum(int n, FLOAT_T *x, int inc_x)
 		const int vstep = npyv_nlanes_f64;
 		const int unrollx4 = n & (-vstep * 4);
 		const int unrollx = n & -vstep;
-		npyv_f64 vsum0 = npyv_zero_f64();
-		npyv_f64 vsum1 = npyv_zero_f64();
-		npyv_f64 vsum2 = npyv_zero_f64();
-		npyv_f64 vsum3 = npyv_zero_f64();
-		for (; i < unrollx4; i += vstep * 4, x += vstep * 4)
+	 	npyv_f64 vsum0 = npyv_zero_f64();
+	 	npyv_f64 vsum1 = npyv_zero_f64();
+	 	npyv_f64 vsum2 = npyv_zero_f64();
+	 	npyv_f64 vsum3 = npyv_zero_f64();
+		for (; i < unrollx4; i += vstep * 4)
 		{
-			vsum0 = npyv_add_f64(vsum0, npyv_load_f64(x));
-			vsum1 = npyv_add_f64(vsum1, npyv_load_f64(x + vstep));
-			vsum2 = npyv_add_f64(vsum2, npyv_load_f64(x + vstep * 2));
-			vsum3 = npyv_add_f64(vsum3, npyv_load_f64(x + vstep * 3));
+			vsum0 = npyv_add_f64(vsum0, npyv_load_f64(x + i));
+			vsum1 = npyv_add_f64(vsum1, npyv_load_f64(x + i + vstep));
+			vsum2 = npyv_add_f64(vsum2, npyv_load_f64(x + i + vstep * 2));
+			vsum3 = npyv_add_f64(vsum3, npyv_load_f64(x + i + vstep * 3));
 		}
 		vsum0 = npyv_add_f64(
-			npyv_add_f64(vsum0, vsum1), npyv_add_f64(vsum2, vsum3));
-		for (; i < unrollx4; i += vstep, x += vstep)
+		 	npyv_add_f64(vsum0, vsum1), npyv_add_f64(vsum2, vsum3));
+		for (; i < unrollx; i += vstep)
 		{
 			vsum0 = npyv_add_f64(vsum0, npyv_load_f64(x + i));
 		}
@@ -37,20 +37,20 @@ FLOAT_T usimd_sum(int n, FLOAT_T *x, int inc_x)
 		const int vstep = npyv_nlanes_f32;
 		const int unrollx4 = n & (-vstep * 4);
 		const int unrollx = n & -vstep;
-		npyv_f32 vsum0 = npyv_zero_f32();
-		npyv_f32 vsum1 = npyv_zero_f32();
-		npyv_f32 vsum2 = npyv_zero_f32();
-		npyv_f32 vsum3 = npyv_zero_f32();
-		for (; i < unrollx4; i += vstep * 4, x += vstep * 4)
+	 	npyv_f32 vsum0 = npyv_zero_f32();
+	 	npyv_f32 vsum1 = npyv_zero_f32();
+	 	npyv_f32 vsum2 = npyv_zero_f32();
+	 	npyv_f32 vsum3 = npyv_zero_f32();
+		for (; i < unrollx4; i += vstep * 4)
 		{
-			vsum0 = npyv_add_f32(vsum0, npyv_load_f32(x));
-			vsum1 = npyv_add_f32(vsum1, npyv_load_f32(x + vstep));
-			vsum2 = npyv_add_f32(vsum2, npyv_load_f32(x + vstep * 2));
-			vsum3 = npyv_add_f32(vsum3, npyv_load_f32(x + vstep * 3));
+			vsum0 = npyv_add_f32(vsum0, npyv_load_f32(x + i));
+			vsum1 = npyv_add_f32(vsum1, npyv_load_f32(x + i + vstep));
+			vsum2 = npyv_add_f32(vsum2, npyv_load_f32(x + i + vstep * 2));
+			vsum3 = npyv_add_f32(vsum3, npyv_load_f32(x + i + vstep * 3));
 		}
 		vsum0 = npyv_add_f32(
-			npyv_add_f32(vsum0, vsum1), npyv_add_f32(vsum2, vsum3));
-		for (; i < unrollx4; i += vstep, x += vstep)
+		 	npyv_add_f32(vsum0, vsum1), npyv_add_f32(vsum2, vsum3));
+		for (; i < unrollx; i += vstep)
 		{
 			vsum0 = npyv_add_f32(vsum0, npyv_load_f32(x + i));
 		}

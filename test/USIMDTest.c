@@ -19,9 +19,12 @@ void TestVadd(CuTest *tc) {
 }
 
 void TestVsum(CuTest *tc) {
-	FLOAT_T input[16] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
-    double actual = usimd_sum(16,input,1);
-    double expected = 136;
+	FLOAT_T input[100];
+	for(int i=0;i<100;i++) {
+		input[i] = i+1;
+	}
+    double actual = usimd_sum(100,input,1);
+    double expected = 5050;
 	CuAssertDblEquals(tc,expected, actual , 1e-6);
 }
 

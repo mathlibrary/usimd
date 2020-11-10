@@ -14,7 +14,7 @@ void bench_add(int scale)
     FLOAT_T *output = getFinput(scale);
     int loops = 10;
     double timeg;
-    printf("bench add:\n");
+    printf("bench add with scale %d:\n", scale);
     for (int l=0; l<loops; l++)
     {
         begin();

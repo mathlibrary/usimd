@@ -31,7 +31,7 @@ void bench_sum(int scale)
     FLOAT_T *input = getFinput(scale);
     int loops = 10;
     double timeg;
-    printf("bench sum:\n");
+    printf("bench sum with scale %d:\n", scale);
     for (int l=0; l<loops; l++)
     {
         begin();

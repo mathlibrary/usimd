@@ -9,6 +9,8 @@
 */
 #include "simd_utils.h"
 #include <assert.h>
+#include <math.h>
+#include <stdlib.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -57,6 +59,18 @@ typedef double     npyv_lanetype_f64;
 #else
     #define NPY_FINLINE static
 #endif
+
+#if defined(__GNUC__) || defined(__ICC) || defined(__clang__)
+    #define NPY_DECL_ALIGNED(x) __attribute__ ((aligned (x)))
+#elif defined(_MSC_VER)
+    #define NPY_DECL_ALIGNED(x) __declspec(align(x))
+#else
+    #define NPY_DECL_ALIGNED(x)
+#endif
+
+#define NPY_CAT__(a, b) a ## b
+#define NPY_CAT_(a, b) NPY_CAT__(a, b)
+#define NPY_CAT(a, b) NPY_CAT_(a, b)
 
 // include head
 /** SSE **/

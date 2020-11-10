@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#ifdef __CYGWIN32__
+#if defined(__CYGWIN32__) || defined(__linux__)
 #include <sys/time.h>
 #endif
 

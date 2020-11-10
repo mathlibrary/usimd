@@ -2,6 +2,18 @@
 x86_platform="x86"
 arm_platform="arm"
 
+function ARMBaselineFloatBench() {
+    echo "ARM C + float"
+    gcc bench.c -o bench.o
+    ./bench.o
+}
+
+function ARMBaselineDoubleBench() {
+    echo "ARM C + double"
+    gcc bench.c -DDOUBLE_T -o bench.o
+    ./bench.o
+}
+
 function X86BaselineFloatBench() {
     echo "C + float"
     gcc bench.c -mavx2 -o bench
@@ -9,18 +21,6 @@ function X86BaselineFloatBench() {
 }
 
 function X86BaselineDoubleBench() {
-    echo "C + double"
-    gcc bench.c -DDOUBLE_T -mavx2 -o bench
-    ./bench.exe
-}
-
-function ARMBaselineFloatBench() {
-    echo "C + float"
-    gcc bench.c -mavx2 -o bench
-    ./bench.exe
-}
-
-function ARMBaselineDoubleBench() {
     echo "C + double"
     gcc bench.c -DDOUBLE_T -mavx2 -o bench
     ./bench.exe
@@ -52,23 +52,27 @@ function AVX2DoubleBench() {
 
 function NEONFloatBench() {
     echo "Neon enabled + float"
-    gcc bench.c -DNPY_HAVE_NEON -o bench
-    ./bench
+    gcc bench.c -DNPY_HAVE_NEON -o bench.o
+    ./bench.o
 }
 
-function main() {
-    if [[ "$1" != ${arm_platform} ]]; then
-        #X86BaselineDoubleBench
-        #SSE2DoubleBench
-        #X86BaselineDoubleBench
-        #AVX2DoubleBench
-        
-        #X86BaselineFloatBench
-        #SSE2FloatBench
-        X86BaselineFloatBench
-        AVX2FloatBench
-    else
-        NEONFloatBench
-    fi
+function NEONDoubleBench() {
+    echo "Neon enabled + double"
+    gcc bench.c -DDOUBLE_T -DNPY_HAVE_NEON -o bench.o
+    ./bench.o
 }
-main
+
+if [ "$1" != "${arm_platform}" ]; then
+    #X86BaselineDoubleBench
+    #SSE2DoubleBench
+    #X86BaselineDoubleBench
+    #AVX2DoubleBench
+    
+    #X86BaselineFloatBench
+    #SSE2FloatBench
+    X86BaselineFloatBench
+    AVX2FloatBench
+else
+    ARMBaselineFloatBench
+    NEONFloatBench
+fi

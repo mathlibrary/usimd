@@ -107,11 +107,11 @@ int main()
     int scalex8 = 8e6;
     /*
         start benching
-    */
-    bench_add(scale);
-    bench_sum(scale);
-    bench_muladd(scale);
-    bench_axpy(scalex8);
     
+    bench_add(scale);
+    bench_muladd(scale);
+    bench_axpy(scalex8);*/
+    bench_sum(scalex4);
+    bench_sum(scalex8);
     return 0;
 }

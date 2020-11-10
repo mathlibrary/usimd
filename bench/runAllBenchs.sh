@@ -75,4 +75,6 @@ if [ "$1" != "${arm_platform}" ]; then
 else
     ARMBaselineFloatBench
     NEONFloatBench
+    #ARMBaselineDoubleBench
+    #NEONDoubleBench
 fi

@@ -12,40 +12,40 @@ FLOAT_T usimd_dot(int n, FLOAT_T *x, int inc_x, FLOAT_T *y, int inc_y)
         int n1 = n & -4;
 #if NPY_SIMD 
 #ifndef DOUBLE_T
-        const int vstep = npyv_nlanes_f32;
+        const int vstep = v_nlanes_f32;
         const int unrollx4 = n & (-vstep * 4);
         const int unrollx  = n &  -vstep;
-		npyv_f32 vsum0 = npyv_zero_f32();
-        npyv_f32 vsum1 = npyv_zero_f32();
-        npyv_f32 vsum2 = npyv_zero_f32();
-        npyv_f32 vsum3 = npyv_zero_f32();
+		v_f32 vsum0 = v_zero_f32();
+        v_f32 vsum1 = v_zero_f32();
+        v_f32 vsum2 = v_zero_f32();
+        v_f32 vsum3 = v_zero_f32();
 		while(i < unrollx4)
         {
-            vsum0 = npyv_muladd_f32(
-                npyv_load_f32(x + i),           npyv_load_f32(y + i),           vsum0
+            vsum0 = v_muladd_f32(
+                v_load_f32(x + i),           v_load_f32(y + i),           vsum0
             );
-            vsum1 = npyv_muladd_f32(
-                npyv_load_f32(x + i + vstep),   npyv_load_f32(y + i + vstep),   vsum1
+            vsum1 = v_muladd_f32(
+                v_load_f32(x + i + vstep),   v_load_f32(y + i + vstep),   vsum1
             );
-            vsum2 = npyv_muladd_f32(
-                npyv_load_f32(x + i + vstep*2), npyv_load_f32(y + i + vstep*2), vsum2
+            vsum2 = v_muladd_f32(
+                v_load_f32(x + i + vstep*2), v_load_f32(y + i + vstep*2), vsum2
             );
-            vsum3 = npyv_muladd_f32(
-                npyv_load_f32(x + i + vstep*3), npyv_load_f32(y + i + vstep*3), vsum3
+            vsum3 = v_muladd_f32(
+                v_load_f32(x + i + vstep*3), v_load_f32(y + i + vstep*3), vsum3
             );
             i += vstep*4;
         }
-        vsum0 = npyv_add_f32(
-            npyv_add_f32(vsum0, vsum1), npyv_add_f32(vsum2 , vsum3)
+        vsum0 = v_add_f32(
+            v_add_f32(vsum0, vsum1), v_add_f32(vsum2 , vsum3)
         );
 		while(i < unrollx)
         {
-            vsum0 = npyv_muladd_f32(
-                npyv_load_f32(x + i), npyv_load_f32(y + i), vsum0
+            vsum0 = v_muladd_f32(
+                v_load_f32(x + i), v_load_f32(y + i), vsum0
             );
             i += vstep;
         }
-        dot = npyv_sum_f32(vsum0);
+        dot = v_sum_f32(vsum0);
 #else
 		for (; i < n1; i += 4)
 		{

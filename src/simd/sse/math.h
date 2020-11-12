@@ -8,33 +8,33 @@
  * Elementary
  ***************************/
 // Square root
-#define npyv_sqrt_f32 _mm_sqrt_ps
-#define npyv_sqrt_f64 _mm_sqrt_pd
+#define v_sqrt_f32 _mm_sqrt_ps
+#define v_sqrt_f64 _mm_sqrt_pd
 
 // Reciprocal
-NPY_FINLINE npyv_f32 npyv_recip_f32(npyv_f32 a)
+NPY_FINLINE v_f32 v_recip_f32(v_f32 a)
 { return _mm_div_ps(_mm_set1_ps(1.0f), a); }
-NPY_FINLINE npyv_f64 npyv_recip_f64(npyv_f64 a)
+NPY_FINLINE v_f64 v_recip_f64(v_f64 a)
 { return _mm_div_pd(_mm_set1_pd(1.0), a); }
 
 // Absolute
-NPY_FINLINE npyv_f32 npyv_abs_f32(npyv_f32 a)
+NPY_FINLINE v_f32 v_abs_f32(v_f32 a)
 {
     return _mm_and_ps(
         a, _mm_castsi128_ps(_mm_set1_epi32(0x7fffffff))
     );
 }
-NPY_FINLINE npyv_f64 npyv_abs_f64(npyv_f64 a)
+NPY_FINLINE v_f64 v_abs_f64(v_f64 a)
 {
     return _mm_and_pd(
-        a, _mm_castsi128_pd(npyv_setall_s64(0x7fffffffffffffffLL))
+        a, _mm_castsi128_pd(v_setall_s64(0x7fffffffffffffffLL))
     );
 }
 
 // Square
-NPY_FINLINE npyv_f32 npyv_square_f32(npyv_f32 a)
+NPY_FINLINE v_f32 v_square_f32(v_f32 a)
 { return _mm_mul_ps(a, a); }
-NPY_FINLINE npyv_f64 npyv_square_f64(npyv_f64 a)
+NPY_FINLINE v_f64 v_square_f64(v_f64 a)
 { return _mm_mul_pd(a, a); }
 
 #endif

@@ -26,19 +26,19 @@ typedef int  npy_intp;
 typedef unsigned long npy_uint64;
 typedef long  npy_int64;
 
-typedef npy_uint8  npyv_lanetype_u8;
-typedef npy_int8   npyv_lanetype_s8;
-typedef npy_uint16 npyv_lanetype_u16;
-typedef npy_int16  npyv_lanetype_s16;
-typedef npy_uint32 npyv_lanetype_u32;
-typedef npy_int32  npyv_lanetype_s32;
-typedef npy_uint64 npyv_lanetype_u64;
-typedef npy_int64  npyv_lanetype_s64;
+typedef npy_uint8  v_lanetype_u8;
+typedef npy_int8   v_lanetype_s8;
+typedef npy_uint16 v_lanetype_u16;
+typedef npy_int16  v_lanetype_s16;
+typedef npy_uint32 v_lanetype_u32;
+typedef npy_int32  v_lanetype_s32;
+typedef npy_uint64 v_lanetype_u64;
+typedef npy_int64  v_lanetype_s64;
 
 // lane type by intrin suffix
 
-typedef float      npyv_lanetype_f32;
-typedef double     npyv_lanetype_f64;
+typedef float      v_lanetype_f32;
+typedef double     v_lanetype_f64;
 
 #if defined(_MSC_VER)
         #define NPY_INLINE __inline
@@ -137,11 +137,11 @@ typedef double     npyv_lanetype_f64;
  *  npy_intp ld_stride = step[0] / sizeof(float);
  *  npy_intp st_stride = step[1] / sizeof(float);
  *
- *  if (npyv_loadable_stride_f32(ld_stride) && npyv_storable_stride_f32(st_stride)) {
+ *  if (v_loadable_stride_f32(ld_stride) && v_storable_stride_f32(st_stride)) {
  *      for (;;)
- *          npyv_f32 a = npyv_loadn_f32(ld_pointer, ld_stride);
+ *          v_f32 a = v_loadn_f32(ld_pointer, ld_stride);
  *          // ...
- *          npyv_storen_f32(st_pointer, st_stride, a);
+ *          v_storen_f32(st_pointer, st_stride, a);
  *  }
  *  else {
  *      for (;;)
@@ -161,9 +161,9 @@ typedef double     npyv_lanetype_f64;
     #define NPY_SIMD_MAXSTORE_STRIDE64 0
 #endif
 #define NPYV_IMPL_MAXSTRIDE(SFX, MAXLOAD, MAXSTORE) \
-    NPY_FINLINE int npyv_loadable_stride_##SFX(npy_intp stride) \
+    NPY_FINLINE int v_loadable_stride_##SFX(npy_intp stride) \
     { return MAXLOAD > 0 ? llabs(stride) <= MAXLOAD : 1; } \
-    NPY_FINLINE int npyv_storable_stride_##SFX(npy_intp stride) \
+    NPY_FINLINE int v_storable_stride_##SFX(npy_intp stride) \
     { return MAXSTORE > 0 ? llabs(stride) <= MAXSTORE : 1; }
 #if NPY_SIMD
     NPYV_IMPL_MAXSTRIDE(u32, NPY_SIMD_MAXLOAD_STRIDE32, NPY_SIMD_MAXSTORE_STRIDE32)

@@ -12,32 +12,32 @@
  ***************************/
 // non-saturated
 #ifdef NPY_HAVE_AVX512BW
-    #define npyv_add_u8  _mm512_add_epi8
-    #define npyv_add_u16 _mm512_add_epi16
+    #define v_add_u8  _mm512_add_epi8
+    #define v_add_u16 _mm512_add_epi16
 #else
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(npyv_add_u8,  _mm256_add_epi8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(npyv_add_u16, _mm256_add_epi16)
+    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_add_u8,  _mm256_add_epi8)
+    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_add_u16, _mm256_add_epi16)
 #endif
-#define npyv_add_s8  npyv_add_u8
-#define npyv_add_s16 npyv_add_u16
-#define npyv_add_u32 _mm512_add_epi32
-#define npyv_add_s32 _mm512_add_epi32
-#define npyv_add_u64 _mm512_add_epi64
-#define npyv_add_s64 _mm512_add_epi64
-#define npyv_add_f32 _mm512_add_ps
-#define npyv_add_f64 _mm512_add_pd
+#define v_add_s8  v_add_u8
+#define v_add_s16 v_add_u16
+#define v_add_u32 _mm512_add_epi32
+#define v_add_s32 _mm512_add_epi32
+#define v_add_u64 _mm512_add_epi64
+#define v_add_s64 _mm512_add_epi64
+#define v_add_f32 _mm512_add_ps
+#define v_add_f64 _mm512_add_pd
 
 // saturated
 #ifdef NPY_HAVE_AVX512BW
-    #define npyv_adds_u8  _mm512_adds_epu8
-    #define npyv_adds_s8  _mm512_adds_epi8
-    #define npyv_adds_u16 _mm512_adds_epu16
-    #define npyv_adds_s16 _mm512_adds_epi16
+    #define v_adds_u8  _mm512_adds_epu8
+    #define v_adds_s8  _mm512_adds_epi8
+    #define v_adds_u16 _mm512_adds_epu16
+    #define v_adds_s16 _mm512_adds_epi16
 #else
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(npyv_adds_u8,  _mm256_adds_epu8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(npyv_adds_s8,  _mm256_adds_epi8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(npyv_adds_u16, _mm256_adds_epu16)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(npyv_adds_s16, _mm256_adds_epi16)
+    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_adds_u8,  _mm256_adds_epu8)
+    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_adds_s8,  _mm256_adds_epi8)
+    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_adds_u16, _mm256_adds_epu16)
+    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_adds_s16, _mm256_adds_epi16)
 #endif
 // TODO: rest, after implment Packs intrins
 
@@ -46,32 +46,32 @@
  ***************************/
 // non-saturated
 #ifdef NPY_HAVE_AVX512BW
-    #define npyv_sub_u8  _mm512_sub_epi8
-    #define npyv_sub_u16 _mm512_sub_epi16
+    #define v_sub_u8  _mm512_sub_epi8
+    #define v_sub_u16 _mm512_sub_epi16
 #else
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(npyv_sub_u8,  _mm256_sub_epi8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(npyv_sub_u16, _mm256_sub_epi16)
+    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_sub_u8,  _mm256_sub_epi8)
+    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_sub_u16, _mm256_sub_epi16)
 #endif
-#define npyv_sub_s8  npyv_sub_u8
-#define npyv_sub_s16 npyv_sub_u16
-#define npyv_sub_u32 _mm512_sub_epi32
-#define npyv_sub_s32 _mm512_sub_epi32
-#define npyv_sub_u64 _mm512_sub_epi64
-#define npyv_sub_s64 _mm512_sub_epi64
-#define npyv_sub_f32 _mm512_sub_ps
-#define npyv_sub_f64 _mm512_sub_pd
+#define v_sub_s8  v_sub_u8
+#define v_sub_s16 v_sub_u16
+#define v_sub_u32 _mm512_sub_epi32
+#define v_sub_s32 _mm512_sub_epi32
+#define v_sub_u64 _mm512_sub_epi64
+#define v_sub_s64 _mm512_sub_epi64
+#define v_sub_f32 _mm512_sub_ps
+#define v_sub_f64 _mm512_sub_pd
 
 // saturated
 #ifdef NPY_HAVE_AVX512BW
-    #define npyv_subs_u8  _mm512_subs_epu8
-    #define npyv_subs_s8  _mm512_subs_epi8
-    #define npyv_subs_u16 _mm512_subs_epu16
-    #define npyv_subs_s16 _mm512_subs_epi16
+    #define v_subs_u8  _mm512_subs_epu8
+    #define v_subs_s8  _mm512_subs_epi8
+    #define v_subs_u16 _mm512_subs_epu16
+    #define v_subs_s16 _mm512_subs_epi16
 #else
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(npyv_subs_u8,  _mm256_subs_epu8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(npyv_subs_s8,  _mm256_subs_epi8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(npyv_subs_u16, _mm256_subs_epu16)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(npyv_subs_s16, _mm256_subs_epi16)
+    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_subs_u8,  _mm256_subs_epu8)
+    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_subs_s8,  _mm256_subs_epi8)
+    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_subs_u16, _mm256_subs_epu16)
+    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_subs_s16, _mm256_subs_epi16)
 #endif
 // TODO: rest, after implment Packs intrins
 
@@ -80,7 +80,7 @@
  ***************************/
 // non-saturated
 #ifdef NPY_HAVE_AVX512BW
-NPY_FINLINE __m512i npyv_mul_u8(__m512i a, __m512i b)
+NPY_FINLINE __m512i v_mul_u8(__m512i a, __m512i b)
 {
     __m512i even = _mm512_mullo_epi16(a, b);
     __m512i odd  = _mm512_mullo_epi16(_mm512_srai_epi16(a, 8), _mm512_srai_epi16(b, 8));
@@ -88,20 +88,20 @@ NPY_FINLINE __m512i npyv_mul_u8(__m512i a, __m512i b)
     return _mm512_mask_blend_epi8(0xAAAAAAAAAAAAAAAA, even, odd);
 }
 #else
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(npyv_mul_u8, npyv256_mul_u8)
+    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_mul_u8, v256_mul_u8)
 #endif
 
 #ifdef NPY_HAVE_AVX512BW
-    #define npyv_mul_u16 _mm512_mullo_epi16
+    #define v_mul_u16 _mm512_mullo_epi16
 #else
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(npyv_mul_u16, _mm256_mullo_epi16)
+    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_mul_u16, _mm256_mullo_epi16)
 #endif
-#define npyv_mul_s8  npyv_mul_u8
-#define npyv_mul_s16 npyv_mul_u16
-#define npyv_mul_u32 _mm512_mullo_epi32
-#define npyv_mul_s32 _mm512_mullo_epi32
-#define npyv_mul_f32 _mm512_mul_ps
-#define npyv_mul_f64 _mm512_mul_pd
+#define v_mul_s8  v_mul_u8
+#define v_mul_s16 v_mul_u16
+#define v_mul_u32 _mm512_mullo_epi32
+#define v_mul_s32 _mm512_mullo_epi32
+#define v_mul_f32 _mm512_mul_ps
+#define v_mul_f64 _mm512_mul_pd
 
 // saturated
 // TODO: after implment Packs intrins
@@ -110,24 +110,24 @@ NPY_FINLINE __m512i npyv_mul_u8(__m512i a, __m512i b)
  * Division
  ***************************/
 // TODO: emulate integer division
-#define npyv_div_f32 _mm512_div_ps
-#define npyv_div_f64 _mm512_div_pd
+#define v_div_f32 _mm512_div_ps
+#define v_div_f64 _mm512_div_pd
 
 /***************************
  * FUSED
  ***************************/
 // multiply and add, a*b + c
-#define npyv_muladd_f32 _mm512_fmadd_ps
-#define npyv_muladd_f64 _mm512_fmadd_pd
+#define v_muladd_f32 _mm512_fmadd_ps
+#define v_muladd_f64 _mm512_fmadd_pd
 // multiply and subtract, a*b - c
-#define npyv_mulsub_f32 _mm512_fmsub_ps
-#define npyv_mulsub_f64 _mm512_fmsub_pd
+#define v_mulsub_f32 _mm512_fmsub_ps
+#define v_mulsub_f64 _mm512_fmsub_pd
 // negate multiply and add, -(a*b) + c
-#define npyv_nmuladd_f32 _mm512_fnmadd_ps
-#define npyv_nmuladd_f64 _mm512_fnmadd_pd
+#define v_nmuladd_f32 _mm512_fnmadd_ps
+#define v_nmuladd_f64 _mm512_fnmadd_pd
 // negate multiply and subtract, -(a*b) - c
-#define npyv_nmulsub_f32 _mm512_fnmsub_ps
-#define npyv_nmulsub_f64 _mm512_fnmsub_pd
+#define v_nmulsub_f32 _mm512_fnmsub_ps
+#define v_nmulsub_f64 _mm512_fnmsub_pd
 
 /***************************
  * Reduce Sum
@@ -145,10 +145,10 @@ NPY_FINLINE __m512i npyv_mul_u8(__m512i a, __m512i b)
  * intel compiler/GCC 7.1/Clang 4, we still need to support older GCC.
  ***************************/
 #ifdef NPY_HAVE_AVX512F_REDUCE
-    #define npyv_sum_f32 _mm512_reduce_add_ps
-    #define npyv_sum_f64 _mm512_reduce_add_pd
+    #define v_sum_f32 _mm512_reduce_add_ps
+    #define v_sum_f64 _mm512_reduce_add_pd
 #else
-    NPY_FINLINE float npyv_sum_f32(npyv_f32 a)
+    NPY_FINLINE float v_sum_f32(v_f32 a)
     {
         __m512 h64   = _mm512_shuffle_f32x4(a, a, _MM_SHUFFLE(3, 2, 3, 2));
         __m512 sum32 = _mm512_add_ps(a, h64);
@@ -160,7 +160,7 @@ NPY_FINLINE __m512i npyv_mul_u8(__m512i a, __m512i b)
         __m512 sum4  = _mm512_add_ps(sum8, h4);
         return _mm_cvtss_f32(_mm512_castps512_ps128(sum4));
     }
-    NPY_FINLINE double npyv_sum_f64(npyv_f64 a)
+    NPY_FINLINE double v_sum_f64(v_f64 a)
     {
         __m512d h64   = _mm512_shuffle_f64x2(a, a, _MM_SHUFFLE(3, 2, 3, 2));
         __m512d sum32 = _mm512_add_pd(a, h64);

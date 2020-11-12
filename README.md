@@ -123,8 +123,8 @@ int MultiplyIntList(int const *l1, int n)
 #ifdef NPY_SIMD
     int dim4 = n >> 2;
     n &= 3;
-    npyv_s32 sum_vec = npy_setall_s32(1);
-    npyv_s32 data_vec;
+    v_s32 sum_vec = npy_setall_s32(1);
+    v_s32 data_vec;
     for(;dim4 > 0; dim4--){
         data_vec = npy_load_s32(l1);
         sum_vec = npy_mulq_s32(sum_vec, data_vec);

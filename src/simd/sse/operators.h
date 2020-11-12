@@ -180,7 +180,7 @@ V_FINLINE __m128i v_shr_s64(__m128i a, int c)
     #define v_cmpgt_u32 _mm_comgt_epu32
     #define v_cmpgt_u64 _mm_comgt_epu64
 #else
-    #define NPYV_IMPL_SSE_UNSIGNED_GT(LEN, SIGN)                     \
+    #define V_IMPL_SSE_UNSIGNED_GT(LEN, SIGN)                     \
         V_FINLINE __m128i v_cmpgt_u##LEN(__m128i a, __m128i b)  \
         {                                                            \
             const __m128i sbit = _mm_set1_epi32(SIGN);               \
@@ -189,9 +189,9 @@ V_FINLINE __m128i v_shr_s64(__m128i a, int c)
             );                                                       \
         }
 
-    NPYV_IMPL_SSE_UNSIGNED_GT(8,  0x80808080)
-    NPYV_IMPL_SSE_UNSIGNED_GT(16, 0x80008000)
-    NPYV_IMPL_SSE_UNSIGNED_GT(32, 0x80000000)
+    V_IMPL_SSE_UNSIGNED_GT(8,  0x80808080)
+    V_IMPL_SSE_UNSIGNED_GT(16, 0x80008000)
+    V_IMPL_SSE_UNSIGNED_GT(32, 0x80000000)
 
     V_FINLINE __m128i v_cmpgt_u64(__m128i a, __m128i b)
     {

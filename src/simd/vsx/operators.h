@@ -83,7 +83,7 @@
 
 // NOT
 // note: we implement v_not_b*(boolen types) for internal use*/
-#define NPYV_IMPL_VSX_NOT_INT(VEC_LEN)                                 \
+#define V_IMPL_VSX_NOT_INT(VEC_LEN)                                 \
     V_FINLINE v_u##VEC_LEN v_not_u##VEC_LEN(v_u##VEC_LEN a) \
     { return vec_nor(a, a); }                                          \
     V_FINLINE v_s##VEC_LEN v_not_s##VEC_LEN(v_s##VEC_LEN a) \
@@ -91,13 +91,13 @@
     V_FINLINE v_b##VEC_LEN v_not_b##VEC_LEN(v_b##VEC_LEN a) \
     { return vec_nor(a, a); }
 
-NPYV_IMPL_VSX_NOT_INT(8)
-NPYV_IMPL_VSX_NOT_INT(16)
-NPYV_IMPL_VSX_NOT_INT(32)
+V_IMPL_VSX_NOT_INT(8)
+V_IMPL_VSX_NOT_INT(16)
+V_IMPL_VSX_NOT_INT(32)
 
 // up to gcc5 vec_nor doesn't support bool long long
 #if defined(__GNUC__) && __GNUC__ > 5
-    NPYV_IMPL_VSX_NOT_INT(64)
+    V_IMPL_VSX_NOT_INT(64)
 #else
     V_FINLINE v_u64 v_not_u64(v_u64 a)
     { return vec_nor(a, a); }

@@ -74,10 +74,10 @@ V_FINLINE v_f64x2 v_combine_f64(__m512d a, __m512d b)
 
 // interleave two vectors
 #ifndef V_HAVE_AVX512BW
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v__unpacklo_epi8,  _mm256_unpacklo_epi8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v__unpackhi_epi8,  _mm256_unpackhi_epi8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v__unpacklo_epi16, _mm256_unpacklo_epi16)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v__unpackhi_epi16, _mm256_unpackhi_epi16)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v__unpacklo_epi8,  _mm256_unpacklo_epi8)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v__unpackhi_epi8,  _mm256_unpackhi_epi8)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v__unpacklo_epi16, _mm256_unpacklo_epi16)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v__unpackhi_epi16, _mm256_unpackhi_epi16)
 #endif
 
 V_FINLINE v_u64x2 v_zip_u64(__m512i a, __m512i b)

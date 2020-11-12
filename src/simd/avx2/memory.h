@@ -10,7 +10,7 @@
 /***************************
  * load/store
  ***************************/
-#define NPYV_IMPL_AVX2_MEM_INT(CTYPE, SFX)                                   \
+#define V_IMPL_AVX2_MEM_INT(CTYPE, SFX)                                   \
     V_FINLINE v_##SFX v_load_##SFX(const CTYPE *ptr)                 \
     { return _mm256_loadu_si256((const __m256i*)ptr); }                      \
     V_FINLINE v_##SFX v_loada_##SFX(const CTYPE *ptr)                \
@@ -30,14 +30,14 @@
     V_FINLINE void v_storeh_##SFX(CTYPE *ptr, v_##SFX vec)           \
     { _mm_storeu_si128((__m128i*)(ptr), _mm256_extracti128_si256(vec, 1)); }
 
-NPYV_IMPL_AVX2_MEM_INT(s_uint8,  u8)
-NPYV_IMPL_AVX2_MEM_INT(s_int8,   s8)
-NPYV_IMPL_AVX2_MEM_INT(s_uint16, u16)
-NPYV_IMPL_AVX2_MEM_INT(s_int16,  s16)
-NPYV_IMPL_AVX2_MEM_INT(s_uint32, u32)
-NPYV_IMPL_AVX2_MEM_INT(s_int32,  s32)
-NPYV_IMPL_AVX2_MEM_INT(s_uint64, u64)
-NPYV_IMPL_AVX2_MEM_INT(s_int64,  s64)
+V_IMPL_AVX2_MEM_INT(s_uint8,  u8)
+V_IMPL_AVX2_MEM_INT(s_int8,   s8)
+V_IMPL_AVX2_MEM_INT(s_uint16, u16)
+V_IMPL_AVX2_MEM_INT(s_int16,  s16)
+V_IMPL_AVX2_MEM_INT(s_uint32, u32)
+V_IMPL_AVX2_MEM_INT(s_int32,  s32)
+V_IMPL_AVX2_MEM_INT(s_uint64, u64)
+V_IMPL_AVX2_MEM_INT(s_int64,  s64)
 
 // unaligned load
 #define v_load_f32 _mm256_loadu_ps
@@ -293,7 +293,7 @@ V_FINLINE void v_storen_till_s64(s_int64 *ptr, s_intp stride, s_uintp nlane, v_s
 /*****************************************************************************
  * Implement partial load/store for u32/f32/u64/f64... via reinterpret cast
  *****************************************************************************/
-#define NPYV_IMPL_AVX2_REST_PARTIAL_TYPES(F_SFX, T_SFX)                                     \
+#define V_IMPL_AVX2_REST_PARTIAL_TYPES(F_SFX, T_SFX)                                     \
     V_FINLINE v_##F_SFX v_load_till_##F_SFX                                         \
     (const v_lanetype_##F_SFX *ptr, s_uintp nlane, v_lanetype_##F_SFX fill)         \
     {                                                                                       \
@@ -348,9 +348,9 @@ V_FINLINE void v_storen_till_s64(s_int64 *ptr, s_intp stride, s_uintp nlane, v_s
         );                                                                                  \
     }
 
-NPYV_IMPL_AVX2_REST_PARTIAL_TYPES(u32, s32)
-NPYV_IMPL_AVX2_REST_PARTIAL_TYPES(f32, s32)
-NPYV_IMPL_AVX2_REST_PARTIAL_TYPES(u64, s64)
-NPYV_IMPL_AVX2_REST_PARTIAL_TYPES(f64, s64)
+V_IMPL_AVX2_REST_PARTIAL_TYPES(u32, s32)
+V_IMPL_AVX2_REST_PARTIAL_TYPES(f32, s32)
+V_IMPL_AVX2_REST_PARTIAL_TYPES(u64, s64)
+V_IMPL_AVX2_REST_PARTIAL_TYPES(f64, s64)
 
 #endif // _V_SIMD_AVX2_MEMORY_H

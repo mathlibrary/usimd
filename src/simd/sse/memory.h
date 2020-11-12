@@ -16,7 +16,7 @@
 #else
     #define v__loads(PTR) _mm_load_si128((const __m128i *)(PTR))
 #endif
-#define NPYV_IMPL_SSE_MEM_INT(CTYPE, SFX)                                    \
+#define V_IMPL_SSE_MEM_INT(CTYPE, SFX)                                    \
     V_FINLINE v_##SFX v_load_##SFX(const CTYPE *ptr)                 \
     { return _mm_loadu_si128((const __m128i*)ptr); }                         \
     V_FINLINE v_##SFX v_loada_##SFX(const CTYPE *ptr)                \
@@ -36,14 +36,14 @@
     V_FINLINE void v_storeh_##SFX(CTYPE *ptr, v_##SFX vec)           \
     { _mm_storel_epi64((__m128i *)ptr, _mm_unpackhi_epi64(vec, vec)); }
 
-NPYV_IMPL_SSE_MEM_INT(s_uint8,  u8)
-NPYV_IMPL_SSE_MEM_INT(s_int8,   s8)
-NPYV_IMPL_SSE_MEM_INT(s_uint16, u16)
-NPYV_IMPL_SSE_MEM_INT(s_int16,  s16)
-NPYV_IMPL_SSE_MEM_INT(s_uint32, u32)
-NPYV_IMPL_SSE_MEM_INT(s_int32,  s32)
-NPYV_IMPL_SSE_MEM_INT(s_uint64, u64)
-NPYV_IMPL_SSE_MEM_INT(s_int64,  s64)
+V_IMPL_SSE_MEM_INT(s_uint8,  u8)
+V_IMPL_SSE_MEM_INT(s_int8,   s8)
+V_IMPL_SSE_MEM_INT(s_uint16, u16)
+V_IMPL_SSE_MEM_INT(s_int16,  s16)
+V_IMPL_SSE_MEM_INT(s_uint32, u32)
+V_IMPL_SSE_MEM_INT(s_int32,  s32)
+V_IMPL_SSE_MEM_INT(s_uint64, u64)
+V_IMPL_SSE_MEM_INT(s_int64,  s64)
 
 // unaligned load
 #define v_load_f32 _mm_loadu_ps
@@ -145,13 +145,13 @@ V_FINLINE void v_storen_s64(s_int64 *ptr, s_intp stride, v_s64 a)
      * when we try to fill it up with certain scalars,
      * which my lead to zero division errors.
     */
-    #define NPYV__CLANG_ZEROUPPER
+    #define V__CLANG_ZEROUPPER
 #endif
 //// 32
 V_FINLINE v_s32 v_load_till_s32(const s_int32 *ptr, s_uintp nlane, s_int32 fill)
 {
     assert(nlane > 0);
-#ifdef NPYV__CLANG_ZEROUPPER
+#ifdef V__CLANG_ZEROUPPER
     if (nlane > 3) {
         return v_load_s32(ptr);
     }
@@ -219,7 +219,7 @@ V_FINLINE v_s32 v_load_tillz_s32(const s_int32 *ptr, s_uintp nlane)
 V_FINLINE v_s64 v_load_till_s64(const s_int64 *ptr, s_uintp nlane, s_int64 fill)
 {
     assert(nlane > 0);
-#ifdef NPYV__CLANG_ZEROUPPER
+#ifdef V__CLANG_ZEROUPPER
     if (nlane <= 2) {
         s_int64 V_DECL_ALIGNED(16) data[2] = {fill, fill};
         for (s_uint64 i = 0; i < nlane; ++i) {
@@ -254,7 +254,7 @@ V_FINLINE v_s32
 v_loadn_till_s32(const s_int32 *ptr, s_intp stride, s_uintp nlane, s_int32 fill)
 {
     assert(nlane > 0);
-#ifdef NPYV__CLANG_ZEROUPPER
+#ifdef V__CLANG_ZEROUPPER
     if (nlane > 3) {
         return v_loadn_s32(ptr, stride);
     }
@@ -331,7 +331,7 @@ V_FINLINE v_s64
 v_loadn_till_s64(const s_int64 *ptr, s_intp stride, s_uintp nlane, s_int64 fill)
 {
     assert(nlane > 0);
-#ifdef NPYV__CLANG_ZEROUPPER
+#ifdef V__CLANG_ZEROUPPER
     if (nlane <= 2) {
         s_int64 V_DECL_ALIGNED(16) data[2] = {fill, fill};
         for (s_uint64 i = 0; i < nlane; ++i) {
@@ -435,7 +435,7 @@ V_FINLINE void v_storen_till_s64(s_int64 *ptr, s_intp stride, s_uintp nlane, v_s
 /*****************************************************************
  * Implement partial load/store for u32/f32/u64/f64... via casting
  *****************************************************************/
-#define NPYV_IMPL_SSE_REST_PARTIAL_TYPES(F_SFX, T_SFX)                                      \
+#define V_IMPL_SSE_REST_PARTIAL_TYPES(F_SFX, T_SFX)                                      \
     V_FINLINE v_##F_SFX v_load_till_##F_SFX                                         \
     (const v_lanetype_##F_SFX *ptr, s_uintp nlane, v_lanetype_##F_SFX fill)         \
     {                                                                                       \
@@ -490,9 +490,9 @@ V_FINLINE void v_storen_till_s64(s_int64 *ptr, s_intp stride, s_uintp nlane, v_s
         );                                                                                  \
     }
 
-NPYV_IMPL_SSE_REST_PARTIAL_TYPES(u32, s32)
-NPYV_IMPL_SSE_REST_PARTIAL_TYPES(f32, s32)
-NPYV_IMPL_SSE_REST_PARTIAL_TYPES(u64, s64)
-NPYV_IMPL_SSE_REST_PARTIAL_TYPES(f64, s64)
+V_IMPL_SSE_REST_PARTIAL_TYPES(u32, s32)
+V_IMPL_SSE_REST_PARTIAL_TYPES(f32, s32)
+V_IMPL_SSE_REST_PARTIAL_TYPES(u64, s64)
+V_IMPL_SSE_REST_PARTIAL_TYPES(f64, s64)
 
 #endif // _V_SIMD_SSE_MEMORY_H

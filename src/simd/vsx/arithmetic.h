@@ -53,7 +53,7 @@
 // non-saturated
 // up to GCC 6 vec_mul only supports precisions and llong
 #if defined(__GNUC__) && __GNUC__ < 7
-    #define NPYV_IMPL_VSX_MUL(T_VEC, SFX, ...)              \
+    #define V_IMPL_VSX_MUL(T_VEC, SFX, ...)              \
         V_FINLINE T_VEC v_mul_##SFX(T_VEC a, T_VEC b)  \
         {                                                   \
             const v_u8 ev_od = {__VA_ARGS__};            \
@@ -63,13 +63,13 @@
             );                                              \
         }
 
-    NPYV_IMPL_VSX_MUL(v_u8,  u8,  0, 16, 2, 18, 4, 20, 6, 22, 8, 24, 10, 26, 12, 28, 14, 30)
-    NPYV_IMPL_VSX_MUL(v_s8,  s8,  0, 16, 2, 18, 4, 20, 6, 22, 8, 24, 10, 26, 12, 28, 14, 30)
-    NPYV_IMPL_VSX_MUL(v_u16, u16, 0, 1, 16, 17, 4, 5, 20, 21, 8, 9, 24, 25, 12, 13, 28, 29)
-    NPYV_IMPL_VSX_MUL(v_s16, s16, 0, 1, 16, 17, 4, 5, 20, 21, 8, 9, 24, 25, 12, 13, 28, 29)
+    V_IMPL_VSX_MUL(v_u8,  u8,  0, 16, 2, 18, 4, 20, 6, 22, 8, 24, 10, 26, 12, 28, 14, 30)
+    V_IMPL_VSX_MUL(v_s8,  s8,  0, 16, 2, 18, 4, 20, 6, 22, 8, 24, 10, 26, 12, 28, 14, 30)
+    V_IMPL_VSX_MUL(v_u16, u16, 0, 1, 16, 17, 4, 5, 20, 21, 8, 9, 24, 25, 12, 13, 28, 29)
+    V_IMPL_VSX_MUL(v_s16, s16, 0, 1, 16, 17, 4, 5, 20, 21, 8, 9, 24, 25, 12, 13, 28, 29)
 
     // vmuluwm can be used for unsigned or signed 32-bit integers
-    #define NPYV_IMPL_VSX_MUL_32(T_VEC, SFX)                \
+    #define V_IMPL_VSX_MUL_32(T_VEC, SFX)                \
         V_FINLINE T_VEC v_mul_##SFX(T_VEC a, T_VEC b)  \
         {                                                   \
             T_VEC ret;                                      \
@@ -80,8 +80,8 @@
             return ret;                                     \
         }
 
-    NPYV_IMPL_VSX_MUL_32(v_u32, u32)
-    NPYV_IMPL_VSX_MUL_32(v_s32, s32)
+    V_IMPL_VSX_MUL_32(v_u32, u32)
+    V_IMPL_VSX_MUL_32(v_s32, s32)
 
 #else
     #define v_mul_u8  vec_mul

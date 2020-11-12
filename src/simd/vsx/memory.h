@@ -62,7 +62,7 @@ V_FINLINE v_u64 v__loadl(const void *ptr)
 /****************************
  * load/store
  ****************************/
-#define NPYV_IMPL_VSX_MEM(SFX, DW_CAST)                                                 \
+#define V_IMPL_VSX_MEM(SFX, DW_CAST)                                                 \
     V_FINLINE v_##SFX v_load_##SFX(const v_lanetype_##SFX *ptr)              \
     { return (v_##SFX)v__load(v_##SFX, (const v_lanetype_##DW_CAST*)ptr); } \
     V_FINLINE v_##SFX v_loada_##SFX(const v_lanetype_##SFX *ptr)             \
@@ -82,16 +82,16 @@ V_FINLINE v_u64 v__loadl(const void *ptr)
     V_FINLINE void v_storeh_##SFX(v_lanetype_##SFX *ptr, v_##SFX vec)        \
     { v__storeh(ptr, vec); }
 
-NPYV_IMPL_VSX_MEM(u8,  u8)
-NPYV_IMPL_VSX_MEM(s8,  s8)
-NPYV_IMPL_VSX_MEM(u16, u16)
-NPYV_IMPL_VSX_MEM(s16, s16)
-NPYV_IMPL_VSX_MEM(u32, u32)
-NPYV_IMPL_VSX_MEM(s32, s32)
-NPYV_IMPL_VSX_MEM(u64, f64)
-NPYV_IMPL_VSX_MEM(s64, f64)
-NPYV_IMPL_VSX_MEM(f32, f32)
-NPYV_IMPL_VSX_MEM(f64, f64)
+V_IMPL_VSX_MEM(u8,  u8)
+V_IMPL_VSX_MEM(s8,  s8)
+V_IMPL_VSX_MEM(u16, u16)
+V_IMPL_VSX_MEM(s16, s16)
+V_IMPL_VSX_MEM(u32, u32)
+V_IMPL_VSX_MEM(s32, s32)
+V_IMPL_VSX_MEM(u64, f64)
+V_IMPL_VSX_MEM(s64, f64)
+V_IMPL_VSX_MEM(f32, f32)
+V_IMPL_VSX_MEM(f64, f64)
 
 /***************************
  * Non-contiguous Load
@@ -283,7 +283,7 @@ V_FINLINE void v_storen_till_s64(s_int64 *ptr, s_intp stride, s_uintp nlane, v_s
 /*****************************************************************
  * Implement partial load/store for u32/f32/u64/f64... via casting
  *****************************************************************/
-#define NPYV_IMPL_VSX_REST_PARTIAL_TYPES(F_SFX, T_SFX)                                      \
+#define V_IMPL_VSX_REST_PARTIAL_TYPES(F_SFX, T_SFX)                                      \
     V_FINLINE v_##F_SFX v_load_till_##F_SFX                                         \
     (const v_lanetype_##F_SFX *ptr, s_uintp nlane, v_lanetype_##F_SFX fill)         \
     {                                                                                       \
@@ -338,9 +338,9 @@ V_FINLINE void v_storen_till_s64(s_int64 *ptr, s_intp stride, s_uintp nlane, v_s
         );                                                                                  \
     }
 
-NPYV_IMPL_VSX_REST_PARTIAL_TYPES(u32, s32)
-NPYV_IMPL_VSX_REST_PARTIAL_TYPES(f32, s32)
-NPYV_IMPL_VSX_REST_PARTIAL_TYPES(u64, s64)
-NPYV_IMPL_VSX_REST_PARTIAL_TYPES(f64, s64)
+V_IMPL_VSX_REST_PARTIAL_TYPES(u32, s32)
+V_IMPL_VSX_REST_PARTIAL_TYPES(f32, s32)
+V_IMPL_VSX_REST_PARTIAL_TYPES(u64, s64)
+V_IMPL_VSX_REST_PARTIAL_TYPES(f64, s64)
 
 #endif // _V_SIMD_VSX_MEMORY_H

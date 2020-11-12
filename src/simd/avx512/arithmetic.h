@@ -15,8 +15,8 @@
     #define v_add_u8  _mm512_add_epi8
     #define v_add_u16 _mm512_add_epi16
 #else
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_add_u8,  _mm256_add_epi8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_add_u16, _mm256_add_epi16)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_add_u8,  _mm256_add_epi8)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_add_u16, _mm256_add_epi16)
 #endif
 #define v_add_s8  v_add_u8
 #define v_add_s16 v_add_u16
@@ -34,10 +34,10 @@
     #define v_adds_u16 _mm512_adds_epu16
     #define v_adds_s16 _mm512_adds_epi16
 #else
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_adds_u8,  _mm256_adds_epu8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_adds_s8,  _mm256_adds_epi8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_adds_u16, _mm256_adds_epu16)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_adds_s16, _mm256_adds_epi16)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_adds_u8,  _mm256_adds_epu8)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_adds_s8,  _mm256_adds_epi8)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_adds_u16, _mm256_adds_epu16)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_adds_s16, _mm256_adds_epi16)
 #endif
 // TODO: rest, after implment Packs intrins
 
@@ -49,8 +49,8 @@
     #define v_sub_u8  _mm512_sub_epi8
     #define v_sub_u16 _mm512_sub_epi16
 #else
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_sub_u8,  _mm256_sub_epi8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_sub_u16, _mm256_sub_epi16)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_sub_u8,  _mm256_sub_epi8)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_sub_u16, _mm256_sub_epi16)
 #endif
 #define v_sub_s8  v_sub_u8
 #define v_sub_s16 v_sub_u16
@@ -68,10 +68,10 @@
     #define v_subs_u16 _mm512_subs_epu16
     #define v_subs_s16 _mm512_subs_epi16
 #else
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_subs_u8,  _mm256_subs_epu8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_subs_s8,  _mm256_subs_epi8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_subs_u16, _mm256_subs_epu16)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_subs_s16, _mm256_subs_epi16)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_subs_u8,  _mm256_subs_epu8)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_subs_s8,  _mm256_subs_epi8)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_subs_u16, _mm256_subs_epu16)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_subs_s16, _mm256_subs_epi16)
 #endif
 // TODO: rest, after implment Packs intrins
 
@@ -88,13 +88,13 @@ V_FINLINE __m512i v_mul_u8(__m512i a, __m512i b)
     return _mm512_mask_blend_epi8(0xAAAAAAAAAAAAAAAA, even, odd);
 }
 #else
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_mul_u8, v256_mul_u8)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_mul_u8, v256_mul_u8)
 #endif
 
 #ifdef V_HAVE_AVX512BW
     #define v_mul_u16 _mm512_mullo_epi16
 #else
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_mul_u16, _mm256_mullo_epi16)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_mul_u16, _mm256_mullo_epi16)
 #endif
 #define v_mul_s8  v_mul_u8
 #define v_mul_s16 v_mul_u16

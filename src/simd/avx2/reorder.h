@@ -64,7 +64,7 @@ V_FINLINE v_f64x2 v_combine_f64(__m256d a, __m256d b)
 #define v_combine_s64 v__combine
 
 // interleave two vectors
-#define NPYV_IMPL_AVX2_ZIP_U(T_VEC, LEN)                    \
+#define V_IMPL_AVX2_ZIP_U(T_VEC, LEN)                    \
     V_FINLINE T_VEC##x2 v_zip_u##LEN(T_VEC a, T_VEC b) \
     {                                                       \
         __m256i ab0 = _mm256_unpacklo_epi##LEN(a, b);       \
@@ -72,10 +72,10 @@ V_FINLINE v_f64x2 v_combine_f64(__m256d a, __m256d b)
         return v__combine(ab0, ab1);                     \
     }
 
-NPYV_IMPL_AVX2_ZIP_U(v_u8,  8)
-NPYV_IMPL_AVX2_ZIP_U(v_u16, 16)
-NPYV_IMPL_AVX2_ZIP_U(v_u32, 32)
-NPYV_IMPL_AVX2_ZIP_U(v_u64, 64)
+V_IMPL_AVX2_ZIP_U(v_u8,  8)
+V_IMPL_AVX2_ZIP_U(v_u16, 16)
+V_IMPL_AVX2_ZIP_U(v_u32, 32)
+V_IMPL_AVX2_ZIP_U(v_u64, 64)
 #define v_zip_s8  v_zip_u8
 #define v_zip_s16 v_zip_u16
 #define v_zip_s32 v_zip_u32

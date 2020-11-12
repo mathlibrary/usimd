@@ -35,7 +35,7 @@
  * combine: combine two vectors from lower and higher parts of two other vectors
  * zip: interleave two vectors
 */
-#define NPYV_IMPL_VSX_COMBINE_ZIP(T_VEC, SFX)                  \
+#define V_IMPL_VSX_COMBINE_ZIP(T_VEC, SFX)                  \
     V_FINLINE T_VEC##x2 v_combine_##SFX(T_VEC a, T_VEC b) \
     {                                                          \
         T_VEC##x2 r;                                           \
@@ -51,15 +51,15 @@
         return r;                                              \
     }
 
-NPYV_IMPL_VSX_COMBINE_ZIP(v_u8,  u8)
-NPYV_IMPL_VSX_COMBINE_ZIP(v_s8,  s8)
-NPYV_IMPL_VSX_COMBINE_ZIP(v_u16, u16)
-NPYV_IMPL_VSX_COMBINE_ZIP(v_s16, s16)
-NPYV_IMPL_VSX_COMBINE_ZIP(v_u32, u32)
-NPYV_IMPL_VSX_COMBINE_ZIP(v_s32, s32)
-NPYV_IMPL_VSX_COMBINE_ZIP(v_u64, u64)
-NPYV_IMPL_VSX_COMBINE_ZIP(v_s64, s64)
-NPYV_IMPL_VSX_COMBINE_ZIP(v_f32, f32)
-NPYV_IMPL_VSX_COMBINE_ZIP(v_f64, f64)
+V_IMPL_VSX_COMBINE_ZIP(v_u8,  u8)
+V_IMPL_VSX_COMBINE_ZIP(v_s8,  s8)
+V_IMPL_VSX_COMBINE_ZIP(v_u16, u16)
+V_IMPL_VSX_COMBINE_ZIP(v_s16, s16)
+V_IMPL_VSX_COMBINE_ZIP(v_u32, u32)
+V_IMPL_VSX_COMBINE_ZIP(v_s32, s32)
+V_IMPL_VSX_COMBINE_ZIP(v_u64, u64)
+V_IMPL_VSX_COMBINE_ZIP(v_s64, s64)
+V_IMPL_VSX_COMBINE_ZIP(v_f32, f32)
+V_IMPL_VSX_COMBINE_ZIP(v_f64, f64)
 
 #endif // _V_SIMD_VSX_REORDER_H

@@ -13,7 +13,7 @@
 #ifdef V_HAVE_AVX512BW
     #define v_shl_u16(A, C) _mm512_sll_epi16(A, _mm_cvtsi32_si128(C))
 #else
-    #define NPYV_IMPL_AVX512_SHIFT(FN, INTRIN)          \
+    #define V_IMPL_AVX512_SHIFT(FN, INTRIN)          \
         V_FINLINE __m512i v_##FN(__m512i a, int c) \
         {                                               \
             __m256i l  = v512_lower_si256(a);        \
@@ -24,7 +24,7 @@
             return v512_combine_si256(l, h);         \
         }
 
-    NPYV_IMPL_AVX512_SHIFT(shl_u16, sll_epi16)
+    V_IMPL_AVX512_SHIFT(shl_u16, sll_epi16)
 #endif
 #define v_shl_s16 v_shl_u16
 #define v_shl_u32(A, C) _mm512_sll_epi32(A, _mm_cvtsi32_si128(C))
@@ -49,8 +49,8 @@
     #define v_shr_u16(A, C) _mm512_srl_epi16(A, _mm_cvtsi32_si128(C))
     #define v_shr_s16(A, C) _mm512_sra_epi16(A, _mm_cvtsi32_si128(C))
 #else
-    NPYV_IMPL_AVX512_SHIFT(shr_u16, srl_epi16)
-    NPYV_IMPL_AVX512_SHIFT(shr_s16, sra_epi16)
+    V_IMPL_AVX512_SHIFT(shr_u16, srl_epi16)
+    V_IMPL_AVX512_SHIFT(shr_s16, sra_epi16)
 #endif
 #define v_shr_u32(A, C) _mm512_srl_epi32(A, _mm_cvtsi32_si128(C))
 #define v_shr_s32(A, C) _mm512_sra_epi32(A, _mm_cvtsi32_si128(C))
@@ -87,8 +87,8 @@
     #define v_and_f32 _mm512_and_ps
     #define v_and_f64 _mm512_and_pd
 #else
-    NPYV_IMPL_AVX512_FROM_SI512_PS_2ARG(v_and_f32, _mm512_and_si512)
-    NPYV_IMPL_AVX512_FROM_SI512_PD_2ARG(v_and_f64, _mm512_and_si512)
+    V_IMPL_AVX512_FROM_SI512_PS_2ARG(v_and_f32, _mm512_and_si512)
+    V_IMPL_AVX512_FROM_SI512_PD_2ARG(v_and_f64, _mm512_and_si512)
 #endif
 
 // OR
@@ -104,8 +104,8 @@
     #define v_or_f32 _mm512_or_ps
     #define v_or_f64 _mm512_or_pd
 #else
-    NPYV_IMPL_AVX512_FROM_SI512_PS_2ARG(v_or_f32, _mm512_or_si512)
-    NPYV_IMPL_AVX512_FROM_SI512_PD_2ARG(v_or_f64, _mm512_or_si512)
+    V_IMPL_AVX512_FROM_SI512_PS_2ARG(v_or_f32, _mm512_or_si512)
+    V_IMPL_AVX512_FROM_SI512_PD_2ARG(v_or_f64, _mm512_or_si512)
 #endif
 
 // XOR
@@ -121,8 +121,8 @@
     #define v_xor_f32 _mm512_xor_ps
     #define v_xor_f64 _mm512_xor_pd
 #else
-    NPYV_IMPL_AVX512_FROM_SI512_PS_2ARG(v_xor_f32, _mm512_xor_si512)
-    NPYV_IMPL_AVX512_FROM_SI512_PD_2ARG(v_xor_f64, _mm512_xor_si512)
+    V_IMPL_AVX512_FROM_SI512_PS_2ARG(v_xor_f32, _mm512_xor_si512)
+    V_IMPL_AVX512_FROM_SI512_PD_2ARG(v_xor_f64, _mm512_xor_si512)
 #endif
 
 // NOT
@@ -153,8 +153,8 @@
     #define v_cmpeq_u16 _mm512_cmpeq_epu16_mask
     #define v_cmpeq_s16 _mm512_cmpeq_epi16_mask
 #else
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_cmpeq_u8,  _mm256_cmpeq_epi8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_cmpeq_u16, _mm256_cmpeq_epi16)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_cmpeq_u8,  _mm256_cmpeq_epi8)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_cmpeq_u16, _mm256_cmpeq_epi16)
     #define v_cmpeq_s8  v_cmpeq_u8
     #define v_cmpeq_s16 v_cmpeq_u16
 #endif
@@ -187,8 +187,8 @@
     #define v_cmpgt_u16 _mm512_cmpgt_epu16_mask
     #define v_cmpgt_s16 _mm512_cmpgt_epi16_mask
 #else
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_cmpgt_s8,  _mm256_cmpgt_epi8)
-    NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_cmpgt_s16, _mm256_cmpgt_epi16)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_cmpgt_s8,  _mm256_cmpgt_epi8)
+    V_IMPL_AVX512_FROM_AVX2_2ARG(v_cmpgt_s16, _mm256_cmpgt_epi16)
     V_FINLINE __m512i v_cmpgt_u8(__m512i a, __m512i b)
     {
         const __m512i sbit = _mm512_set1_epi32(0x80808080);

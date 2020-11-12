@@ -61,7 +61,7 @@ V_FINLINE v_f64x2 v_combine_f64(__m128d a, __m128d b)
 #define v_combine_s64 v__combine
 
 // interleave two vectors
-#define NPYV_IMPL_SSE_ZIP(T_VEC, SFX, INTR_SFX)            \
+#define V_IMPL_SSE_ZIP(T_VEC, SFX, INTR_SFX)            \
     V_FINLINE T_VEC##x2 v_zip_##SFX(T_VEC a, T_VEC b) \
     {                                                      \
         T_VEC##x2 r;                                       \
@@ -70,15 +70,15 @@ V_FINLINE v_f64x2 v_combine_f64(__m128d a, __m128d b)
         return r;                                          \
     }
 
-NPYV_IMPL_SSE_ZIP(v_u8,  u8,  epi8)
-NPYV_IMPL_SSE_ZIP(v_s8,  s8,  epi8)
-NPYV_IMPL_SSE_ZIP(v_u16, u16, epi16)
-NPYV_IMPL_SSE_ZIP(v_s16, s16, epi16)
-NPYV_IMPL_SSE_ZIP(v_u32, u32, epi32)
-NPYV_IMPL_SSE_ZIP(v_s32, s32, epi32)
-NPYV_IMPL_SSE_ZIP(v_u64, u64, epi64)
-NPYV_IMPL_SSE_ZIP(v_s64, s64, epi64)
-NPYV_IMPL_SSE_ZIP(v_f32, f32, ps)
-NPYV_IMPL_SSE_ZIP(v_f64, f64, pd)
+V_IMPL_SSE_ZIP(v_u8,  u8,  epi8)
+V_IMPL_SSE_ZIP(v_s8,  s8,  epi8)
+V_IMPL_SSE_ZIP(v_u16, u16, epi16)
+V_IMPL_SSE_ZIP(v_s16, s16, epi16)
+V_IMPL_SSE_ZIP(v_u32, u32, epi32)
+V_IMPL_SSE_ZIP(v_s32, s32, epi32)
+V_IMPL_SSE_ZIP(v_u64, u64, epi64)
+V_IMPL_SSE_ZIP(v_s64, s64, epi64)
+V_IMPL_SSE_ZIP(v_f32, f32, ps)
+V_IMPL_SSE_ZIP(v_f64, f64, pd)
 
 #endif // _V_SIMD_SSE_REORDER_H

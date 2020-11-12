@@ -19,34 +19,34 @@
 
 // vector with a specific value set to all lanes
 // the safest way to generate vsplti* and vsplt* instructions
-#define NPYV_IMPL_VSX_SPLTB(T_VEC, V) ((T_VEC){V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V})
-#define NPYV_IMPL_VSX_SPLTH(T_VEC, V) ((T_VEC){V, V, V, V, V, V, V, V})
-#define NPYV_IMPL_VSX_SPLTW(T_VEC, V) ((T_VEC){V, V, V, V})
-#define NPYV_IMPL_VSX_SPLTD(T_VEC, V) ((T_VEC){V, V})
+#define V_IMPL_VSX_SPLTB(T_VEC, V) ((T_VEC){V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V})
+#define V_IMPL_VSX_SPLTH(T_VEC, V) ((T_VEC){V, V, V, V, V, V, V, V})
+#define V_IMPL_VSX_SPLTW(T_VEC, V) ((T_VEC){V, V, V, V})
+#define V_IMPL_VSX_SPLTD(T_VEC, V) ((T_VEC){V, V})
 
-#define v_setall_u8(VAL)  NPYV_IMPL_VSX_SPLTB(v_u8,  (unsigned char)VAL)
-#define v_setall_s8(VAL)  NPYV_IMPL_VSX_SPLTB(v_s8,  (signed char)VAL)
-#define v_setall_u16(VAL) NPYV_IMPL_VSX_SPLTH(v_u16, (unsigned short)VAL)
-#define v_setall_s16(VAL) NPYV_IMPL_VSX_SPLTH(v_s16, (short)VAL)
-#define v_setall_u32(VAL) NPYV_IMPL_VSX_SPLTW(v_u32, (unsigned int)VAL)
-#define v_setall_s32(VAL) NPYV_IMPL_VSX_SPLTW(v_s32, (int)VAL)
-#define v_setall_f32(VAL) NPYV_IMPL_VSX_SPLTW(v_f32, VAL)
-#define v_setall_u64(VAL) NPYV_IMPL_VSX_SPLTD(v_u64, (s_uint64)VAL)
-#define v_setall_s64(VAL) NPYV_IMPL_VSX_SPLTD(v_s64, (s_int64)VAL)
-#define v_setall_f64(VAL) NPYV_IMPL_VSX_SPLTD(v_f64, VAL)
+#define v_setall_u8(VAL)  V_IMPL_VSX_SPLTB(v_u8,  (unsigned char)VAL)
+#define v_setall_s8(VAL)  V_IMPL_VSX_SPLTB(v_s8,  (signed char)VAL)
+#define v_setall_u16(VAL) V_IMPL_VSX_SPLTH(v_u16, (unsigned short)VAL)
+#define v_setall_s16(VAL) V_IMPL_VSX_SPLTH(v_s16, (short)VAL)
+#define v_setall_u32(VAL) V_IMPL_VSX_SPLTW(v_u32, (unsigned int)VAL)
+#define v_setall_s32(VAL) V_IMPL_VSX_SPLTW(v_s32, (int)VAL)
+#define v_setall_f32(VAL) V_IMPL_VSX_SPLTW(v_f32, VAL)
+#define v_setall_u64(VAL) V_IMPL_VSX_SPLTD(v_u64, (s_uint64)VAL)
+#define v_setall_s64(VAL) V_IMPL_VSX_SPLTD(v_s64, (s_int64)VAL)
+#define v_setall_f64(VAL) V_IMPL_VSX_SPLTD(v_f64, VAL)
 
 // vector with specific values set to each lane and
 // set a specific value to all remained lanes
-#define v_setf_u8(FILL, ...)  ((v_u8){NPYV__SET_FILL_16(char, FILL, __VA_ARGS__)})
-#define v_setf_s8(FILL, ...)  ((v_s8){NPYV__SET_FILL_16(char, FILL, __VA_ARGS__)})
-#define v_setf_u16(FILL, ...) ((v_u16){NPYV__SET_FILL_8(short, FILL, __VA_ARGS__)})
-#define v_setf_s16(FILL, ...) ((v_s16){NPYV__SET_FILL_8(short, FILL, __VA_ARGS__)})
-#define v_setf_u32(FILL, ...) ((v_u32){NPYV__SET_FILL_4(int, FILL, __VA_ARGS__)})
-#define v_setf_s32(FILL, ...) ((v_s32){NPYV__SET_FILL_4(int, FILL, __VA_ARGS__)})
-#define v_setf_u64(FILL, ...) ((v_u64){NPYV__SET_FILL_2(s_int64, FILL, __VA_ARGS__)})
-#define v_setf_s64(FILL, ...) ((v_s64){NPYV__SET_FILL_2(s_int64, FILL, __VA_ARGS__)})
-#define v_setf_f32(FILL, ...) ((v_f32){NPYV__SET_FILL_4(float, FILL, __VA_ARGS__)})
-#define v_setf_f64(FILL, ...) ((v_f64){NPYV__SET_FILL_2(double, FILL, __VA_ARGS__)})
+#define v_setf_u8(FILL, ...)  ((v_u8){V__SET_FILL_16(char, FILL, __VA_ARGS__)})
+#define v_setf_s8(FILL, ...)  ((v_s8){V__SET_FILL_16(char, FILL, __VA_ARGS__)})
+#define v_setf_u16(FILL, ...) ((v_u16){V__SET_FILL_8(short, FILL, __VA_ARGS__)})
+#define v_setf_s16(FILL, ...) ((v_s16){V__SET_FILL_8(short, FILL, __VA_ARGS__)})
+#define v_setf_u32(FILL, ...) ((v_u32){V__SET_FILL_4(int, FILL, __VA_ARGS__)})
+#define v_setf_s32(FILL, ...) ((v_s32){V__SET_FILL_4(int, FILL, __VA_ARGS__)})
+#define v_setf_u64(FILL, ...) ((v_u64){V__SET_FILL_2(s_int64, FILL, __VA_ARGS__)})
+#define v_setf_s64(FILL, ...) ((v_s64){V__SET_FILL_2(s_int64, FILL, __VA_ARGS__)})
+#define v_setf_f32(FILL, ...) ((v_f32){V__SET_FILL_4(float, FILL, __VA_ARGS__)})
+#define v_setf_f64(FILL, ...) ((v_f64){V__SET_FILL_2(double, FILL, __VA_ARGS__)})
 
 // vector with specific values set to each lane and
 // set zero to all remained lanes

@@ -135,7 +135,7 @@ V_FINLINE __m256i v_shr_s64(__m256i a, int c)
 #define v_cmpge_s64(A, B) v_not_s64(_mm256_cmpgt_epi64(B, A))
 
 // unsigned greater than
-#define NPYV_IMPL_AVX2_UNSIGNED_GT(LEN, SIGN)                    \
+#define V_IMPL_AVX2_UNSIGNED_GT(LEN, SIGN)                    \
     V_FINLINE __m256i v_cmpgt_u##LEN(__m256i a, __m256i b)  \
     {                                                            \
         const __m256i sbit = _mm256_set1_epi32(SIGN);            \
@@ -144,9 +144,9 @@ V_FINLINE __m256i v_shr_s64(__m256i a, int c)
         );                                                       \
     }
 
-NPYV_IMPL_AVX2_UNSIGNED_GT(8,  0x80808080)
-NPYV_IMPL_AVX2_UNSIGNED_GT(16, 0x80008000)
-NPYV_IMPL_AVX2_UNSIGNED_GT(32, 0x80000000)
+V_IMPL_AVX2_UNSIGNED_GT(8,  0x80808080)
+V_IMPL_AVX2_UNSIGNED_GT(16, 0x80008000)
+V_IMPL_AVX2_UNSIGNED_GT(32, 0x80000000)
 
 V_FINLINE __m256i v_cmpgt_u64(__m256i a, __m256i b)
 {

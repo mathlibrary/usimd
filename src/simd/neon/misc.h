@@ -40,7 +40,7 @@ V_FINLINE uint8x16_t v__set_u8(s_uint8 i0, s_uint8 i1, s_uint8 i2, s_uint8 i3,
     };
     return vld1q_u8(data);
 }
-#define v_setf_u8(FILL, ...)  v__set_u8(NPYV__SET_FILL_16(s_uint8, FILL, __VA_ARGS__))
+#define v_setf_u8(FILL, ...)  v__set_u8(V__SET_FILL_16(s_uint8, FILL, __VA_ARGS__))
 
 V_FINLINE int8x16_t v__set_s8(s_int8 i0, s_int8 i1, s_int8 i2, s_int8 i3,
     s_int8 i4, s_int8 i5, s_int8 i6, s_int8 i7, s_int8 i8, s_int8 i9,
@@ -51,7 +51,7 @@ V_FINLINE int8x16_t v__set_s8(s_int8 i0, s_int8 i1, s_int8 i2, s_int8 i3,
     };
     return vld1q_s8(data);
 }
-#define v_setf_s8(FILL, ...)  v__set_s8(NPYV__SET_FILL_16(s_int8, FILL, __VA_ARGS__))
+#define v_setf_s8(FILL, ...)  v__set_s8(V__SET_FILL_16(s_int8, FILL, __VA_ARGS__))
 
 V_FINLINE uint16x8_t v__set_u16(s_uint16 i0, s_uint16 i1, s_uint16 i2, s_uint16 i3,
     s_uint16 i4, s_uint16 i5, s_uint16 i6, s_uint16 i7)
@@ -59,7 +59,7 @@ V_FINLINE uint16x8_t v__set_u16(s_uint16 i0, s_uint16 i1, s_uint16 i2, s_uint16 
     const uint16_t V_DECL_ALIGNED(16) data[8] = {i0, i1, i2, i3, i4, i5, i6, i7};
     return vld1q_u16(data);
 }
-#define v_setf_u16(FILL, ...) v__set_u16(NPYV__SET_FILL_8(s_uint16, FILL, __VA_ARGS__))
+#define v_setf_u16(FILL, ...) v__set_u16(V__SET_FILL_8(s_uint16, FILL, __VA_ARGS__))
 
 V_FINLINE int16x8_t v__set_s16(s_int16 i0, s_int16 i1, s_int16 i2, s_int16 i3,
     s_int16 i4, s_int16 i5, s_int16 i6, s_int16 i7)
@@ -67,42 +67,42 @@ V_FINLINE int16x8_t v__set_s16(s_int16 i0, s_int16 i1, s_int16 i2, s_int16 i3,
     const int16_t V_DECL_ALIGNED(16) data[8] = {i0, i1, i2, i3, i4, i5, i6, i7};
     return vld1q_s16(data);
 }
-#define v_setf_s16(FILL, ...) v__set_s16(NPYV__SET_FILL_8(s_int16, FILL, __VA_ARGS__))
+#define v_setf_s16(FILL, ...) v__set_s16(V__SET_FILL_8(s_int16, FILL, __VA_ARGS__))
 
 V_FINLINE uint32x4_t v__set_u32(s_uint32 i0, s_uint32 i1, s_uint32 i2, s_uint32 i3)
 {
     const uint32_t V_DECL_ALIGNED(16) data[4] = {i0, i1, i2, i3};
     return vld1q_u32(data);
 }
-#define v_setf_u32(FILL, ...) v__set_u32(NPYV__SET_FILL_4(s_uint32, FILL, __VA_ARGS__))
+#define v_setf_u32(FILL, ...) v__set_u32(V__SET_FILL_4(s_uint32, FILL, __VA_ARGS__))
 
 V_FINLINE int32x4_t v__set_s32(s_int32 i0, s_int32 i1, s_int32 i2, s_int32 i3)
 {
     const int32_t V_DECL_ALIGNED(16) data[4] = {i0, i1, i2, i3};
     return vld1q_s32(data);
 }
-#define v_setf_s32(FILL, ...) v__set_s32(NPYV__SET_FILL_4(s_int32, FILL, __VA_ARGS__))
+#define v_setf_s32(FILL, ...) v__set_s32(V__SET_FILL_4(s_int32, FILL, __VA_ARGS__))
 
 V_FINLINE uint64x2_t v__set_u64(s_uint64 i0, s_uint64 i1)
 {
     const uint64_t V_DECL_ALIGNED(16) data[2] = {i0, i1};
     return vld1q_u64(data);
 }
-#define v_setf_u64(FILL, ...) v__set_u64(NPYV__SET_FILL_2(s_int64, FILL, __VA_ARGS__))
+#define v_setf_u64(FILL, ...) v__set_u64(V__SET_FILL_2(s_int64, FILL, __VA_ARGS__))
 
 V_FINLINE int64x2_t v__set_s64(s_int64 i0, s_int64 i1)
 {
     const int64_t V_DECL_ALIGNED(16) data[2] = {i0, i1};
     return vld1q_s64(data);
 }
-#define v_setf_s64(FILL, ...) v__set_s64(NPYV__SET_FILL_2(s_int64, FILL, __VA_ARGS__))
+#define v_setf_s64(FILL, ...) v__set_s64(V__SET_FILL_2(s_int64, FILL, __VA_ARGS__))
 
 V_FINLINE float32x4_t v__set_f32(float i0, float i1, float i2, float i3)
 {
     const float V_DECL_ALIGNED(16) data[4] = {i0, i1, i2, i3};
     return vld1q_f32(data);
 }
-#define v_setf_f32(FILL, ...) v__set_f32(NPYV__SET_FILL_4(float, FILL, __VA_ARGS__))
+#define v_setf_f32(FILL, ...) v__set_f32(V__SET_FILL_4(float, FILL, __VA_ARGS__))
 
 #ifdef __aarch64__
 V_FINLINE float64x2_t v__set_f64(double i0, double i1)
@@ -110,7 +110,7 @@ V_FINLINE float64x2_t v__set_f64(double i0, double i1)
     const double V_DECL_ALIGNED(16) data[2] = {i0, i1};
     return vld1q_f64(data);
 }
-#define v_setf_f64(FILL, ...) v__set_f64(NPYV__SET_FILL_2(double, FILL, __VA_ARGS__))
+#define v_setf_f64(FILL, ...) v__set_f64(V__SET_FILL_2(double, FILL, __VA_ARGS__))
 #endif
 
 // vector with specific values set to each lane and

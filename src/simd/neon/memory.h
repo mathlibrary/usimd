@@ -11,7 +11,7 @@
  * load/store
  ***************************/
 // GCC requires literal type definitions for pointers types otherwise it causes ambiguous errors
-#define NPYV_IMPL_NEON_MEM(SFX, CTYPE)                                           \
+#define V_IMPL_NEON_MEM(SFX, CTYPE)                                           \
     V_FINLINE v_##SFX v_load_##SFX(const v_lanetype_##SFX *ptr)       \
     { return vld1q_##SFX((const CTYPE*)ptr); }                                   \
     V_FINLINE v_##SFX v_loada_##SFX(const v_lanetype_##SFX *ptr)      \
@@ -35,17 +35,17 @@
     V_FINLINE void v_storeh_##SFX(v_lanetype_##SFX *ptr, v_##SFX vec) \
     { vst1_##SFX((CTYPE*)ptr, vget_high_##SFX(vec)); }
 
-NPYV_IMPL_NEON_MEM(u8,  uint8_t)
-NPYV_IMPL_NEON_MEM(s8,  int8_t)
-NPYV_IMPL_NEON_MEM(u16, uint16_t)
-NPYV_IMPL_NEON_MEM(s16, int16_t)
-NPYV_IMPL_NEON_MEM(u32, uint32_t)
-NPYV_IMPL_NEON_MEM(s32, int32_t)
-NPYV_IMPL_NEON_MEM(u64, uint64_t)
-NPYV_IMPL_NEON_MEM(s64, int64_t)
-NPYV_IMPL_NEON_MEM(f32, float)
+V_IMPL_NEON_MEM(u8,  uint8_t)
+V_IMPL_NEON_MEM(s8,  int8_t)
+V_IMPL_NEON_MEM(u16, uint16_t)
+V_IMPL_NEON_MEM(s16, int16_t)
+V_IMPL_NEON_MEM(u32, uint32_t)
+V_IMPL_NEON_MEM(s32, int32_t)
+V_IMPL_NEON_MEM(u64, uint64_t)
+V_IMPL_NEON_MEM(s64, int64_t)
+V_IMPL_NEON_MEM(f32, float)
 #if V_SIMD_F64
-NPYV_IMPL_NEON_MEM(f64, double)
+V_IMPL_NEON_MEM(f64, double)
 #endif
 /***************************
  * Non-contiguous Load
@@ -271,7 +271,7 @@ V_FINLINE void v_storen_till_s64(s_int64 *ptr, s_intp stride, s_uintp nlane, v_s
 /*****************************************************************
  * Implement partial load/store for u32/f32/u64/f64... via casting
  *****************************************************************/
-#define NPYV_IMPL_NEON_REST_PARTIAL_TYPES(F_SFX, T_SFX)                                     \
+#define V_IMPL_NEON_REST_PARTIAL_TYPES(F_SFX, T_SFX)                                     \
     V_FINLINE v_##F_SFX v_load_till_##F_SFX                                         \
     (const v_lanetype_##F_SFX *ptr, s_uintp nlane, v_lanetype_##F_SFX fill)         \
     {                                                                                       \
@@ -326,11 +326,11 @@ V_FINLINE void v_storen_till_s64(s_int64 *ptr, s_intp stride, s_uintp nlane, v_s
         );                                                                                  \
     }
 
-NPYV_IMPL_NEON_REST_PARTIAL_TYPES(u32, s32)
-NPYV_IMPL_NEON_REST_PARTIAL_TYPES(f32, s32)
-NPYV_IMPL_NEON_REST_PARTIAL_TYPES(u64, s64)
+V_IMPL_NEON_REST_PARTIAL_TYPES(u32, s32)
+V_IMPL_NEON_REST_PARTIAL_TYPES(f32, s32)
+V_IMPL_NEON_REST_PARTIAL_TYPES(u64, s64)
 #if V_SIMD_F64
-NPYV_IMPL_NEON_REST_PARTIAL_TYPES(f64, s64)
+V_IMPL_NEON_REST_PARTIAL_TYPES(f64, s64)
 #endif
 
 #endif // _V_SIMD_NEON_MEMORY_H

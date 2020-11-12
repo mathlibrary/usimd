@@ -29,7 +29,7 @@
         _mm512_castsi512_ps(v512_combine_si256(_mm512_castps_si512(A), _mm512_castps_si512(B)))
 #endif
 
-#define NPYV_IMPL_AVX512_FROM_AVX2_1ARG(FN_NAME, INTRIN) \
+#define V_IMPL_AVX512_FROM_AVX2_1ARG(FN_NAME, INTRIN) \
     V_FINLINE __m512i FN_NAME(__m512i a)               \
     {                                                    \
         __m256i l_a  = v512_lower_si256(a);           \
@@ -39,7 +39,7 @@
         return v512_combine_si256(l_a, h_a);          \
     }
 
-#define NPYV_IMPL_AVX512_FROM_AVX2_2ARG(FN_NAME, INTRIN) \
+#define V_IMPL_AVX512_FROM_AVX2_2ARG(FN_NAME, INTRIN) \
     V_FINLINE __m512i FN_NAME(__m512i a, __m512i b)    \
     {                                                    \
         __m256i l_a  = v512_lower_si256(a);           \
@@ -51,7 +51,7 @@
         return v512_combine_si256(l_a, h_a);          \
     }
 
-#define NPYV_IMPL_AVX512_FROM_SI512_PS_2ARG(FN_NAME, INTRIN) \
+#define V_IMPL_AVX512_FROM_SI512_PS_2ARG(FN_NAME, INTRIN) \
     V_FINLINE __m512 FN_NAME(__m512 a, __m512 b)           \
     {                                                        \
         return _mm512_castsi512_ps(INTRIN(                   \
@@ -59,7 +59,7 @@
         ));                                                  \
     }
 
-#define NPYV_IMPL_AVX512_FROM_SI512_PD_2ARG(FN_NAME, INTRIN) \
+#define V_IMPL_AVX512_FROM_SI512_PD_2ARG(FN_NAME, INTRIN) \
     V_FINLINE __m512d FN_NAME(__m512d a, __m512d b)        \
     {                                                        \
         return _mm512_castsi512_pd(INTRIN(                   \

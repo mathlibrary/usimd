@@ -1,43 +1,43 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
 #include "misc.h"
 
-#ifndef _NPY_SIMD_AVX2_MEMORY_H
-#define _NPY_SIMD_AVX2_MEMORY_H
+#ifndef _V_SIMD_AVX2_MEMORY_H
+#define _V_SIMD_AVX2_MEMORY_H
 
 /***************************
  * load/store
  ***************************/
 #define NPYV_IMPL_AVX2_MEM_INT(CTYPE, SFX)                                   \
-    NPY_FINLINE v_##SFX v_load_##SFX(const CTYPE *ptr)                 \
+    V_FINLINE v_##SFX v_load_##SFX(const CTYPE *ptr)                 \
     { return _mm256_loadu_si256((const __m256i*)ptr); }                      \
-    NPY_FINLINE v_##SFX v_loada_##SFX(const CTYPE *ptr)                \
+    V_FINLINE v_##SFX v_loada_##SFX(const CTYPE *ptr)                \
     { return _mm256_load_si256((const __m256i*)ptr); }                       \
-    NPY_FINLINE v_##SFX v_loads_##SFX(const CTYPE *ptr)                \
+    V_FINLINE v_##SFX v_loads_##SFX(const CTYPE *ptr)                \
     { return _mm256_stream_load_si256((const __m256i*)ptr); }                \
-    NPY_FINLINE v_##SFX v_loadl_##SFX(const CTYPE *ptr)                \
+    V_FINLINE v_##SFX v_loadl_##SFX(const CTYPE *ptr)                \
     { return _mm256_castsi128_si256(_mm_loadu_si128((const __m128i*)ptr)); } \
-    NPY_FINLINE void v_store_##SFX(CTYPE *ptr, v_##SFX vec)            \
+    V_FINLINE void v_store_##SFX(CTYPE *ptr, v_##SFX vec)            \
     { _mm256_storeu_si256((__m256i*)ptr, vec); }                             \
-    NPY_FINLINE void v_storea_##SFX(CTYPE *ptr, v_##SFX vec)           \
+    V_FINLINE void v_storea_##SFX(CTYPE *ptr, v_##SFX vec)           \
     { _mm256_store_si256((__m256i*)ptr, vec); }                              \
-    NPY_FINLINE void v_stores_##SFX(CTYPE *ptr, v_##SFX vec)           \
+    V_FINLINE void v_stores_##SFX(CTYPE *ptr, v_##SFX vec)           \
     { _mm256_stream_si256((__m256i*)ptr, vec); }                             \
-    NPY_FINLINE void v_storel_##SFX(CTYPE *ptr, v_##SFX vec)           \
+    V_FINLINE void v_storel_##SFX(CTYPE *ptr, v_##SFX vec)           \
     { _mm_storeu_si128((__m128i*)(ptr), _mm256_castsi256_si128(vec)); }      \
-    NPY_FINLINE void v_storeh_##SFX(CTYPE *ptr, v_##SFX vec)           \
+    V_FINLINE void v_storeh_##SFX(CTYPE *ptr, v_##SFX vec)           \
     { _mm_storeu_si128((__m128i*)(ptr), _mm256_extracti128_si256(vec, 1)); }
 
-NPYV_IMPL_AVX2_MEM_INT(npy_uint8,  u8)
-NPYV_IMPL_AVX2_MEM_INT(npy_int8,   s8)
-NPYV_IMPL_AVX2_MEM_INT(npy_uint16, u16)
-NPYV_IMPL_AVX2_MEM_INT(npy_int16,  s16)
-NPYV_IMPL_AVX2_MEM_INT(npy_uint32, u32)
-NPYV_IMPL_AVX2_MEM_INT(npy_int32,  s32)
-NPYV_IMPL_AVX2_MEM_INT(npy_uint64, u64)
-NPYV_IMPL_AVX2_MEM_INT(npy_int64,  s64)
+NPYV_IMPL_AVX2_MEM_INT(s_uint8,  u8)
+NPYV_IMPL_AVX2_MEM_INT(s_int8,   s8)
+NPYV_IMPL_AVX2_MEM_INT(s_uint16, u16)
+NPYV_IMPL_AVX2_MEM_INT(s_int16,  s16)
+NPYV_IMPL_AVX2_MEM_INT(s_uint32, u32)
+NPYV_IMPL_AVX2_MEM_INT(s_int32,  s32)
+NPYV_IMPL_AVX2_MEM_INT(s_uint64, u64)
+NPYV_IMPL_AVX2_MEM_INT(s_int64,  s64)
 
 // unaligned load
 #define v_load_f32 _mm256_loadu_ps
@@ -72,30 +72,30 @@ NPYV_IMPL_AVX2_MEM_INT(npy_int64,  s64)
  * Non-contiguous Load
  ***************************/
 //// 32
-NPY_FINLINE v_u32 v_loadn_u32(const npy_uint32 *ptr, npy_intp stride)
+V_FINLINE v_u32 v_loadn_u32(const s_uint32 *ptr, s_intp stride)
 {
-    assert(llabs(stride) <= NPY_SIMD_MAXLOAD_STRIDE32);
+    assert(llabs(stride) <= V_SIMD_MAXLOAD_STRIDE32);
     const __m256i steps = _mm256_setr_epi32(0, 1, 2, 3, 4, 5, 6, 7);
     const __m256i idx = _mm256_mullo_epi32(_mm256_set1_epi32((int)stride), steps);
     return _mm256_i32gather_epi32((const int*)ptr, idx, 4);
 }
-NPY_FINLINE v_s32 v_loadn_s32(const npy_int32 *ptr, npy_intp stride)
-{ return v_loadn_u32((const npy_uint32*)ptr, stride); }
-NPY_FINLINE v_f32 v_loadn_f32(const float *ptr, npy_intp stride)
-{ return _mm256_castsi256_ps(v_loadn_u32((const npy_uint32*)ptr, stride)); }
+V_FINLINE v_s32 v_loadn_s32(const s_int32 *ptr, s_intp stride)
+{ return v_loadn_u32((const s_uint32*)ptr, stride); }
+V_FINLINE v_f32 v_loadn_f32(const float *ptr, s_intp stride)
+{ return _mm256_castsi256_ps(v_loadn_u32((const s_uint32*)ptr, stride)); }
 //// 64
 #if 0 // slower
-NPY_FINLINE v_u64 v_loadn_u64(const npy_uint64 *ptr, npy_intp stride)
+V_FINLINE v_u64 v_loadn_u64(const s_uint64 *ptr, s_intp stride)
 {
     const __m256i idx = _mm256_setr_epi64x(0, 1*stride, 2*stride, 3*stride);
     return _mm256_i64gather_epi64((const void*)ptr, idx, 8);
 }
-NPY_FINLINE v_s64 v_loadn_s64(const npy_int64 *ptr, npy_intp stride)
-{ return v_loadn_u64((const npy_uint64*)ptr, stride); }
-NPY_FINLINE v_f64 v_loadn_f64(const double *ptr, npy_intp stride)
-{ return _mm256_castsi256_pd(v_loadn_u64((const npy_uint64*)ptr, stride)); }
+V_FINLINE v_s64 v_loadn_s64(const s_int64 *ptr, s_intp stride)
+{ return v_loadn_u64((const s_uint64*)ptr, stride); }
+V_FINLINE v_f64 v_loadn_f64(const double *ptr, s_intp stride)
+{ return _mm256_castsi256_pd(v_loadn_u64((const s_uint64*)ptr, stride)); }
 #endif
-NPY_FINLINE v_f64 v_loadn_f64(const double *ptr, npy_intp stride)
+V_FINLINE v_f64 v_loadn_f64(const double *ptr, s_intp stride)
 {
     __m128d a0 = _mm_castsi128_pd(_mm_loadl_epi64((const __m128i*)ptr));
     __m128d a2 = _mm_castsi128_pd(_mm_loadl_epi64((const __m128i*)(ptr + stride*2)));
@@ -103,15 +103,15 @@ NPY_FINLINE v_f64 v_loadn_f64(const double *ptr, npy_intp stride)
     __m128d a23 = _mm_loadh_pd(a2, ptr + stride*3);
     return _mm256_insertf128_pd(_mm256_castpd128_pd256(a01), a23, 1);
 }
-NPY_FINLINE v_u64 v_loadn_u64(const npy_uint64 *ptr, npy_intp stride)
+V_FINLINE v_u64 v_loadn_u64(const s_uint64 *ptr, s_intp stride)
 { return _mm256_castpd_si256(v_loadn_f64((const double*)ptr, stride)); }
-NPY_FINLINE v_s64 v_loadn_s64(const npy_int64 *ptr, npy_intp stride)
+V_FINLINE v_s64 v_loadn_s64(const s_int64 *ptr, s_intp stride)
 { return _mm256_castpd_si256(v_loadn_f64((const double*)ptr, stride)); }
 /***************************
  * Non-contiguous Store
  ***************************/
 //// 32
-NPY_FINLINE void v_storen_s32(npy_int32 *ptr, npy_intp stride, v_s32 a)
+V_FINLINE void v_storen_s32(s_int32 *ptr, s_intp stride, v_s32 a)
 {
     __m128i a0 = _mm256_castsi256_si128(a);
     __m128i a1 = _mm256_extracti128_si256(a, 1);
@@ -124,12 +124,12 @@ NPY_FINLINE void v_storen_s32(npy_int32 *ptr, npy_intp stride, v_s32 a)
     ptr[stride * 6] = _mm_extract_epi32(a1, 2);
     ptr[stride * 7] = _mm_extract_epi32(a1, 3);
 }
-NPY_FINLINE void v_storen_u32(npy_uint32 *ptr, npy_intp stride, v_u32 a)
-{ v_storen_s32((npy_int32*)ptr, stride, a); }
-NPY_FINLINE void v_storen_f32(float *ptr, npy_intp stride, v_f32 a)
-{ v_storen_s32((npy_int32*)ptr, stride, _mm256_castps_si256(a)); }
+V_FINLINE void v_storen_u32(s_uint32 *ptr, s_intp stride, v_u32 a)
+{ v_storen_s32((s_int32*)ptr, stride, a); }
+V_FINLINE void v_storen_f32(float *ptr, s_intp stride, v_f32 a)
+{ v_storen_s32((s_int32*)ptr, stride, _mm256_castps_si256(a)); }
 //// 64
-NPY_FINLINE void v_storen_f64(double *ptr, npy_intp stride, v_f64 a)
+V_FINLINE void v_storen_f64(double *ptr, s_intp stride, v_f64 a)
 {
     __m128d a0 = _mm256_castpd256_pd128(a);
     __m128d a1 = _mm256_extractf128_pd(a, 1);
@@ -138,16 +138,16 @@ NPY_FINLINE void v_storen_f64(double *ptr, npy_intp stride, v_f64 a)
     _mm_storel_pd(ptr + stride * 2, a1);
     _mm_storeh_pd(ptr + stride * 3, a1);
 }
-NPY_FINLINE void v_storen_u64(npy_uint64 *ptr, npy_intp stride, v_u64 a)
+V_FINLINE void v_storen_u64(s_uint64 *ptr, s_intp stride, v_u64 a)
 { v_storen_f64((double*)ptr, stride, _mm256_castsi256_pd(a)); }
-NPY_FINLINE void v_storen_s64(npy_int64 *ptr, npy_intp stride, v_s64 a)
+V_FINLINE void v_storen_s64(s_int64 *ptr, s_intp stride, v_s64 a)
 { v_storen_f64((double*)ptr, stride, _mm256_castsi256_pd(a)); }
 
 /*********************************
  * Partial Load
  *********************************/
 //// 32
-NPY_FINLINE v_s32 v_load_till_s32(const npy_int32 *ptr, npy_uintp nlane, npy_int32 fill)
+V_FINLINE v_s32 v_load_till_s32(const s_int32 *ptr, s_uintp nlane, s_int32 fill)
 {
     assert(nlane > 0);
     const __m256i vfill = _mm256_set1_epi32(fill);
@@ -158,7 +158,7 @@ NPY_FINLINE v_s32 v_load_till_s32(const npy_int32 *ptr, npy_uintp nlane, npy_int
     return _mm256_blendv_epi8(vfill, payload, mask);
 }
 // fill zero to rest lanes
-NPY_FINLINE v_s32 v_load_tillz_s32(const npy_int32 *ptr, npy_uintp nlane)
+V_FINLINE v_s32 v_load_tillz_s32(const s_int32 *ptr, s_uintp nlane)
 {
     assert(nlane > 0);
     const __m256i steps = _mm256_setr_epi32(0, 1, 2, 3, 4, 5, 6, 7);
@@ -167,7 +167,7 @@ NPY_FINLINE v_s32 v_load_tillz_s32(const npy_int32 *ptr, npy_uintp nlane)
     return _mm256_maskload_epi32((const int*)ptr, mask);
 }
 //// 64
-NPY_FINLINE v_s64 v_load_till_s64(const npy_int64 *ptr, npy_uintp nlane, npy_int64 fill)
+V_FINLINE v_s64 v_load_till_s64(const s_int64 *ptr, s_uintp nlane, s_int64 fill)
 {
     assert(nlane > 0);
     const __m256i vfill = _mm256_set1_epi64x(fill);
@@ -178,7 +178,7 @@ NPY_FINLINE v_s64 v_load_till_s64(const npy_int64 *ptr, npy_uintp nlane, npy_int
     return _mm256_blendv_epi8(vfill, payload, mask);
 }
 // fill zero to rest lanes
-NPY_FINLINE v_s64 v_load_tillz_s64(const npy_int64 *ptr, npy_uintp nlane)
+V_FINLINE v_s64 v_load_tillz_s64(const s_int64 *ptr, s_uintp nlane)
 {
     assert(nlane > 0);
     const __m256i steps = _mm256_setr_epi64x(0, 1, 2, 3);
@@ -190,11 +190,11 @@ NPY_FINLINE v_s64 v_load_tillz_s64(const npy_int64 *ptr, npy_uintp nlane)
  * Non-contiguous partial load
  *********************************/
 //// 32
-NPY_FINLINE v_s32
-v_loadn_till_s32(const npy_int32 *ptr, npy_intp stride, npy_uintp nlane, npy_int32 fill)
+V_FINLINE v_s32
+v_loadn_till_s32(const s_int32 *ptr, s_intp stride, s_uintp nlane, s_int32 fill)
 {
     assert(nlane > 0);
-    assert(llabs(stride) <= NPY_SIMD_MAXLOAD_STRIDE32);
+    assert(llabs(stride) <= V_SIMD_MAXLOAD_STRIDE32);
     const __m256i vfill = _mm256_set1_epi32(fill);
     const __m256i steps = _mm256_setr_epi32(0, 1, 2, 3, 4, 5, 6, 7);
     const __m256i idx   = _mm256_mullo_epi32(_mm256_set1_epi32((int)stride), steps);
@@ -203,12 +203,12 @@ v_loadn_till_s32(const npy_int32 *ptr, npy_intp stride, npy_uintp nlane, npy_int
     return _mm256_mask_i32gather_epi32(vfill, (const int*)ptr, idx, mask, 4);
 }
 // fill zero to rest lanes
-NPY_FINLINE v_s32
-v_loadn_tillz_s32(const npy_int32 *ptr, npy_intp stride, npy_uintp nlane)
+V_FINLINE v_s32
+v_loadn_tillz_s32(const s_int32 *ptr, s_intp stride, s_uintp nlane)
 { return v_loadn_till_s32(ptr, stride, nlane, 0); }
 //// 64
-NPY_FINLINE v_s64
-v_loadn_till_s64(const npy_int64 *ptr, npy_intp stride, npy_uintp nlane, npy_int64 fill)
+V_FINLINE v_s64
+v_loadn_till_s64(const s_int64 *ptr, s_intp stride, s_uintp nlane, s_int64 fill)
 {
     assert(nlane > 0);
     const __m256i vfill = _mm256_set1_epi64x(fill);
@@ -219,14 +219,14 @@ v_loadn_till_s64(const npy_int64 *ptr, npy_intp stride, npy_uintp nlane, npy_int
     return _mm256_mask_i64gather_epi64(vfill, (const void*)ptr, idx, mask, 8);
 }
 // fill zero to rest lanes
-NPY_FINLINE v_s64
-v_loadn_tillz_s64(const npy_int64 *ptr, npy_intp stride, npy_uintp nlane)
+V_FINLINE v_s64
+v_loadn_tillz_s64(const s_int64 *ptr, s_intp stride, s_uintp nlane)
 { return v_loadn_till_s64(ptr, stride, nlane, 0); }
 /*********************************
  * Partial store
  *********************************/
 //// 32
-NPY_FINLINE void v_store_till_s32(npy_int32 *ptr, npy_uintp nlane, v_s32 a)
+V_FINLINE void v_store_till_s32(s_int32 *ptr, s_uintp nlane, v_s32 a)
 {
     assert(nlane > 0);
     const __m256i steps = _mm256_setr_epi32(0, 1, 2, 3, 4, 5, 6, 7);
@@ -235,7 +235,7 @@ NPY_FINLINE void v_store_till_s32(npy_int32 *ptr, npy_uintp nlane, v_s32 a)
     _mm256_maskstore_epi32((int*)ptr, mask, a);
 }
 //// 64
-NPY_FINLINE void v_store_till_s64(npy_int64 *ptr, npy_uintp nlane, v_s64 a)
+V_FINLINE void v_store_till_s64(s_int64 *ptr, s_uintp nlane, v_s64 a)
 {
     assert(nlane > 0);
     const __m256i steps = _mm256_setr_epi64x(0, 1, 2, 3);
@@ -247,7 +247,7 @@ NPY_FINLINE void v_store_till_s64(npy_int64 *ptr, npy_uintp nlane, v_s64 a)
  * Non-contiguous partial store
  *********************************/
 //// 32
-NPY_FINLINE void v_storen_till_s32(npy_int32 *ptr, npy_intp stride, npy_uintp nlane, v_s32 a)
+V_FINLINE void v_storen_till_s32(s_int32 *ptr, s_intp stride, s_uintp nlane, v_s32 a)
 {
     assert(nlane > 0);
     __m128i a0 = _mm256_castsi256_si128(a);
@@ -272,7 +272,7 @@ NPY_FINLINE void v_storen_till_s32(npy_int32 *ptr, npy_intp stride, npy_uintp nl
     }
 }
 //// 64
-NPY_FINLINE void v_storen_till_s64(npy_int64 *ptr, npy_intp stride, npy_uintp nlane, v_s64 a)
+V_FINLINE void v_storen_till_s64(s_int64 *ptr, s_intp stride, s_uintp nlane, v_s64 a)
 {
     assert(nlane > 0);
     __m128d a0 = _mm256_castpd256_pd128(_mm256_castsi256_pd(a));
@@ -294,8 +294,8 @@ NPY_FINLINE void v_storen_till_s64(npy_int64 *ptr, npy_intp stride, npy_uintp nl
  * Implement partial load/store for u32/f32/u64/f64... via reinterpret cast
  *****************************************************************************/
 #define NPYV_IMPL_AVX2_REST_PARTIAL_TYPES(F_SFX, T_SFX)                                     \
-    NPY_FINLINE v_##F_SFX v_load_till_##F_SFX                                         \
-    (const v_lanetype_##F_SFX *ptr, npy_uintp nlane, v_lanetype_##F_SFX fill)         \
+    V_FINLINE v_##F_SFX v_load_till_##F_SFX                                         \
+    (const v_lanetype_##F_SFX *ptr, s_uintp nlane, v_lanetype_##F_SFX fill)         \
     {                                                                                       \
         union {                                                                             \
             v_lanetype_##F_SFX from_##F_SFX;                                             \
@@ -305,8 +305,8 @@ NPY_FINLINE void v_storen_till_s64(npy_int64 *ptr, npy_intp stride, npy_uintp nl
             (const v_lanetype_##T_SFX *)ptr, nlane, pun.to_##T_SFX                       \
         ));                                                                                 \
     }                                                                                       \
-    NPY_FINLINE v_##F_SFX v_loadn_till_##F_SFX                                        \
-    (const v_lanetype_##F_SFX *ptr, npy_intp stride, npy_uintp nlane,                    \
+    V_FINLINE v_##F_SFX v_loadn_till_##F_SFX                                        \
+    (const v_lanetype_##F_SFX *ptr, s_intp stride, s_uintp nlane,                    \
      v_lanetype_##F_SFX fill)                                                            \
     {                                                                                       \
         union {                                                                             \
@@ -317,30 +317,30 @@ NPY_FINLINE void v_storen_till_s64(npy_int64 *ptr, npy_intp stride, npy_uintp nl
             (const v_lanetype_##T_SFX *)ptr, stride, nlane, pun.to_##T_SFX               \
         ));                                                                                 \
     }                                                                                       \
-    NPY_FINLINE v_##F_SFX v_load_tillz_##F_SFX                                        \
-    (const v_lanetype_##F_SFX *ptr, npy_uintp nlane)                                     \
+    V_FINLINE v_##F_SFX v_load_tillz_##F_SFX                                        \
+    (const v_lanetype_##F_SFX *ptr, s_uintp nlane)                                     \
     {                                                                                       \
         return v_reinterpret_##F_SFX##_##T_SFX(v_load_tillz_##T_SFX(                  \
             (const v_lanetype_##T_SFX *)ptr, nlane                                       \
         ));                                                                                 \
     }                                                                                       \
-    NPY_FINLINE v_##F_SFX v_loadn_tillz_##F_SFX                                       \
-    (const v_lanetype_##F_SFX *ptr, npy_intp stride, npy_uintp nlane)                    \
+    V_FINLINE v_##F_SFX v_loadn_tillz_##F_SFX                                       \
+    (const v_lanetype_##F_SFX *ptr, s_intp stride, s_uintp nlane)                    \
     {                                                                                       \
         return v_reinterpret_##F_SFX##_##T_SFX(v_loadn_tillz_##T_SFX(                 \
             (const v_lanetype_##T_SFX *)ptr, stride, nlane                               \
         ));                                                                                 \
     }                                                                                       \
-    NPY_FINLINE void v_store_till_##F_SFX                                                \
-    (v_lanetype_##F_SFX *ptr, npy_uintp nlane, v_##F_SFX a)                           \
+    V_FINLINE void v_store_till_##F_SFX                                                \
+    (v_lanetype_##F_SFX *ptr, s_uintp nlane, v_##F_SFX a)                           \
     {                                                                                       \
         v_store_till_##T_SFX(                                                            \
             (v_lanetype_##T_SFX *)ptr, nlane,                                            \
             v_reinterpret_##T_SFX##_##F_SFX(a)                                           \
         );                                                                                  \
     }                                                                                       \
-    NPY_FINLINE void v_storen_till_##F_SFX                                               \
-    (v_lanetype_##F_SFX *ptr, npy_intp stride, npy_uintp nlane, v_##F_SFX a)          \
+    V_FINLINE void v_storen_till_##F_SFX                                               \
+    (v_lanetype_##F_SFX *ptr, s_intp stride, s_uintp nlane, v_##F_SFX a)          \
     {                                                                                       \
         v_storen_till_##T_SFX(                                                           \
             (v_lanetype_##T_SFX *)ptr, stride, nlane,                                    \
@@ -353,4 +353,4 @@ NPYV_IMPL_AVX2_REST_PARTIAL_TYPES(f32, s32)
 NPYV_IMPL_AVX2_REST_PARTIAL_TYPES(u64, s64)
 NPYV_IMPL_AVX2_REST_PARTIAL_TYPES(f64, s64)
 
-#endif // _NPY_SIMD_AVX2_MEMORY_H
+#endif // _V_SIMD_AVX2_MEMORY_H

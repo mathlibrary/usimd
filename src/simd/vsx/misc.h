@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_VSX_MISC_H
-#define _NPY_SIMD_VSX_MISC_H
+#ifndef _V_SIMD_VSX_MISC_H
+#define _V_SIMD_VSX_MISC_H
 
 // vector with zero lanes
 #define v_zero_u8()  ((v_u8)   v_setall_s32(0))
@@ -31,8 +31,8 @@
 #define v_setall_u32(VAL) NPYV_IMPL_VSX_SPLTW(v_u32, (unsigned int)VAL)
 #define v_setall_s32(VAL) NPYV_IMPL_VSX_SPLTW(v_s32, (int)VAL)
 #define v_setall_f32(VAL) NPYV_IMPL_VSX_SPLTW(v_f32, VAL)
-#define v_setall_u64(VAL) NPYV_IMPL_VSX_SPLTD(v_u64, (npy_uint64)VAL)
-#define v_setall_s64(VAL) NPYV_IMPL_VSX_SPLTD(v_s64, (npy_int64)VAL)
+#define v_setall_u64(VAL) NPYV_IMPL_VSX_SPLTD(v_u64, (s_uint64)VAL)
+#define v_setall_s64(VAL) NPYV_IMPL_VSX_SPLTD(v_s64, (s_int64)VAL)
 #define v_setall_f64(VAL) NPYV_IMPL_VSX_SPLTD(v_f64, VAL)
 
 // vector with specific values set to each lane and
@@ -43,8 +43,8 @@
 #define v_setf_s16(FILL, ...) ((v_s16){NPYV__SET_FILL_8(short, FILL, __VA_ARGS__)})
 #define v_setf_u32(FILL, ...) ((v_u32){NPYV__SET_FILL_4(int, FILL, __VA_ARGS__)})
 #define v_setf_s32(FILL, ...) ((v_s32){NPYV__SET_FILL_4(int, FILL, __VA_ARGS__)})
-#define v_setf_u64(FILL, ...) ((v_u64){NPYV__SET_FILL_2(npy_int64, FILL, __VA_ARGS__)})
-#define v_setf_s64(FILL, ...) ((v_s64){NPYV__SET_FILL_2(npy_int64, FILL, __VA_ARGS__)})
+#define v_setf_u64(FILL, ...) ((v_u64){NPYV__SET_FILL_2(s_int64, FILL, __VA_ARGS__)})
+#define v_setf_s64(FILL, ...) ((v_s64){NPYV__SET_FILL_2(s_int64, FILL, __VA_ARGS__)})
 #define v_setf_f32(FILL, ...) ((v_f32){NPYV__SET_FILL_4(float, FILL, __VA_ARGS__)})
 #define v_setf_f64(FILL, ...) ((v_f64){NPYV__SET_FILL_2(double, FILL, __VA_ARGS__)})
 
@@ -187,4 +187,4 @@
 // Only required by AVX2/AVX512
 #define v_cleanup() ((void)0)
 
-#endif // _NPY_SIMD_VSX_MISC_H
+#endif // _V_SIMD_VSX_MISC_H

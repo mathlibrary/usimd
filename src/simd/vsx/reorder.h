@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_VSX_REORDER_H
-#define _NPY_SIMD_VSX_REORDER_H
+#ifndef _V_SIMD_VSX_REORDER_H
+#define _V_SIMD_VSX_REORDER_H
 
 // combine lower part of two vectors
 #define v__combinel(A, B) vec_mergeh((v_u64)(A), (v_u64)(B))
@@ -36,14 +36,14 @@
  * zip: interleave two vectors
 */
 #define NPYV_IMPL_VSX_COMBINE_ZIP(T_VEC, SFX)                  \
-    NPY_FINLINE T_VEC##x2 v_combine_##SFX(T_VEC a, T_VEC b) \
+    V_FINLINE T_VEC##x2 v_combine_##SFX(T_VEC a, T_VEC b) \
     {                                                          \
         T_VEC##x2 r;                                           \
-        r.val[0] = NPY_CAT(v_combinel_, SFX)(a, b);         \
-        r.val[1] = NPY_CAT(v_combineh_, SFX)(a, b);         \
+        r.val[0] = V_CAT(v_combinel_, SFX)(a, b);         \
+        r.val[1] = V_CAT(v_combineh_, SFX)(a, b);         \
         return r;                                              \
     }                                                          \
-    NPY_FINLINE T_VEC##x2 v_zip_##SFX(T_VEC a, T_VEC b)     \
+    V_FINLINE T_VEC##x2 v_zip_##SFX(T_VEC a, T_VEC b)     \
     {                                                          \
         T_VEC##x2 r;                                           \
         r.val[0] = vec_mergeh(a, b);                           \
@@ -62,4 +62,4 @@ NPYV_IMPL_VSX_COMBINE_ZIP(v_s64, s64)
 NPYV_IMPL_VSX_COMBINE_ZIP(v_f32, f32)
 NPYV_IMPL_VSX_COMBINE_ZIP(v_f64, f64)
 
-#endif // _NPY_SIMD_VSX_REORDER_H
+#endif // _V_SIMD_VSX_REORDER_H

@@ -1,20 +1,20 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_AVX512_OPERATORS_H
-#define _NPY_SIMD_AVX512_OPERATORS_H
+#ifndef _V_SIMD_AVX512_OPERATORS_H
+#define _V_SIMD_AVX512_OPERATORS_H
 
 /***************************
  * Shifting
  ***************************/
 
 // left
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     #define v_shl_u16(A, C) _mm512_sll_epi16(A, _mm_cvtsi32_si128(C))
 #else
     #define NPYV_IMPL_AVX512_SHIFT(FN, INTRIN)          \
-        NPY_FINLINE __m512i v_##FN(__m512i a, int c) \
+        V_FINLINE __m512i v_##FN(__m512i a, int c) \
         {                                               \
             __m256i l  = v512_lower_si256(a);        \
             __m256i h  = v512_higher_si256(a);       \
@@ -33,7 +33,7 @@
 #define v_shl_s64(A, C) _mm512_sll_epi64(A, _mm_cvtsi32_si128(C))
 
 // left by an immediate constant
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     #define v_shli_u16 _mm512_slli_epi16
 #else
     #define v_shli_u16 v_shl_u16
@@ -45,7 +45,7 @@
 #define v_shli_s64 _mm512_slli_epi64
 
 // right
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     #define v_shr_u16(A, C) _mm512_srl_epi16(A, _mm_cvtsi32_si128(C))
     #define v_shr_s16(A, C) _mm512_sra_epi16(A, _mm_cvtsi32_si128(C))
 #else
@@ -58,7 +58,7 @@
 #define v_shr_s64(A, C) _mm512_sra_epi64(A, _mm_cvtsi32_si128(C))
 
 // right by an immediate constant
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     #define v_shri_u16 _mm512_srli_epi16
     #define v_shri_s16 _mm512_srai_epi16
 #else
@@ -83,7 +83,7 @@
 #define v_and_s32 _mm512_and_si512
 #define v_and_u64 _mm512_and_si512
 #define v_and_s64 _mm512_and_si512
-#ifdef NPY_HAVE_AVX512DQ
+#ifdef V_HAVE_AVX512DQ
     #define v_and_f32 _mm512_and_ps
     #define v_and_f64 _mm512_and_pd
 #else
@@ -100,7 +100,7 @@
 #define v_or_s32 _mm512_or_si512
 #define v_or_u64 _mm512_or_si512
 #define v_or_s64 _mm512_or_si512
-#ifdef NPY_HAVE_AVX512DQ
+#ifdef V_HAVE_AVX512DQ
     #define v_or_f32 _mm512_or_ps
     #define v_or_f64 _mm512_or_pd
 #else
@@ -117,7 +117,7 @@
 #define v_xor_s32 _mm512_xor_si512
 #define v_xor_u64 _mm512_xor_si512
 #define v_xor_s64 _mm512_xor_si512
-#ifdef NPY_HAVE_AVX512DQ
+#ifdef V_HAVE_AVX512DQ
     #define v_xor_f32 _mm512_xor_ps
     #define v_xor_f64 _mm512_xor_pd
 #else
@@ -134,7 +134,7 @@
 #define v_not_s32 v_not_u8
 #define v_not_u64 v_not_u8
 #define v_not_s64 v_not_u8
-#ifdef NPY_HAVE_AVX512DQ
+#ifdef V_HAVE_AVX512DQ
     #define v_not_f32(A) _mm512_xor_ps(A, _mm512_castsi512_ps(_mm512_set1_epi32(-1)))
     #define v_not_f64(A) _mm512_xor_pd(A, _mm512_castsi512_pd(_mm512_set1_epi32(-1)))
 #else
@@ -147,7 +147,7 @@
  ***************************/
 
 // int Equal
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     #define v_cmpeq_u8  _mm512_cmpeq_epu8_mask
     #define v_cmpeq_s8  _mm512_cmpeq_epi8_mask
     #define v_cmpeq_u16 _mm512_cmpeq_epu16_mask
@@ -164,7 +164,7 @@
 #define v_cmpeq_s64 _mm512_cmpeq_epi64_mask
 
 // int not equal
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     #define v_cmpneq_u8  _mm512_cmpneq_epu8_mask
     #define v_cmpneq_s8  _mm512_cmpneq_epi8_mask
     #define v_cmpneq_u16 _mm512_cmpneq_epu16_mask
@@ -181,7 +181,7 @@
 #define v_cmpneq_s64 _mm512_cmpneq_epi64_mask
 
 // greater than
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     #define v_cmpgt_u8  _mm512_cmpgt_epu8_mask
     #define v_cmpgt_s8  _mm512_cmpgt_epi8_mask
     #define v_cmpgt_u16 _mm512_cmpgt_epu16_mask
@@ -189,12 +189,12 @@
 #else
     NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_cmpgt_s8,  _mm256_cmpgt_epi8)
     NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_cmpgt_s16, _mm256_cmpgt_epi16)
-    NPY_FINLINE __m512i v_cmpgt_u8(__m512i a, __m512i b)
+    V_FINLINE __m512i v_cmpgt_u8(__m512i a, __m512i b)
     {
         const __m512i sbit = _mm512_set1_epi32(0x80808080);
         return v_cmpgt_s8(_mm512_xor_si512(a, sbit), _mm512_xor_si512(b, sbit));
     }
-    NPY_FINLINE __m512i v_cmpgt_u16(__m512i a, __m512i b)
+    V_FINLINE __m512i v_cmpgt_u16(__m512i a, __m512i b)
     {
         const __m512i sbit = _mm512_set1_epi32(0x80008000);
         return v_cmpgt_s16(_mm512_xor_si512(a, sbit), _mm512_xor_si512(b, sbit));
@@ -206,7 +206,7 @@
 #define v_cmpgt_s64 _mm512_cmpgt_epi64_mask
 
 // greater than or equal
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     #define v_cmpge_u8  _mm512_cmpge_epu8_mask
     #define v_cmpge_s8  _mm512_cmpge_epi8_mask
     #define v_cmpge_u16 _mm512_cmpge_epu16_mask
@@ -256,4 +256,4 @@
 #define v_cmpge_f32(A, B)  _mm512_cmp_ps_mask(A, B, _CMP_GE_OQ)
 #define v_cmpge_f64(A, B)  _mm512_cmp_pd_mask(A, B, _CMP_GE_OQ)
 
-#endif // _NPY_SIMD_AVX512_OPERATORS_H
+#endif // _V_SIMD_AVX512_OPERATORS_H

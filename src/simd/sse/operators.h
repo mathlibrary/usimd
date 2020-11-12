@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_SSE_OPERATORS_H
-#define _NPY_SIMD_SSE_OPERATORS_H
+#ifndef _V_SIMD_SSE_OPERATORS_H
+#define _V_SIMD_SSE_OPERATORS_H
 
 /***************************
  * Shifting
@@ -31,7 +31,7 @@
 #define v_shr_u32(A, C) _mm_srl_epi32(A, _mm_cvtsi32_si128(C))
 #define v_shr_s32(A, C) _mm_sra_epi32(A, _mm_cvtsi32_si128(C))
 #define v_shr_u64(A, C) _mm_srl_epi64(A, _mm_cvtsi32_si128(C))
-NPY_FINLINE __m128i v_shr_s64(__m128i a, int c)
+V_FINLINE __m128i v_shr_s64(__m128i a, int c)
 {
     const __m128i sbit = v_setall_s64(0x8000000000000000);
     const __m128i cv   = _mm_cvtsi32_si128(c);
@@ -112,10 +112,10 @@ NPY_FINLINE __m128i v_shr_s64(__m128i a, int c)
 #define v_cmpeq_s32 _mm_cmpeq_epi32
 #define v_cmpeq_s64  v_cmpeq_u64
 
-#ifdef NPY_HAVE_SSE41
+#ifdef V_HAVE_SSE41
     #define v_cmpeq_u64 _mm_cmpeq_epi64
 #else
-    NPY_FINLINE __m128i v_cmpeq_u64(__m128i a, __m128i b)
+    V_FINLINE __m128i v_cmpeq_u64(__m128i a, __m128i b)
     {
         __m128i cmpeq = _mm_cmpeq_epi32(a, b);
         __m128i cmpeq_h = _mm_srli_epi64(cmpeq, 32);
@@ -125,7 +125,7 @@ NPY_FINLINE __m128i v_shr_s64(__m128i a, int c)
 #endif
 
 // Int Not Equal
-#ifdef NPY_HAVE_XOP
+#ifdef V_HAVE_XOP
     #define v_cmpneq_u8  _mm_comneq_epi8
     #define v_cmpneq_u16 _mm_comneq_epi16
     #define v_cmpneq_u32 _mm_comneq_epi32
@@ -146,10 +146,10 @@ NPY_FINLINE __m128i v_shr_s64(__m128i a, int c)
 #define v_cmpgt_s16 _mm_cmpgt_epi16
 #define v_cmpgt_s32 _mm_cmpgt_epi32
 
-#ifdef NPY_HAVE_SSE42
+#ifdef V_HAVE_SSE42
     #define v_cmpgt_s64 _mm_cmpgt_epi64
 #else
-    NPY_FINLINE __m128i v_cmpgt_s64(__m128i a, __m128i b)
+    V_FINLINE __m128i v_cmpgt_s64(__m128i a, __m128i b)
     {
         __m128i sub = _mm_sub_epi64(b, a);
         __m128i nsame_sbit = _mm_xor_si128(a, b);
@@ -161,7 +161,7 @@ NPY_FINLINE __m128i v_shr_s64(__m128i a, int c)
 #endif
 
 // signed greater than or equal
-#ifdef NPY_HAVE_XOP
+#ifdef V_HAVE_XOP
     #define v_cmpge_s8  _mm_comge_epi8
     #define v_cmpge_s16 _mm_comge_epi16
     #define v_cmpge_s32 _mm_comge_epi32
@@ -174,14 +174,14 @@ NPY_FINLINE __m128i v_shr_s64(__m128i a, int c)
 #endif
 
 // unsigned greater than
-#ifdef NPY_HAVE_XOP
+#ifdef V_HAVE_XOP
     #define v_cmpgt_u8  _mm_comgt_epu8
     #define v_cmpgt_u16 _mm_comgt_epu16
     #define v_cmpgt_u32 _mm_comgt_epu32
     #define v_cmpgt_u64 _mm_comgt_epu64
 #else
     #define NPYV_IMPL_SSE_UNSIGNED_GT(LEN, SIGN)                     \
-        NPY_FINLINE __m128i v_cmpgt_u##LEN(__m128i a, __m128i b)  \
+        V_FINLINE __m128i v_cmpgt_u##LEN(__m128i a, __m128i b)  \
         {                                                            \
             const __m128i sbit = _mm_set1_epi32(SIGN);               \
             return _mm_cmpgt_epi##LEN(                               \
@@ -193,7 +193,7 @@ NPY_FINLINE __m128i v_shr_s64(__m128i a, int c)
     NPYV_IMPL_SSE_UNSIGNED_GT(16, 0x80008000)
     NPYV_IMPL_SSE_UNSIGNED_GT(32, 0x80000000)
 
-    NPY_FINLINE __m128i v_cmpgt_u64(__m128i a, __m128i b)
+    V_FINLINE __m128i v_cmpgt_u64(__m128i a, __m128i b)
     {
         const __m128i sbit = v_setall_s64(0x8000000000000000);
         return v_cmpgt_s64(_mm_xor_si128(a, sbit), _mm_xor_si128(b, sbit));
@@ -201,18 +201,18 @@ NPY_FINLINE __m128i v_shr_s64(__m128i a, int c)
 #endif
 
 // unsigned greater than or equal
-#ifdef NPY_HAVE_XOP
+#ifdef V_HAVE_XOP
     #define v_cmpge_u8  _mm_comge_epu8
     #define v_cmpge_u16 _mm_comge_epu16
     #define v_cmpge_u32 _mm_comge_epu32
     #define v_cmpge_u64 _mm_comge_epu64
 #else
-    NPY_FINLINE __m128i v_cmpge_u8(__m128i a, __m128i b)
+    V_FINLINE __m128i v_cmpge_u8(__m128i a, __m128i b)
     { return _mm_cmpeq_epi8(a, _mm_max_epu8(a, b)); }
-    #ifdef NPY_HAVE_SSE41
-        NPY_FINLINE __m128i v_cmpge_u16(__m128i a, __m128i b)
+    #ifdef V_HAVE_SSE41
+        V_FINLINE __m128i v_cmpge_u16(__m128i a, __m128i b)
         { return _mm_cmpeq_epi16(a, _mm_max_epu16(a, b)); }
-        NPY_FINLINE __m128i v_cmpge_u32(__m128i a, __m128i b)
+        V_FINLINE __m128i v_cmpge_u32(__m128i a, __m128i b)
         { return _mm_cmpeq_epi32(a, _mm_max_epu32(a, b)); }
     #else
         #define v_cmpge_u16(A, B) _mm_cmpeq_epi16(_mm_subs_epu16(B, A), _mm_setzero_si128())
@@ -255,4 +255,4 @@ NPY_FINLINE __m128i v_shr_s64(__m128i a, int c)
 #define v_cmpge_f32(a, b)  _mm_castps_si128(_mm_cmpge_ps(a, b))
 #define v_cmpge_f64(a, b)  _mm_castpd_si128(_mm_cmpge_pd(a, b))
 
-#endif // _NPY_SIMD_SSE_OPERATORS_H
+#endif // _V_SIMD_SSE_OPERATORS_H

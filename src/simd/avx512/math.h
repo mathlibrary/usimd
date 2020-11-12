@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_AVX512_MATH_H
-#define _NPY_SIMD_AVX512_MATH_H
+#ifndef _V_SIMD_AVX512_MATH_H
+#define _V_SIMD_AVX512_MATH_H
 
 /***************************
  * Elementary
@@ -13,15 +13,15 @@
 #define v_sqrt_f64 _mm512_sqrt_pd
 
 // Reciprocal
-NPY_FINLINE v_f32 v_recip_f32(v_f32 a)
+V_FINLINE v_f32 v_recip_f32(v_f32 a)
 { return _mm512_div_ps(_mm512_set1_ps(1.0f), a); }
-NPY_FINLINE v_f64 v_recip_f64(v_f64 a)
+V_FINLINE v_f64 v_recip_f64(v_f64 a)
 { return _mm512_div_pd(_mm512_set1_pd(1.0), a); }
 
 // Absolute
-NPY_FINLINE v_f32 v_abs_f32(v_f32 a)
+V_FINLINE v_f32 v_abs_f32(v_f32 a)
 {
-#if 0 // def NPY_HAVE_AVX512DQ
+#if 0 // def V_HAVE_AVX512DQ
     return _mm512_range_ps(a, a, 8);
 #else
     return v_and_f32(
@@ -29,9 +29,9 @@ NPY_FINLINE v_f32 v_abs_f32(v_f32 a)
     );
 #endif
 }
-NPY_FINLINE v_f64 v_abs_f64(v_f64 a)
+V_FINLINE v_f64 v_abs_f64(v_f64 a)
 {
-#if 0 // def NPY_HAVE_AVX512DQ
+#if 0 // def V_HAVE_AVX512DQ
     return _mm512_range_pd(a, a, 8);
 #else
     return v_and_f64(
@@ -41,9 +41,9 @@ NPY_FINLINE v_f64 v_abs_f64(v_f64 a)
 }
 
 // Square
-NPY_FINLINE v_f32 v_square_f32(v_f32 a)
+V_FINLINE v_f32 v_square_f32(v_f32 a)
 { return _mm512_mul_ps(a, a); }
-NPY_FINLINE v_f64 v_square_f64(v_f64 a)
+V_FINLINE v_f64 v_square_f64(v_f64 a)
 { return _mm512_mul_pd(a, a); }
 
 #endif

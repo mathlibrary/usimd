@@ -6,7 +6,7 @@ void usimd_daxpy(int n, FLOAT_T *data0, FLOAT_T *data1, FLOAT_T *alpha)
 {
     int i = n;
     FLOAT_T a = *alpha;
-#if NPY_SIMD>128 && !defined(DOUBLE_T)
+#if V_SIMD>128 && !defined(DOUBLE_T)
 #ifdef DOUBLE_T
 	int vstep = v_nlanes_f64;
 	int vstepx4 = vstep*4;

@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_AVX2_REORDER_H
-#define _NPY_SIMD_AVX2_REORDER_H
+#ifndef _V_SIMD_AVX2_REORDER_H
+#define _V_SIMD_AVX2_REORDER_H
 
 // combine lower part of two vectors
 #define v_combinel_u8(A, B) _mm256_permute2x128_si256(A, B, 0x20)
@@ -30,7 +30,7 @@
 #define v_combineh_f64(A, B) _mm256_permute2f128_pd(A, B, 0x31)
 
 // combine two vectors from lower and higher parts of two other vectors
-NPY_FINLINE v_m256ix2 v__combine(__m256i a, __m256i b)
+V_FINLINE v_m256ix2 v__combine(__m256i a, __m256i b)
 {
     v_m256ix2 r;
     __m256i a1b0 = _mm256_permute2x128_si256(a, b, 0x21);
@@ -38,7 +38,7 @@ NPY_FINLINE v_m256ix2 v__combine(__m256i a, __m256i b)
     r.val[1] = _mm256_blend_epi32(b, a1b0, 0xF);
     return r;
 }
-NPY_FINLINE v_f32x2 v_combine_f32(__m256 a, __m256 b)
+V_FINLINE v_f32x2 v_combine_f32(__m256 a, __m256 b)
 {
     v_f32x2 r;
     __m256 a1b0 = _mm256_permute2f128_ps(a, b, 0x21);
@@ -46,7 +46,7 @@ NPY_FINLINE v_f32x2 v_combine_f32(__m256 a, __m256 b)
     r.val[1] = _mm256_blend_ps(b, a1b0, 0xF);
     return r;
 }
-NPY_FINLINE v_f64x2 v_combine_f64(__m256d a, __m256d b)
+V_FINLINE v_f64x2 v_combine_f64(__m256d a, __m256d b)
 {
     v_f64x2 r;
     __m256d a1b0 = _mm256_permute2f128_pd(a, b, 0x21);
@@ -65,7 +65,7 @@ NPY_FINLINE v_f64x2 v_combine_f64(__m256d a, __m256d b)
 
 // interleave two vectors
 #define NPYV_IMPL_AVX2_ZIP_U(T_VEC, LEN)                    \
-    NPY_FINLINE T_VEC##x2 v_zip_u##LEN(T_VEC a, T_VEC b) \
+    V_FINLINE T_VEC##x2 v_zip_u##LEN(T_VEC a, T_VEC b) \
     {                                                       \
         __m256i ab0 = _mm256_unpacklo_epi##LEN(a, b);       \
         __m256i ab1 = _mm256_unpackhi_epi##LEN(a, b);       \
@@ -81,17 +81,17 @@ NPYV_IMPL_AVX2_ZIP_U(v_u64, 64)
 #define v_zip_s32 v_zip_u32
 #define v_zip_s64 v_zip_u64
 
-NPY_FINLINE v_f32x2 v_zip_f32(__m256 a, __m256 b)
+V_FINLINE v_f32x2 v_zip_f32(__m256 a, __m256 b)
 {
     __m256 ab0 = _mm256_unpacklo_ps(a, b);
     __m256 ab1 = _mm256_unpackhi_ps(a, b);
     return v_combine_f32(ab0, ab1);
 }
-NPY_FINLINE v_f64x2 v_zip_f64(__m256d a, __m256d b)
+V_FINLINE v_f64x2 v_zip_f64(__m256d a, __m256d b)
 {
     __m256d ab0 = _mm256_unpacklo_pd(a, b);
     __m256d ab1 = _mm256_unpackhi_pd(a, b);
     return v_combine_f64(ab0, ab1);
 }
 
-#endif // _NPY_SIMD_AVX2_REORDER_H
+#endif // _V_SIMD_AVX2_REORDER_H

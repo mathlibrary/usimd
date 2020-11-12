@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_NEON_ARITHMETIC_H
-#define _NPY_SIMD_NEON_ARITHMETIC_H
+#ifndef _V_SIMD_NEON_ARITHMETIC_H
+#define _V_SIMD_NEON_ARITHMETIC_H
 
 /***************************
  * Addition
@@ -63,10 +63,10 @@
 /***************************
  * Division
  ***************************/
-#if NPY_SIMD_F64
+#if V_SIMD_F64
     #define v_div_f32 vdivq_f32
 #else
-    NPY_FINLINE v_f32 v_div_f32(v_f32 a, v_f32 b)
+    V_FINLINE v_f32 v_div_f32(v_f32 a, v_f32 b)
     {
         // Based on ARM doc, see https://developer.arm.com/documentation/dui0204/j/CIHDIACI
         // estimate to 1/b
@@ -90,57 +90,57 @@
 /***************************
  * FUSED F32
  ***************************/
-#ifdef NPY_HAVE_NEON_VFPV4 // FMA
+#ifdef V_HAVE_NEON_VFPV4 // FMA
     // multiply and add, a*b + c
-    NPY_FINLINE v_f32 v_muladd_f32(v_f32 a, v_f32 b, v_f32 c)
+    V_FINLINE v_f32 v_muladd_f32(v_f32 a, v_f32 b, v_f32 c)
     { return vfmaq_f32(c, a, b); }
     // multiply and subtract, a*b - c
-    NPY_FINLINE v_f32 v_mulsub_f32(v_f32 a, v_f32 b, v_f32 c)
+    V_FINLINE v_f32 v_mulsub_f32(v_f32 a, v_f32 b, v_f32 c)
     { return vfmaq_f32(vnegq_f32(c), a, b); }
     // negate multiply and add, -(a*b) + c
-    NPY_FINLINE v_f32 v_nmuladd_f32(v_f32 a, v_f32 b, v_f32 c)
+    V_FINLINE v_f32 v_nmuladd_f32(v_f32 a, v_f32 b, v_f32 c)
     { return vfmsq_f32(c, a, b); }
     // negate multiply and subtract, -(a*b) - c
-    NPY_FINLINE v_f32 v_nmulsub_f32(v_f32 a, v_f32 b, v_f32 c)
+    V_FINLINE v_f32 v_nmulsub_f32(v_f32 a, v_f32 b, v_f32 c)
     { return vfmsq_f32(vnegq_f32(c), a, b); }
 #else
     // multiply and add, a*b + c
-    NPY_FINLINE v_f32 v_muladd_f32(v_f32 a, v_f32 b, v_f32 c)
+    V_FINLINE v_f32 v_muladd_f32(v_f32 a, v_f32 b, v_f32 c)
     { return vmlaq_f32(c, a, b); }
     // multiply and subtract, a*b - c
-    NPY_FINLINE v_f32 v_mulsub_f32(v_f32 a, v_f32 b, v_f32 c)
+    V_FINLINE v_f32 v_mulsub_f32(v_f32 a, v_f32 b, v_f32 c)
     { return vmlaq_f32(vnegq_f32(c), a, b); }
     // negate multiply and add, -(a*b) + c
-    NPY_FINLINE v_f32 v_nmuladd_f32(v_f32 a, v_f32 b, v_f32 c)
+    V_FINLINE v_f32 v_nmuladd_f32(v_f32 a, v_f32 b, v_f32 c)
     { return vmlsq_f32(c, a, b); }
     // negate multiply and subtract, -(a*b) - c
-    NPY_FINLINE v_f32 v_nmulsub_f32(v_f32 a, v_f32 b, v_f32 c)
+    V_FINLINE v_f32 v_nmulsub_f32(v_f32 a, v_f32 b, v_f32 c)
     { return vmlsq_f32(vnegq_f32(c), a, b); }
 #endif
 /***************************
  * FUSED F64
  ***************************/
-#if NPY_SIMD_F64
-    NPY_FINLINE v_f64 v_muladd_f64(v_f64 a, v_f64 b, v_f64 c)
+#if V_SIMD_F64
+    V_FINLINE v_f64 v_muladd_f64(v_f64 a, v_f64 b, v_f64 c)
     { return vfmaq_f64(c, a, b); }
-    NPY_FINLINE v_f64 v_mulsub_f64(v_f64 a, v_f64 b, v_f64 c)
+    V_FINLINE v_f64 v_mulsub_f64(v_f64 a, v_f64 b, v_f64 c)
     { return vfmaq_f64(vnegq_f64(c), a, b); }
-    NPY_FINLINE v_f64 v_nmuladd_f64(v_f64 a, v_f64 b, v_f64 c)
+    V_FINLINE v_f64 v_nmuladd_f64(v_f64 a, v_f64 b, v_f64 c)
     { return vfmsq_f64(c, a, b); }
-    NPY_FINLINE v_f64 v_nmulsub_f64(v_f64 a, v_f64 b, v_f64 c)
+    V_FINLINE v_f64 v_nmulsub_f64(v_f64 a, v_f64 b, v_f64 c)
     { return vfmsq_f64(vnegq_f64(c), a, b); }
-#endif // NPY_SIMD_F64
+#endif // V_SIMD_F64
 
 // Horizontal add: Calculates the sum of all vector elements.
-#if NPY_SIMD_F64
+#if V_SIMD_F64
     #define v_sum_f32 vaddvq_f32
     #define v_sum_f64 vaddvq_f64
 #else
-    NPY_FINLINE float v_sum_f32(v_f32 a)
+    V_FINLINE float v_sum_f32(v_f32 a)
     {
         float32x2_t r = vadd_f32(vget_high_f32(a), vget_low_f32(a));
         return vget_lane_f32(vpadd_f32(r, r), 0);
     }
 #endif
 
-#endif // _NPY_SIMD_NEON_ARITHMETIC_H
+#endif // _V_SIMD_NEON_ARITHMETIC_H

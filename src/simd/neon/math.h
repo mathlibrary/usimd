@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_NEON_MATH_H
-#define _NPY_SIMD_NEON_MATH_H
+#ifndef _V_SIMD_NEON_MATH_H
+#define _V_SIMD_NEON_MATH_H
 
 /***************************
  * Elementary
@@ -13,20 +13,20 @@
 #define v_abs_f64 vabsq_f64
 
 // Square
-NPY_FINLINE v_f32 v_square_f32(v_f32 a)
+V_FINLINE v_f32 v_square_f32(v_f32 a)
 { return vmulq_f32(a, a); }
-#if NPY_SIMD_F64
-    NPY_FINLINE v_f64 v_square_f64(v_f64 a)
+#if V_SIMD_F64
+    V_FINLINE v_f64 v_square_f64(v_f64 a)
     { return vmulq_f64(a, a); }
 #endif
 
 // Square root
-#if NPY_SIMD_F64
+#if V_SIMD_F64
     #define v_sqrt_f32 vsqrtq_f32
     #define v_sqrt_f64 vsqrtq_f64
 #else
     // Based on ARM doc, see https://developer.arm.com/documentation/dui0204/j/CIHDIACI
-    NPY_FINLINE v_f32 v_sqrt_f32(v_f32 a)
+    V_FINLINE v_f32 v_sqrt_f32(v_f32 a)
     {
         const v_f32 zero = vdupq_n_f32(0.0f);
         const v_u32 pinf = vdupq_n_u32(0x7f800000);
@@ -52,12 +52,12 @@ NPY_FINLINE v_f32 v_square_f32(v_f32 a)
         // - return positive infinity if a is positive infinity
         return vbslq_f32(vorrq_u32(is_zero, is_inf), a, sqrt);
     }
-#endif // NPY_SIMD_F64
+#endif // V_SIMD_F64
 
 // Reciprocal
-NPY_FINLINE v_f32 v_recip_f32(v_f32 a)
+V_FINLINE v_f32 v_recip_f32(v_f32 a)
 {
-#if NPY_SIMD_F64
+#if V_SIMD_F64
     const v_f32 one = vdupq_n_f32(1.0f);
     return v_div_f32(one, a);
 #else
@@ -75,12 +75,12 @@ NPY_FINLINE v_f32 v_recip_f32(v_f32 a)
     return recipe;
 #endif
 }
-#if NPY_SIMD_F64
-    NPY_FINLINE v_f64 v_recip_f64(v_f64 a)
+#if V_SIMD_F64
+    V_FINLINE v_f64 v_recip_f64(v_f64 a)
     {
         const v_f64 one = vdupq_n_f64(1.0);
         return v_div_f64(one, a);
     }
-#endif // NPY_SIMD_F64
+#endif // V_SIMD_F64
 
-#endif // _NPY_SIMD_SSE_MATH_H
+#endif // _V_SIMD_SSE_MATH_H

@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_NEON_OPERATORS_H
-#define _NPY_SIMD_NEON_OPERATORS_H
+#ifndef _V_SIMD_NEON_OPERATORS_H
+#define _V_SIMD_NEON_OPERATORS_H
 
 /***************************
  * Shifting
@@ -117,7 +117,7 @@
     #define v_cmpeq_u64 vceqq_u64
     #define v_cmpeq_s64 vceqq_s64
 #else
-    NPY_FINLINE uint64x2_t v_cmpeq_u64(uint64x2_t a, uint64x2_t b)
+    V_FINLINE uint64x2_t v_cmpeq_u64(uint64x2_t a, uint64x2_t b)
     {
         uint64x2_t cmpeq = vreinterpretq_u64_u32(vceqq_u32(
             vreinterpretq_u32_u64(a), vreinterpretq_u32_u64(b)
@@ -156,7 +156,7 @@
     #define v_cmpgt_u64 vcgtq_u64
     #define v_cmpgt_s64 vcgtq_s64
 #else
-    NPY_FINLINE uint64x2_t v_cmpgt_s64(int64x2_t a, int64x2_t b)
+    V_FINLINE uint64x2_t v_cmpgt_s64(int64x2_t a, int64x2_t b)
     {
         int64x2_t sub = vsubq_s64(b, a);
         uint64x2_t nsame_sbit = vreinterpretq_u64_s64(veorq_s64(a, b));
@@ -164,7 +164,7 @@
         int64x2_t extend_sbit = vshrq_n_s64(test, 63);
         return  vreinterpretq_u64_s64(extend_sbit);
     }
-    NPY_FINLINE uint64x2_t v_cmpgt_u64(uint64x2_t a, uint64x2_t b)
+    V_FINLINE uint64x2_t v_cmpgt_u64(uint64x2_t a, uint64x2_t b)
     {
         const uint64x2_t sbit = v_setall_u64(0x8000000000000000);
         a = v_xor_u64(a, sbit);
@@ -215,4 +215,4 @@
 #define v_cmple_f32(A, B) v_cmpge_f32(B, A)
 #define v_cmple_f64(A, B) v_cmpge_f64(B, A)
 
-#endif // _NPY_SIMD_NEON_OPERATORS_H
+#endif // _V_SIMD_NEON_OPERATORS_H

@@ -16,37 +16,37 @@ function pureCDouble() {
 
 function SSE2Float() {
     echo "SSE2 enabled + float"
-    gcc bench.c -DNPY_HAVE_SSE2 -mfma -o bench.o
+    gcc bench.c -DV_HAVE_SSE2 -mfma -o bench.o
     ./bench.o
 }
 
 function SSE2Double() {
     echo "SSE2 enabled + double"
-    gcc bench.c -DDOUBLE_T -DNPY_HAVE_SSE2 -DNPY_HAVE_SSE3 -DNPY_HAVE_AVX -DNPY_HAVE_FMA3 -mfma -o bench.o
+    gcc bench.c -DDOUBLE_T -DV_HAVE_SSE2 -DV_HAVE_SSE3 -DV_HAVE_AVX -DV_HAVE_FMA3 -mfma -o bench.o
     ./bench.o
 }
 
 function AVX2Float() {
     echo "AVX2 enabled + float"
-    gcc bench.c -DNPY_HAVE_AVX -DNPY_HAVE_AVX2 -mavx2 -o bench.o
+    gcc bench.c -DV_HAVE_AVX -DV_HAVE_AVX2 -mavx2 -o bench.o
     ./bench.o
 }
 
 function AVX2Double() {
     echo "AVX2 enabled + double"
-    gcc bench.c -DDOUBLE_T -DNPY_HAVE_AVX -DNPY_HAVE_AVX2 -mavx2 -o bench.o
+    gcc bench.c -DDOUBLE_T -DV_HAVE_AVX -DV_HAVE_AVX2 -mavx2 -o bench.o
     ./bench.o
 }
 
 function NEONFloat() {
     echo "Neon enabled + float"
-    gcc bench.c -DNPY_HAVE_NEON -o bench.o
+    gcc bench.c -DV_HAVE_NEON -o bench.o
     ./bench.o
 }
 
 function NEONDouble() {
     echo "Neon enabled + double"
-    gcc bench.c -DDOUBLE_T -DNPY_HAVE_NEON -o bench.o
+    gcc bench.c -DDOUBLE_T -DV_HAVE_NEON -o bench.o
     ./bench.o
 }
 pureCFloat

@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_AVX2_OPERATORS_H
-#define _NPY_SIMD_AVX2_OPERATORS_H
+#ifndef _V_SIMD_AVX2_OPERATORS_H
+#define _V_SIMD_AVX2_OPERATORS_H
 
 /***************************
  * Shifting
@@ -31,7 +31,7 @@
 #define v_shr_u32(A, C) _mm256_srl_epi32(A, _mm_cvtsi32_si128(C))
 #define v_shr_s32(A, C) _mm256_sra_epi32(A, _mm_cvtsi32_si128(C))
 #define v_shr_u64(A, C) _mm256_srl_epi64(A, _mm_cvtsi32_si128(C))
-NPY_FINLINE __m256i v_shr_s64(__m256i a, int c)
+V_FINLINE __m256i v_shr_s64(__m256i a, int c)
 {
     const __m256i sbit = _mm256_set1_epi64x(0x8000000000000000);
     const __m128i c64  = _mm_cvtsi32_si128(c);
@@ -136,7 +136,7 @@ NPY_FINLINE __m256i v_shr_s64(__m256i a, int c)
 
 // unsigned greater than
 #define NPYV_IMPL_AVX2_UNSIGNED_GT(LEN, SIGN)                    \
-    NPY_FINLINE __m256i v_cmpgt_u##LEN(__m256i a, __m256i b)  \
+    V_FINLINE __m256i v_cmpgt_u##LEN(__m256i a, __m256i b)  \
     {                                                            \
         const __m256i sbit = _mm256_set1_epi32(SIGN);            \
         return _mm256_cmpgt_epi##LEN(                            \
@@ -148,18 +148,18 @@ NPYV_IMPL_AVX2_UNSIGNED_GT(8,  0x80808080)
 NPYV_IMPL_AVX2_UNSIGNED_GT(16, 0x80008000)
 NPYV_IMPL_AVX2_UNSIGNED_GT(32, 0x80000000)
 
-NPY_FINLINE __m256i v_cmpgt_u64(__m256i a, __m256i b)
+V_FINLINE __m256i v_cmpgt_u64(__m256i a, __m256i b)
 {
     const __m256i sbit = _mm256_set1_epi64x(0x8000000000000000);
     return _mm256_cmpgt_epi64(_mm256_xor_si256(a, sbit), _mm256_xor_si256(b, sbit));
 }
 
 // unsigned greater than or equal
-NPY_FINLINE __m256i v_cmpge_u8(__m256i a, __m256i b)
+V_FINLINE __m256i v_cmpge_u8(__m256i a, __m256i b)
 { return _mm256_cmpeq_epi8(a, _mm256_max_epu8(a, b)); }
-NPY_FINLINE __m256i v_cmpge_u16(__m256i a, __m256i b)
+V_FINLINE __m256i v_cmpge_u16(__m256i a, __m256i b)
 { return _mm256_cmpeq_epi16(a, _mm256_max_epu16(a, b)); }
-NPY_FINLINE __m256i v_cmpge_u32(__m256i a, __m256i b)
+V_FINLINE __m256i v_cmpge_u32(__m256i a, __m256i b)
 { return _mm256_cmpeq_epi32(a, _mm256_max_epu32(a, b)); }
 #define v_cmpge_u64(A, B) v_not_u64(v_cmpgt_u64(B, A))
 
@@ -197,4 +197,4 @@ NPY_FINLINE __m256i v_cmpge_u32(__m256i a, __m256i b)
 #define v_cmpge_f32(A, B)  _mm256_castps_si256(_mm256_cmp_ps(A, B, _CMP_GE_OQ))
 #define v_cmpge_f64(A, B)  _mm256_castpd_si256(_mm256_cmp_pd(A, B, _CMP_GE_OQ))
 
-#endif // _NPY_SIMD_AVX2_OPERATORS_H
+#endif // _V_SIMD_AVX2_OPERATORS_H

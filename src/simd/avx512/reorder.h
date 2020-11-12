@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_AVX512_REORDER_H
-#define _NPY_SIMD_AVX512_REORDER_H
+#ifndef _V_SIMD_AVX512_REORDER_H
+#define _V_SIMD_AVX512_REORDER_H
 
 // combine lower part of two vectors
 #define v_combinel_u8(A, B) _mm512_inserti64x4(A, _mm512_castsi512_si256(B), 1)
@@ -15,7 +15,7 @@
 #define v_combinel_u64 v_combinel_u8
 #define v_combinel_s64 v_combinel_u8
 #define v_combinel_f64(A, B) _mm512_insertf64x4(A, _mm512_castpd512_pd256(B), 1)
-#ifdef NPY_HAVE_AVX512DQ
+#ifdef V_HAVE_AVX512DQ
     #define v_combinel_f32(A, B) \
         _mm512_insertf32x8(A, _mm512_castps512_ps256(B), 1)
 #else
@@ -33,7 +33,7 @@
 #define v_combineh_u64 v_combineh_u8
 #define v_combineh_s64 v_combineh_u8
 #define v_combineh_f64(A, B) _mm512_insertf64x4(B, _mm512_extractf64x4_pd(A, 1), 0)
-#ifdef NPY_HAVE_AVX512DQ
+#ifdef V_HAVE_AVX512DQ
     #define v_combineh_f32(A, B) \
         _mm512_insertf32x8(B, _mm512_extractf32x8_ps(A, 1), 0)
 #else
@@ -42,21 +42,21 @@
 #endif
 
 // combine two vectors from lower and higher parts of two other vectors
-NPY_FINLINE v_m512ix2 v__combine(__m512i a, __m512i b)
+V_FINLINE v_m512ix2 v__combine(__m512i a, __m512i b)
 {
     v_m512ix2 r;
     r.val[0] = v_combinel_u8(a, b);
     r.val[1] = v_combineh_u8(a, b);
     return r;
 }
-NPY_FINLINE v_f32x2 v_combine_f32(__m512 a, __m512 b)
+V_FINLINE v_f32x2 v_combine_f32(__m512 a, __m512 b)
 {
     v_f32x2 r;
     r.val[0] = v_combinel_f32(a, b);
     r.val[1] = v_combineh_f32(a, b);
     return r;
 }
-NPY_FINLINE v_f64x2 v_combine_f64(__m512d a, __m512d b)
+V_FINLINE v_f64x2 v_combine_f64(__m512d a, __m512d b)
 {
     v_f64x2 r;
     r.val[0] = v_combinel_f64(a, b);
@@ -73,14 +73,14 @@ NPY_FINLINE v_f64x2 v_combine_f64(__m512d a, __m512d b)
 #define v_combine_s64 v__combine
 
 // interleave two vectors
-#ifndef NPY_HAVE_AVX512BW
+#ifndef V_HAVE_AVX512BW
     NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v__unpacklo_epi8,  _mm256_unpacklo_epi8)
     NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v__unpackhi_epi8,  _mm256_unpackhi_epi8)
     NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v__unpacklo_epi16, _mm256_unpacklo_epi16)
     NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v__unpackhi_epi16, _mm256_unpackhi_epi16)
 #endif
 
-NPY_FINLINE v_u64x2 v_zip_u64(__m512i a, __m512i b)
+V_FINLINE v_u64x2 v_zip_u64(__m512i a, __m512i b)
 {
     v_u64x2 r;
     r.val[0] = _mm512_permutex2var_epi64(a, v_set_u64(0, 8, 1, 9, 2, 10, 3, 11), b);
@@ -89,10 +89,10 @@ NPY_FINLINE v_u64x2 v_zip_u64(__m512i a, __m512i b)
 }
 #define v_zip_s64 v_zip_u64
 
-NPY_FINLINE v_u8x2 v_zip_u8(__m512i a, __m512i b)
+V_FINLINE v_u8x2 v_zip_u8(__m512i a, __m512i b)
 {
     v_u8x2 r;
-#ifdef NPY_HAVE_AVX512VBMI
+#ifdef V_HAVE_AVX512VBMI
     r.val[0] = _mm512_permutex2var_epi8(a,
         v_set_u8(0,  64, 1,  65, 2,  66, 3,  67, 4,  68, 5,  69, 6,  70, 7,  71,
                     8,  72, 9,  73, 10, 74, 11, 75, 12, 76, 13, 77, 14, 78, 15, 79,
@@ -104,7 +104,7 @@ NPY_FINLINE v_u8x2 v_zip_u8(__m512i a, __m512i b)
                     48, 112, 49, 113, 50, 114, 51, 115, 52, 116, 53, 117, 54, 118, 55, 119,
                     56, 120, 57, 121, 58, 122, 59, 123, 60, 124, 61, 125, 62, 126, 63, 127), b);
 #else
-    #ifdef NPY_HAVE_AVX512BW
+    #ifdef V_HAVE_AVX512BW
     __m512i ab0 = _mm512_unpacklo_epi8(a, b);
     __m512i ab1 = _mm512_unpackhi_epi8(a, b);
     #else
@@ -118,10 +118,10 @@ NPY_FINLINE v_u8x2 v_zip_u8(__m512i a, __m512i b)
 }
 #define v_zip_s8 v_zip_u8
 
-NPY_FINLINE v_u16x2 v_zip_u16(__m512i a, __m512i b)
+V_FINLINE v_u16x2 v_zip_u16(__m512i a, __m512i b)
 {
     v_u16x2 r;
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     r.val[0] = _mm512_permutex2var_epi16(a,
         v_set_u16(0, 32, 1, 33, 2, 34, 3, 35, 4, 36, 5, 37, 6, 38, 7, 39,
                      8, 40, 9, 41, 10, 42, 11, 43, 12, 44, 13, 45, 14, 46, 15, 47), b);
@@ -138,7 +138,7 @@ NPY_FINLINE v_u16x2 v_zip_u16(__m512i a, __m512i b)
 }
 #define v_zip_s16 v_zip_u16
 
-NPY_FINLINE v_u32x2 v_zip_u32(__m512i a, __m512i b)
+V_FINLINE v_u32x2 v_zip_u32(__m512i a, __m512i b)
 {
     v_u32x2 r;
     r.val[0] = _mm512_permutex2var_epi32(a,
@@ -149,7 +149,7 @@ NPY_FINLINE v_u32x2 v_zip_u32(__m512i a, __m512i b)
 }
 #define v_zip_s32 v_zip_u32
 
-NPY_FINLINE v_f32x2 v_zip_f32(__m512 a, __m512 b)
+V_FINLINE v_f32x2 v_zip_f32(__m512 a, __m512 b)
 {
     v_f32x2 r;
     r.val[0] = _mm512_permutex2var_ps(a,
@@ -159,7 +159,7 @@ NPY_FINLINE v_f32x2 v_zip_f32(__m512 a, __m512 b)
     return r;
 }
 
-NPY_FINLINE v_f64x2 v_zip_f64(__m512d a, __m512d b)
+V_FINLINE v_f64x2 v_zip_f64(__m512d a, __m512d b)
 {
     v_f64x2 r;
     r.val[0] = _mm512_permutex2var_pd(a, v_set_u64(0, 8, 1, 9, 2, 10, 3, 11), b);
@@ -167,4 +167,4 @@ NPY_FINLINE v_f64x2 v_zip_f64(__m512d a, __m512d b)
     return r;
 }
 
-#endif // _NPY_SIMD_AVX512_REORDER_H
+#endif // _V_SIMD_AVX512_REORDER_H

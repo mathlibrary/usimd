@@ -1,14 +1,14 @@
-#ifndef _NPY_SIMD_H_
+#ifndef _V_SIMD_H_
     #error "Not a standalone header"
 #endif
 
-#define NPY_SIMD 128
-#define NPY_SIMD_WIDTH 16
+#define V_SIMD 128
+#define V_SIMD_WIDTH 16
 
 #ifdef __aarch64__
-    #define NPY_SIMD_F64 1
+    #define V_SIMD_F64 1
 #else
-    #define NPY_SIMD_F64 0
+    #define V_SIMD_F64 0
 #endif
 
 typedef uint8x16_t  v_u8;
@@ -20,7 +20,7 @@ typedef int32x4_t   v_s32;
 typedef uint64x2_t  v_u64;
 typedef int64x2_t   v_s64;
 typedef float32x4_t v_f32;
-#if NPY_SIMD_F64
+#if V_SIMD_F64
 typedef float64x2_t v_f64;
 #endif
 
@@ -38,7 +38,7 @@ typedef int32x4x2_t   v_s32x2;
 typedef uint64x2x2_t  v_u64x2;
 typedef int64x2x2_t   v_s64x2;
 typedef float32x4x2_t v_f32x2;
-#if NPY_SIMD_F64
+#if V_SIMD_F64
 typedef float64x2x2_t v_f64x2;
 #endif
 
@@ -51,7 +51,7 @@ typedef int32x4x3_t   v_s32x3;
 typedef uint64x2x3_t  v_u64x3;
 typedef int64x2x3_t   v_s64x3;
 typedef float32x4x3_t v_f32x3;
-#if NPY_SIMD_F64
+#if V_SIMD_F64
 typedef float64x2x3_t v_f64x3;
 #endif
 

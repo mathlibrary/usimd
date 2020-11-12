@@ -1,10 +1,10 @@
-#ifndef _NPY_SIMD_H_
+#ifndef _V_SIMD_H_
     #error "Not a standalone header"
 #endif
 
-#define NPY_SIMD 128
-#define NPY_SIMD_WIDTH 16
-#define NPY_SIMD_F64 1
+#define V_SIMD 128
+#define V_SIMD_WIDTH 16
+#define V_SIMD_F64 1
 
 typedef __m128i v_u8;
 typedef __m128i v_s8;

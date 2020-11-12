@@ -15,37 +15,37 @@ function pureCDouble() {
 
 function SSE2Float() {
     echo "SSE2 + Single-precision"
-    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DNPY_HAVE_SSE2 -o main.o
+    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DV_HAVE_SSE2 -o main.o
     ./main.o
 }
 
 function SSE2Double() {
     echo "SSE2 + Double-precision"
-    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c  -DDOUBLE_T -DNPY_HAVE_SSE2 -o main.o
+    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c  -DDOUBLE_T -DV_HAVE_SSE2 -o main.o
     ./main.o
 }
 
 function AVX2Float() {
     echo "AVX2 + Single-precision"
-    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DNPY_HAVE_AVX -DNPY_HAVE_AVX2 -mavx2 -o main.o
+    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DV_HAVE_AVX -DV_HAVE_AVX2 -mavx2 -o main.o
     ./main.o
 }
 
 function AVX2Double() {
     echo "SSE2 + Double-precision"
-    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c  -DDOUBLE_T -DNPY_HAVE_AVX -DNPY_HAVE_AVX2 -mavx2 -o main.o
+    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c  -DDOUBLE_T -DV_HAVE_AVX -DV_HAVE_AVX2 -mavx2 -o main.o
     ./main.o
 }
 
 function NEONFloat() {
     echo "NEON + Single-precision"
-    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DNPY_HAVE_NEON -o main.o
+    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DV_HAVE_NEON -o main.o
     ./main.o
 }
 
 function NEONDouble() {
     echo "NEON + Double-precision"
-    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c  -DDOUBLE_T -DNPY_HAVE_NEON -o main.o
+    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c  -DDOUBLE_T -DV_HAVE_NEON -o main.o
     ./main.o
 }
 

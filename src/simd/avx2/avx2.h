@@ -1,12 +1,12 @@
-#ifndef _NPY_SIMD_H_
+#ifndef _V_SIMD_H_
     #error "Not a standalone header"
 #endif
 
-#define NPY_SIMD 256
-#define NPY_SIMD_WIDTH 32
-#define NPY_SIMD_F64 1
+#define V_SIMD 256
+#define V_SIMD_WIDTH 32
+#define V_SIMD_F64 1
 // Enough limit to allow us to use _mm256_i32gather_*
-#define NPY_SIMD_MAXLOAD_STRIDE32 (0x7fffffff / 8)
+#define V_SIMD_MAXLOAD_STRIDE32 (0x7fffffff / 8)
 
 typedef __m256i v_u8;
 typedef __m256i v_s8;

@@ -1,12 +1,12 @@
-#ifndef _NPY_SIMD_H_
+#ifndef _V_SIMD_H_
     #error "Not a standalone header"
 #endif
-#define NPY_SIMD 512
-#define NPY_SIMD_WIDTH 64
-#define NPY_SIMD_F64 1
+#define V_SIMD 512
+#define V_SIMD_WIDTH 64
+#define V_SIMD_F64 1
 // Enough limit to allow us to use _mm512_i32gather_* and _mm512_i32scatter_*
-#define NPY_SIMD_MAXLOAD_STRIDE32  (0x7fffffff / 16)
-#define NPY_SIMD_MAXSTORE_STRIDE32 (0x7fffffff / 16)
+#define V_SIMD_MAXLOAD_STRIDE32  (0x7fffffff / 16)
+#define V_SIMD_MAXSTORE_STRIDE32 (0x7fffffff / 16)
 
 typedef __m512i v_u8;
 typedef __m512i v_s8;
@@ -19,7 +19,7 @@ typedef __m512i v_s64;
 typedef __m512  v_f32;
 typedef __m512d v_f64;
 
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
 typedef __mmask64 v_b8;
 typedef __mmask32 v_b16;
 #else

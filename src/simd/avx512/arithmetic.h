@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_AVX512_ARITHMETIC_H
-#define _NPY_SIMD_AVX512_ARITHMETIC_H
+#ifndef _V_SIMD_AVX512_ARITHMETIC_H
+#define _V_SIMD_AVX512_ARITHMETIC_H
 
 #include "../avx2/utils.h"
 
@@ -11,7 +11,7 @@
  * Addition
  ***************************/
 // non-saturated
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     #define v_add_u8  _mm512_add_epi8
     #define v_add_u16 _mm512_add_epi16
 #else
@@ -28,7 +28,7 @@
 #define v_add_f64 _mm512_add_pd
 
 // saturated
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     #define v_adds_u8  _mm512_adds_epu8
     #define v_adds_s8  _mm512_adds_epi8
     #define v_adds_u16 _mm512_adds_epu16
@@ -45,7 +45,7 @@
  * Subtraction
  ***************************/
 // non-saturated
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     #define v_sub_u8  _mm512_sub_epi8
     #define v_sub_u16 _mm512_sub_epi16
 #else
@@ -62,7 +62,7 @@
 #define v_sub_f64 _mm512_sub_pd
 
 // saturated
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     #define v_subs_u8  _mm512_subs_epu8
     #define v_subs_s8  _mm512_subs_epi8
     #define v_subs_u16 _mm512_subs_epu16
@@ -79,8 +79,8 @@
  * Multiplication
  ***************************/
 // non-saturated
-#ifdef NPY_HAVE_AVX512BW
-NPY_FINLINE __m512i v_mul_u8(__m512i a, __m512i b)
+#ifdef V_HAVE_AVX512BW
+V_FINLINE __m512i v_mul_u8(__m512i a, __m512i b)
 {
     __m512i even = _mm512_mullo_epi16(a, b);
     __m512i odd  = _mm512_mullo_epi16(_mm512_srai_epi16(a, 8), _mm512_srai_epi16(b, 8));
@@ -91,7 +91,7 @@ NPY_FINLINE __m512i v_mul_u8(__m512i a, __m512i b)
     NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_mul_u8, v256_mul_u8)
 #endif
 
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     #define v_mul_u16 _mm512_mullo_epi16
 #else
     NPYV_IMPL_AVX512_FROM_AVX2_2ARG(v_mul_u16, _mm256_mullo_epi16)
@@ -144,11 +144,11 @@ NPY_FINLINE __m512i v_mul_u8(__m512i a, __m512i b)
  * The third one is almost the same as the second one but only works for
  * intel compiler/GCC 7.1/Clang 4, we still need to support older GCC.
  ***************************/
-#ifdef NPY_HAVE_AVX512F_REDUCE
+#ifdef V_HAVE_AVX512F_REDUCE
     #define v_sum_f32 _mm512_reduce_add_ps
     #define v_sum_f64 _mm512_reduce_add_pd
 #else
-    NPY_FINLINE float v_sum_f32(v_f32 a)
+    V_FINLINE float v_sum_f32(v_f32 a)
     {
         __m512 h64   = _mm512_shuffle_f32x4(a, a, _MM_SHUFFLE(3, 2, 3, 2));
         __m512 sum32 = _mm512_add_ps(a, h64);
@@ -160,7 +160,7 @@ NPY_FINLINE __m512i v_mul_u8(__m512i a, __m512i b)
         __m512 sum4  = _mm512_add_ps(sum8, h4);
         return _mm_cvtss_f32(_mm512_castps512_ps128(sum4));
     }
-    NPY_FINLINE double v_sum_f64(v_f64 a)
+    V_FINLINE double v_sum_f64(v_f64 a)
     {
         __m512d h64   = _mm512_shuffle_f64x2(a, a, _MM_SHUFFLE(3, 2, 3, 2));
         __m512d sum32 = _mm512_add_pd(a, h64);
@@ -172,4 +172,4 @@ NPY_FINLINE __m512i v_mul_u8(__m512i a, __m512i b)
     }
 #endif
 
-#endif // _NPY_SIMD_AVX512_ARITHMETIC_H
+#endif // _V_SIMD_AVX512_ARITHMETIC_H

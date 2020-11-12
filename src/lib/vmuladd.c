@@ -20,7 +20,7 @@
 void usimd_muladd(const FLOAT_T *data0, const FLOAT_T *data1, FLOAT_T *data_out, int len)
 {
     int i=len;
-#if NPY_SIMD
+#if V_SIMD
 #ifdef DOUBLE_T
 	int vstep = v_nlanes_f64;
 	int vstepx4 = vstep*4;

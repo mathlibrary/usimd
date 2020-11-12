@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_SSE_CVT_H
-#define _NPY_SIMD_SSE_CVT_H
+#ifndef _V_SIMD_SSE_CVT_H
+#define _V_SIMD_SSE_CVT_H
 
 // convert mask types to integer types
 #define v_cvt_u8_b8(BL)   BL
@@ -29,4 +29,4 @@
 #define v_cvt_b32_f32(A) _mm_castps_si128(A)
 #define v_cvt_b64_f64(A) _mm_castpd_si128(A)
 
-#endif // _NPY_SIMD_SSE_CVT_H
+#endif // _V_SIMD_SSE_CVT_H

@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_VSX_OPERATORS_H
-#define _NPY_SIMD_VSX_OPERATORS_H
+#ifndef _V_SIMD_VSX_OPERATORS_H
+#define _V_SIMD_VSX_OPERATORS_H
 
 /***************************
  * Shifting
@@ -84,11 +84,11 @@
 // NOT
 // note: we implement v_not_b*(boolen types) for internal use*/
 #define NPYV_IMPL_VSX_NOT_INT(VEC_LEN)                                 \
-    NPY_FINLINE v_u##VEC_LEN v_not_u##VEC_LEN(v_u##VEC_LEN a) \
+    V_FINLINE v_u##VEC_LEN v_not_u##VEC_LEN(v_u##VEC_LEN a) \
     { return vec_nor(a, a); }                                          \
-    NPY_FINLINE v_s##VEC_LEN v_not_s##VEC_LEN(v_s##VEC_LEN a) \
+    V_FINLINE v_s##VEC_LEN v_not_s##VEC_LEN(v_s##VEC_LEN a) \
     { return vec_nor(a, a); }                                          \
-    NPY_FINLINE v_b##VEC_LEN v_not_b##VEC_LEN(v_b##VEC_LEN a) \
+    V_FINLINE v_b##VEC_LEN v_not_b##VEC_LEN(v_b##VEC_LEN a) \
     { return vec_nor(a, a); }
 
 NPYV_IMPL_VSX_NOT_INT(8)
@@ -99,17 +99,17 @@ NPYV_IMPL_VSX_NOT_INT(32)
 #if defined(__GNUC__) && __GNUC__ > 5
     NPYV_IMPL_VSX_NOT_INT(64)
 #else
-    NPY_FINLINE v_u64 v_not_u64(v_u64 a)
+    V_FINLINE v_u64 v_not_u64(v_u64 a)
     { return vec_nor(a, a); }
-    NPY_FINLINE v_s64 v_not_s64(v_s64 a)
+    V_FINLINE v_s64 v_not_s64(v_s64 a)
     { return vec_nor(a, a); }
-    NPY_FINLINE v_b64 v_not_b64(v_b64 a)
+    V_FINLINE v_b64 v_not_b64(v_b64 a)
     { return (v_b64)vec_nor((v_u64)a, (v_u64)a); }
 #endif
 
-NPY_FINLINE v_f32 v_not_f32(v_f32 a)
+V_FINLINE v_f32 v_not_f32(v_f32 a)
 { return vec_nor(a, a); }
-NPY_FINLINE v_f64 v_not_f64(v_f64 a)
+V_FINLINE v_f64 v_not_f64(v_f64 a)
 { return vec_nor(a, a); }
 
 /***************************
@@ -129,7 +129,7 @@ NPY_FINLINE v_f64 v_not_f64(v_f64 a)
 #define v_cmpeq_f64 vec_cmpeq
 
 // Int Not Equal
-#ifdef NPY_HAVE_VSX3
+#ifdef V_HAVE_VSX3
     #define v_cmpneq_u8  vec_cmpne
     #define v_cmpneq_s8  vec_cmpne
     #define v_cmpneq_u16 vec_cmpne
@@ -213,4 +213,4 @@ NPY_FINLINE v_f64 v_not_f64(v_f64 a)
 #define v_cmple_f32(A, B) v_cmpge_f32(B, A)
 #define v_cmple_f64(A, B) v_cmpge_f64(B, A)
 
-#endif // _NPY_SIMD_VSX_OPERATORS_H
+#endif // _V_SIMD_VSX_OPERATORS_H

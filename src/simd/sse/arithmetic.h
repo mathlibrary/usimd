@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_SSE_ARITHMETIC_H
-#define _NPY_SIMD_SSE_ARITHMETIC_H
+#ifndef _V_SIMD_SSE_ARITHMETIC_H
+#define _V_SIMD_SSE_ARITHMETIC_H
 
 /***************************
  * Addition
@@ -53,7 +53,7 @@
  * Multiplication
  ***************************/
 // non-saturated
-NPY_FINLINE __m128i v_mul_u8(__m128i a, __m128i b)
+V_FINLINE __m128i v_mul_u8(__m128i a, __m128i b)
 {
     const __m128i mask = _mm_set1_epi32(0xFF00FF00);
     __m128i even = _mm_mullo_epi16(a, b);
@@ -65,10 +65,10 @@ NPY_FINLINE __m128i v_mul_u8(__m128i a, __m128i b)
 #define v_mul_u16 _mm_mullo_epi16
 #define v_mul_s16 _mm_mullo_epi16
 
-#ifdef NPY_HAVE_SSE41
+#ifdef V_HAVE_SSE41
     #define v_mul_u32 _mm_mullo_epi32
 #else
-    NPY_FINLINE __m128i v_mul_u32(__m128i a, __m128i b)
+    V_FINLINE __m128i v_mul_u32(__m128i a, __m128i b)
     {
         __m128i even = _mm_mul_epu32(a, b);
         __m128i odd  = _mm_mul_epu32(_mm_srli_epi64(a, 32), _mm_srli_epi64(b, 32));
@@ -76,7 +76,7 @@ NPY_FINLINE __m128i v_mul_u8(__m128i a, __m128i b)
         __m128i high = _mm_unpackhi_epi32(even, odd);
         return _mm_unpacklo_epi64(low, high);
     }
-#endif // NPY_HAVE_SSE41
+#endif // V_HAVE_SSE41
 #define v_mul_s32 v_mul_u32
 // TODO: emulate 64-bit*/
 #define v_mul_f32 _mm_mul_ps
@@ -94,7 +94,7 @@ NPY_FINLINE __m128i v_mul_u8(__m128i a, __m128i b)
 /***************************
  * FUSED
  ***************************/
-#ifdef NPY_HAVE_FMA3
+#ifdef V_HAVE_FMA3
     // multiply and add, a*b + c
     #define v_muladd_f32 _mm_fmadd_ps
     #define v_muladd_f64 _mm_fmadd_pd
@@ -107,7 +107,7 @@ NPY_FINLINE __m128i v_mul_u8(__m128i a, __m128i b)
     // negate multiply and subtract, -(a*b) - c
     #define v_nmulsub_f32 _mm_fnmsub_ps
     #define v_nmulsub_f64 _mm_fnmsub_pd
-#elif defined(NPY_HAVE_FMA4)
+#elif defined(V_HAVE_FMA4)
     // multiply and add, a*b + c
     #define v_muladd_f32 _mm_macc_ps
     #define v_muladd_f64 _mm_macc_pd
@@ -119,39 +119,39 @@ NPY_FINLINE __m128i v_mul_u8(__m128i a, __m128i b)
     #define v_nmuladd_f64 _mm_nmacc_pd
 #else
     // multiply and add, a*b + c
-    NPY_FINLINE v_f32 v_muladd_f32(v_f32 a, v_f32 b, v_f32 c)
+    V_FINLINE v_f32 v_muladd_f32(v_f32 a, v_f32 b, v_f32 c)
     { return v_add_f32(v_mul_f32(a, b), c); }
-    NPY_FINLINE v_f64 v_muladd_f64(v_f64 a, v_f64 b, v_f64 c)
+    V_FINLINE v_f64 v_muladd_f64(v_f64 a, v_f64 b, v_f64 c)
     { return v_add_f64(v_mul_f64(a, b), c); }
     // multiply and subtract, a*b - c
-    NPY_FINLINE v_f32 v_mulsub_f32(v_f32 a, v_f32 b, v_f32 c)
+    V_FINLINE v_f32 v_mulsub_f32(v_f32 a, v_f32 b, v_f32 c)
     { return v_sub_f32(v_mul_f32(a, b), c); }
-    NPY_FINLINE v_f64 v_mulsub_f64(v_f64 a, v_f64 b, v_f64 c)
+    V_FINLINE v_f64 v_mulsub_f64(v_f64 a, v_f64 b, v_f64 c)
     { return v_sub_f64(v_mul_f64(a, b), c); }
     // negate multiply and add, -(a*b) + c
-    NPY_FINLINE v_f32 v_nmuladd_f32(v_f32 a, v_f32 b, v_f32 c)
+    V_FINLINE v_f32 v_nmuladd_f32(v_f32 a, v_f32 b, v_f32 c)
     { return v_sub_f32(c, v_mul_f32(a, b)); }
-    NPY_FINLINE v_f64 v_nmuladd_f64(v_f64 a, v_f64 b, v_f64 c)
+    V_FINLINE v_f64 v_nmuladd_f64(v_f64 a, v_f64 b, v_f64 c)
     { return v_sub_f64(c, v_mul_f64(a, b)); }
-#endif // NPY_HAVE_FMA3
-#ifndef NPY_HAVE_FMA3 // for FMA4 and NON-FMA3
+#endif // V_HAVE_FMA3
+#ifndef V_HAVE_FMA3 // for FMA4 and NON-FMA3
     // negate multiply and subtract, -(a*b) - c
-    NPY_FINLINE v_f32 v_nmulsub_f32(v_f32 a, v_f32 b, v_f32 c)
+    V_FINLINE v_f32 v_nmulsub_f32(v_f32 a, v_f32 b, v_f32 c)
     {
         v_f32 neg_a = v_xor_f32(a, v_setall_f32(-0.0f));
         return v_sub_f32(v_mul_f32(neg_a, b), c);
     }
-    NPY_FINLINE v_f64 v_nmulsub_f64(v_f64 a, v_f64 b, v_f64 c)
+    V_FINLINE v_f64 v_nmulsub_f64(v_f64 a, v_f64 b, v_f64 c)
     {
         v_f64 neg_a = v_xor_f64(a, v_setall_f64(-0.0));
         return v_sub_f64(v_mul_f64(neg_a, b), c);
     }
-#endif // !NPY_HAVE_FMA3
+#endif // !V_HAVE_FMA3
 
 // Horizontal add: Calculates the sum of all vector elements.
-NPY_FINLINE float v_sum_f32(__m128 a)
+V_FINLINE float v_sum_f32(__m128 a)
 {
-#ifdef NPY_HAVE_SSE3
+#ifdef V_HAVE_SSE3
     __m128 sum_halves = _mm_hadd_ps(a, a);
     return _mm_cvtss_f32(_mm_hadd_ps(sum_halves, sum_halves));
 #else
@@ -163,15 +163,15 @@ NPY_FINLINE float v_sum_f32(__m128 a)
 #endif
 }
 
-NPY_FINLINE double v_sum_f64(__m128d a)
+V_FINLINE double v_sum_f64(__m128d a)
 {
-#ifdef NPY_HAVE_SSE3
+#ifdef V_HAVE_SSE3
     return _mm_cvtsd_f64(_mm_hadd_pd(a, a));
 #else
     return _mm_cvtsd_f64(_mm_add_pd(a, _mm_unpackhi_pd(a, a)));
 #endif
 }
 
-#endif // _NPY_SIMD_SSE_ARITHMETIC_H
+#endif // _V_SIMD_SSE_ARITHMETIC_H
 
 

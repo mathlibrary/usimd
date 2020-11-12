@@ -1,12 +1,12 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_AVX512_CVT_H
-#define _NPY_SIMD_AVX512_CVT_H
+#ifndef _V_SIMD_AVX512_CVT_H
+#define _V_SIMD_AVX512_CVT_H
 
 // convert mask to integer vectors
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     #define v_cvt_u8_b8  _mm512_movm_epi8
     #define v_cvt_u16_b16 _mm512_movm_epi16
 #else
@@ -16,12 +16,12 @@
 #define v_cvt_s8_b8  v_cvt_u8_b8
 #define v_cvt_s16_b16 v_cvt_u16_b16
 
-#ifdef NPY_HAVE_AVX512DQ
+#ifdef V_HAVE_AVX512DQ
     #define v_cvt_u32_b32 _mm512_movm_epi32
     #define v_cvt_u64_b64 _mm512_movm_epi64
 #else
     #define v_cvt_u32_b32(BL) _mm512_maskz_set1_epi32(BL, (int)-1)
-    #define v_cvt_u64_b64(BL) _mm512_maskz_set1_epi64(BL, (npy_int64)-1)
+    #define v_cvt_u64_b64(BL) _mm512_maskz_set1_epi64(BL, (s_int64)-1)
 #endif
 #define v_cvt_s32_b32 v_cvt_u32_b32
 #define v_cvt_s64_b64 v_cvt_u64_b64
@@ -29,7 +29,7 @@
 #define v_cvt_f64_b64(BL) _mm512_castsi512_pd(v_cvt_u64_b64(BL))
 
 // convert integer vectors to mask
-#ifdef NPY_HAVE_AVX512BW
+#ifdef V_HAVE_AVX512BW
     #define v_cvt_b8_u8 _mm512_movepi8_mask
     #define v_cvt_b16_u16 _mm512_movepi16_mask
 #else
@@ -39,7 +39,7 @@
 #define v_cvt_b8_s8  v_cvt_b8_u8
 #define v_cvt_b16_s16 v_cvt_b16_u16
 
-#ifdef NPY_HAVE_AVX512DQ
+#ifdef V_HAVE_AVX512DQ
     #define v_cvt_b32_u32 _mm512_movepi32_mask
     #define v_cvt_b64_u64 _mm512_movepi64_mask
 #else
@@ -51,4 +51,4 @@
 #define v_cvt_b32_f32(A) v_cvt_b32_u32(_mm512_castps_si512(A))
 #define v_cvt_b64_f64(A) v_cvt_b64_u64(_mm512_castpd_si512(A))
 
-#endif // _NPY_SIMD_AVX512_CVT_H
+#endif // _V_SIMD_AVX512_CVT_H

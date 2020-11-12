@@ -120,17 +120,17 @@ The code is similar to:
 int MultiplyIntList(int const *l1, int n)
 {
     int s = 1;
-#ifdef NPY_SIMD
+#ifdef V_SIMD
     int dim4 = n >> 2;
     n &= 3;
-    v_s32 sum_vec = npy_setall_s32(1);
+    v_s32 sum_vec = s_setall_s32(1);
     v_s32 data_vec;
     for(;dim4 > 0; dim4--){
-        data_vec = npy_load_s32(l1);
-        sum_vec = npy_mulq_s32(sum_vec, data_vec);
+        data_vec = s_load_s32(l1);
+        sum_vec = s_mulq_s32(sum_vec, data_vec);
         l1+=4;
     }
-    s = npy_mulr_s32(sum_vec);
+    s = s_mulr_s32(sum_vec);
 #endif
     while (n--) {
         s *= (*l1++);

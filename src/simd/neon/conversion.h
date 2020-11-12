@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_NEON_CVT_H
-#define _NPY_SIMD_NEON_CVT_H
+#ifndef _V_SIMD_NEON_CVT_H
+#define _V_SIMD_NEON_CVT_H
 
 // convert boolean vectors to integer vectors
 #define v_cvt_u8_b8(A)   A
@@ -29,4 +29,4 @@
 #define v_cvt_b32_f32(BL) vreinterpretq_u32_f32(BL)
 #define v_cvt_b64_f64(BL) vreinterpretq_u64_f64(BL)
 
-#endif // _NPY_SIMD_NEON_CVT_H
+#endif // _V_SIMD_NEON_CVT_H

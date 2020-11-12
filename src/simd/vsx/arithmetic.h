@@ -1,9 +1,9 @@
-#ifndef NPY_SIMD
+#ifndef V_SIMD
     #error "Not a standalone header"
 #endif
 
-#ifndef _NPY_SIMD_VSX_ARITHMETIC_H
-#define _NPY_SIMD_VSX_ARITHMETIC_H
+#ifndef _V_SIMD_VSX_ARITHMETIC_H
+#define _V_SIMD_VSX_ARITHMETIC_H
 
 /***************************
  * Addition
@@ -54,7 +54,7 @@
 // up to GCC 6 vec_mul only supports precisions and llong
 #if defined(__GNUC__) && __GNUC__ < 7
     #define NPYV_IMPL_VSX_MUL(T_VEC, SFX, ...)              \
-        NPY_FINLINE T_VEC v_mul_##SFX(T_VEC a, T_VEC b)  \
+        V_FINLINE T_VEC v_mul_##SFX(T_VEC a, T_VEC b)  \
         {                                                   \
             const v_u8 ev_od = {__VA_ARGS__};            \
             return vec_perm(                                \
@@ -70,7 +70,7 @@
 
     // vmuluwm can be used for unsigned or signed 32-bit integers
     #define NPYV_IMPL_VSX_MUL_32(T_VEC, SFX)                \
-        NPY_FINLINE T_VEC v_mul_##SFX(T_VEC a, T_VEC b)  \
+        V_FINLINE T_VEC v_mul_##SFX(T_VEC a, T_VEC b)  \
         {                                                   \
             T_VEC ret;                                      \
             __asm__ __volatile__(                           \
@@ -117,15 +117,15 @@
 #define v_nmulsub_f64 vec_nmadd
 
 // Horizontal add: Calculates the sum of all vector elements.
-NPY_FINLINE float v_sum_f32(v_f32 a)
+V_FINLINE float v_sum_f32(v_f32 a)
 {
     v_f32 sum = vec_add(a, v_combineh_f32(a, a));
     return vec_extract(sum, 0) + vec_extract(sum, 1);
 }
 
-NPY_FINLINE double v_sum_f64(v_f64 a)
+V_FINLINE double v_sum_f64(v_f64 a)
 {
     return vec_extract(a, 0) + vec_extract(a, 1);
 }
 
-#endif // _NPY_SIMD_VSX_ARITHMETIC_H
+#endif // _V_SIMD_VSX_ARITHMETIC_H

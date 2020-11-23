@@ -22,19 +22,31 @@ function SSE2Float() {
 
 function SSE2Double() {
     echo "SSE2 enabled + double"
-    gcc bench.c -DDOUBLE_T -DV_HAVE_SSE2 -DV_HAVE_SSE3 -DV_HAVE_AVX -DV_HAVE_FMA3 -mfma -o bench.o
+    gcc bench.c -DDOUBLE_T -DV_HAVE_SSE2 -o bench.o
+    ./bench.o
+}
+
+function SSE3Float() {
+    echo "SSE3 enabled + float"
+    gcc bench.c -DV_HAVE_SSE2 -DV_HAVE_SSE3 -msse3 -o bench.o
+    ./bench.o
+}
+
+function SSE3Double() {
+    echo "SSE3 enabled + double"
+    gcc bench.c -DDOUBLE_T -DV_HAVE_SSE2 -DV_HAVE_SSE3 -msse3 -o bench.o
     ./bench.o
 }
 
 function AVX2Float() {
     echo "AVX2 enabled + float"
-    gcc bench.c -DV_HAVE_AVX -DV_HAVE_AVX2 -mavx2 -o bench.o
+    gcc bench.c -DV_HAVE_AVX -DV_HAVE_AVX2 -mavx2 -mfma -o bench.o
     ./bench.o
 }
 
 function AVX2Double() {
     echo "AVX2 enabled + double"
-    gcc bench.c -DDOUBLE_T -DV_HAVE_AVX -DV_HAVE_AVX2 -mavx2 -o bench.o
+    gcc bench.c -DDOUBLE_T -DV_HAVE_AVX -DV_HAVE_AVX2 -mavx2 -mfma -o bench.o
     ./bench.o
 }
 
@@ -49,12 +61,14 @@ function NEONDouble() {
     gcc bench.c -DDOUBLE_T -DV_HAVE_NEON -o bench.o
     ./bench.o
 }
-pureCFloat
+#pureCFloat
 pureCDouble
 if [ "$1" != "${arm_platform}" ]; then
-    SSE2Float
+    #SSE2Float
     SSE2Double
-    AVX2Float
+    #SSE3Float
+    SSE3Double
+    #AVX2Float
     AVX2Double
 else
     NEONFloat

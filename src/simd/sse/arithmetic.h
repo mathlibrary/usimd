@@ -82,6 +82,16 @@ V_FINLINE __m128i v_mul_u8(__m128i a, __m128i b)
 #define v_mul_f32 _mm_mul_ps
 #define v_mul_f64 _mm_mul_pd
 
+#ifdef V_HAVE_SSE3
+// complex type :(slower than pure C
+V_FINLINE v_f64 v_cmul_f64(__m128d a, __m128d b)
+{
+  return _mm_addsub_pd(_mm_mul_pd(_mm_unpacklo_pd(a, a), b),
+                       _mm_mul_pd(_mm_unpackhi_pd(a, a),
+                                 _mm_shuffle_pd(b, b, 0b01)));
+}
+#endif
+
 // saturated
 // TODO: after implment Packs intrins
 

@@ -3,6 +3,7 @@
 
 #include "../src/lib/vadd.c"
 #include "../src/lib/vmuladd.c"
+#include "../src/lib/vcmul.c"
 #include"../src/lib/vsum.c"
 #include"../src/lib/vdot.c"
 #include "../src/lib/vdaxpy.c"
@@ -48,6 +49,18 @@ void TestVmuladd(CuTest *tc) {
 	}
 }
 
+void TestVcmul(CuTest *tc) {
+	FLOAT_T input1[18] = {1,-2,-3,4,-5,-6,-7,8,2,9,5,4,6,6,10,20,20,10};
+	FLOAT_T input2[18] = {1,2,3,4,5,6,7,8,3,5,4,5,7,-7,-10,20,-20,10};
+	FLOAT_T output[18];
+	usimd_cmul(input1,input2,output,9);
+	FLOAT_T expected[] = {5,0,-25,0,11,-60,-113,0,-39,37,0,41,84,0,-500,0,-500,0};
+	for(int i=0;i<18;i++) 
+	{
+		CuAssertDblEquals(tc,expected[i], output[i], 1e-6);
+	}
+}
+
 void TestVdaxpy(CuTest *tc) {
 	FLOAT_T input1[16] = {1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8};
 	FLOAT_T input2[16] = {1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8};
@@ -64,6 +77,7 @@ CuSuite* USIMDGetSuite() {
 	CuSuite* suite = CuSuiteNew();
 	SUITE_ADD_TEST(suite, TestVadd);
 	SUITE_ADD_TEST(suite, TestVmuladd);
+	SUITE_ADD_TEST(suite, TestVcmul);
 	SUITE_ADD_TEST(suite, TestVsum);
 	SUITE_ADD_TEST(suite, TestVdot);
 	SUITE_ADD_TEST(suite, TestVdaxpy);

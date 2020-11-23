@@ -4,7 +4,7 @@
 #include"../src/lib/vdot.c"
 #include"../src/lib/vmuladd.c"
 #include"../src/lib/vdaxpy.c"
-
+#include"../src/lib/vcmul.c"
 #include "bench.h"
 
 void bench_add(int scale) 
@@ -80,6 +80,25 @@ void bench_muladd(int scale)
     getMFlops(scale, timeg);
 }
 
+void bench_cmul(int scale)
+{
+    FLOAT_T *input1 = getFinput(scale);
+    FLOAT_T *input2 = getFinput(scale);
+    FLOAT_T *output = getFinput(scale);
+    int loops = 10;
+    double timeg;
+    printf("%s with scale %d:\n", __FUNCTION__, scale);
+    for (int l=0; l<loops; l++)
+    {
+        begin();
+        usimd_cmul(input1,input2,output,scale/2);
+        end();
+        timeg += getsecs();
+    }
+    timeg /= loops;
+    getMFlops(scale, timeg);
+}
+
 void bench_axpy(int scale)
 {
     FLOAT_T *input1 = getFinput(scale);
@@ -105,7 +124,7 @@ int main()
     int scalex2 = 2e6;
     int scalex4 = 4e6;
     int scalex8 = 8e6;
-    /*start benching*/
+    /*start benching
     bench_sum(scalex4);
     bench_sum(scalex8);
     bench_add(scalex4);
@@ -115,7 +134,8 @@ int main()
     bench_axpy(scalex4);
     bench_axpy(scalex8);
     bench_dot(scalex4);
-    bench_dot(scalex8);
-    
+    bench_dot(scalex8);*/
+    //bench_cmul(scalex4);
+    bench_cmul(scalex8);
     return 0;
 }

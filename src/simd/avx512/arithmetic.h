@@ -103,6 +103,13 @@ V_FINLINE __m512i v_mul_u8(__m512i a, __m512i b)
 #define v_mul_f32 _mm512_mul_ps
 #define v_mul_f64 _mm512_mul_pd
 
+// complex types
+V_FINLINE v_f64 v_cmul_f64(__m512d a, __m512d b)
+{
+    v_f64 r=_mm512_permute_pd(b,85)*_mm512_permute_pd(a,127);
+	return _mm512_fmaddsub_pd(b,_mm512_movedup_pd(a),r);
+}
+
 // saturated
 // TODO: after implment Packs intrins
 

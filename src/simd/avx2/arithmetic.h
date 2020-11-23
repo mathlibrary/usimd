@@ -62,6 +62,13 @@
 #define v_mul_f32 _mm256_mul_ps
 #define v_mul_f64 _mm256_mul_pd
 
+// complex type
+V_FINLINE v_f64 v_cmul_f64(__m256d a, __m256d b)
+{
+    v_f64 r=_mm256_permute_pd(b,5)*_mm256_permute_pd(a,15);
+	return _mm256_fmaddsub_pd(b,_mm256_movedup_pd(a),r);
+}
+
 // saturated
 // TODO: after implment Packs intrins
 

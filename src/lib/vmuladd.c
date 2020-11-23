@@ -73,7 +73,7 @@ void usimd_muladd(const FLOAT_T *data0, const FLOAT_T *data1, FLOAT_T *data_out,
 	}
 #endif
 #endif
-	for(; i >=0; i--){
-		data_out[i] += data0[i] * data1[i];
+	for(; i >=0; i--, data_out++, data0++, data1++){
+		*data_out += *data0 * *data1;
 	}
 }

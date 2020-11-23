@@ -19,21 +19,34 @@ function SSE2Float() {
     ./main.o
 }
 
+
 function SSE2Double() {
     echo "SSE2 + Double-precision"
     gcc AllTests.c ./cutest/CuTest.c USIMDTest.c  -DDOUBLE_T -DV_HAVE_SSE2 -o main.o
     ./main.o
 }
 
+function SSE3Float() {
+    echo "SSE3 + Single-precision"
+    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DV_HAVE_SSE2 -DV_HAVE_SSE3 -msse3 -o main.o
+    ./main.o
+}
+
+function SSE3Double() {
+    echo "SSE3 + Double-precision"
+    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DDOUBLE_T -DV_HAVE_SSE2 -DV_HAVE_SSE3 -msse3 -o main.o
+    ./main.o
+}
+
 function AVX2Float() {
     echo "AVX2 + Single-precision"
-    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DV_HAVE_AVX -DV_HAVE_AVX2 -mavx2 -o main.o
+    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DV_HAVE_AVX -DV_HAVE_AVX2 -mfma -mavx2 -o main.o
     ./main.o
 }
 
 function AVX2Double() {
-    echo "SSE2 + Double-precision"
-    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c  -DDOUBLE_T -DV_HAVE_AVX -DV_HAVE_AVX2 -mavx2 -o main.o
+    echo "AVX2 + Double-precision"
+    gcc AllTests.c ./cutest/CuTest.c USIMDTest.c -DDOUBLE_T -DV_HAVE_AVX -DV_HAVE_AVX2 -mfma -mavx2 -o main.o
     ./main.o
 }
 
@@ -54,6 +67,8 @@ pureCDouble
 if [[ "$*" != ${arm_platform} ]]; then
     SSE2Float
     SSE2Double
+    SSE3Float
+    SSE3Double
     AVX2Float
     AVX2Double
 else

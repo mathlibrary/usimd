@@ -22,16 +22,16 @@ void usimd_cmul(const FLOAT_T *data0, const FLOAT_T *data1, FLOAT_T *data_out, i
 		y2=v_load_f64(data1 + i + vstep*2);
 		x3=v_load_f64(data0 + i + vstep*3);
 		y3=v_load_f64(data1 + i + vstep*3);
-		v_store_f64(data_out + i,v_cmul_f64(x0, y0));
-		v_store_f64(data_out + i + vstep,v_cmul_f64(x1, y1));
-		v_store_f64(data_out + i + vstep*2,v_cmul_f64(x2, y2));
-		v_store_f64(data_out + i + vstep*3,v_cmul_f64(x3, y3));
+		v_store_f64(data_out + i,v_cmul_f64(x0, y0,1));
+		v_store_f64(data_out + i + vstep,v_cmul_f64(x1, y1,1));
+		v_store_f64(data_out + i + vstep*2,v_cmul_f64(x2, y2,1));
+		v_store_f64(data_out + i + vstep*3,v_cmul_f64(x3, y3,1));
 	}
 	for (; i < unrollx; i += vstep)
 	{
 		x0=v_load_f64(data0 + i);
 		y0=v_load_f64(data1 + i);
-		v_store_f64(data_out + i,v_cmul_f64(x0, y0));
+		v_store_f64(data_out + i,v_cmul_f64(x0, y0,1));
 	}
 #endif
 #endif

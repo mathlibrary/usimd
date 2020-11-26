@@ -1,4 +1,5 @@
 #ifndef _COMMON_H
+#include<stdio.h>
 #define _COMMON_H
 #ifdef DOUBLE_T
     #define FLOAT_T double

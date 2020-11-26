@@ -4,9 +4,10 @@
 #include "../src/lib/vadd.c"
 #include "../src/lib/vmuladd.c"
 #include "../src/lib/vcmul.c"
-#include"../src/lib/vsum.c"
-#include"../src/lib/vdot.c"
+#include "../src/lib/vsum.c"
+#include "../src/lib/vdot.c"
 #include "../src/lib/vdaxpy.c"
+#include "../src/lib/vaddindex.c"
 
 void TestVadd(CuTest *tc) {
 	FLOAT_T input1[8] = {1,2,3,4,5,6,7,8};
@@ -73,6 +74,19 @@ void TestVdaxpy(CuTest *tc) {
 	}
 }
 
+void TestVaddindex(CuTest *tc) {
+	FLOAT_T input[105];
+	FLOAT_T output[105];
+	for(int i=0;i<105;i++) {
+		input[i] = i+1;
+		output[i] = input[i] + i;
+	}
+    usimd_addindex(105,input);
+	for(int i=0;i<105;i++) {
+		CuAssertDblEquals(tc,output[i], input[i] , 1e-6);
+	}
+}
+
 CuSuite* USIMDGetSuite() {
 	CuSuite* suite = CuSuiteNew();
 	SUITE_ADD_TEST(suite, TestVadd);
@@ -81,5 +95,6 @@ CuSuite* USIMDGetSuite() {
 	SUITE_ADD_TEST(suite, TestVsum);
 	SUITE_ADD_TEST(suite, TestVdot);
 	SUITE_ADD_TEST(suite, TestVdaxpy);
+	SUITE_ADD_TEST(suite, TestVaddindex);
 	return suite;
 }

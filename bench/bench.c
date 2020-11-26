@@ -5,6 +5,7 @@
 #include"../src/lib/vmuladd.c"
 #include"../src/lib/vdaxpy.c"
 #include"../src/lib/vcmul.c"
+#include"../src/lib/vaddindex.c"
 #include "bench.h"
 
 void bench_add(int scale) 
@@ -118,6 +119,23 @@ void bench_axpy(int scale)
     getMFlops(scale, timeg);
 }
 
+void bench_vaddindex(int scale) 
+{
+    FLOAT_T *input = getFinput(scale);
+    int loops = 10;
+    double timeg;
+    printf("%s with scale %d:\n", __FUNCTION__, scale);
+    for (int l=0; l<loops; l++)
+    {
+        begin();
+        usimd_addindex(scale, input);
+        end();
+        timeg += getsecs();
+    }
+    timeg /= loops;
+    getMFlops(scale, timeg);
+}
+
 int main()
 {
     int scale = 1e6;
@@ -134,8 +152,10 @@ int main()
     bench_axpy(scalex4);
     bench_axpy(scalex8);
     bench_dot(scalex4);
-    bench_dot(scalex8);*/
+    bench_dot(scalex8);
     //bench_cmul(scalex4);
-    bench_cmul(scalex8);
+    bench_cmul(scalex8);*/
+    bench_vaddindex(scalex4);
+    bench_vaddindex(scalex8);
     return 0;
 }

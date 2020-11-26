@@ -71,7 +71,7 @@ typedef double     v_lanetype_f64;
 #define V_CAT__(a, b) a ## b
 #define V_CAT_(a, b) V_CAT__(a, b)
 #define V_CAT(a, b) V_CAT_(a, b)
-
+#define V_EXPAND(x) x
 // include head
 /** SSE **/
 #ifdef V_HAVE_SSE

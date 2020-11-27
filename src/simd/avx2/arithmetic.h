@@ -147,6 +147,10 @@ V_FINLINE double v_sum_f64(__m256d a)
     return _mm_cvtsd_f64(sum);
 }
 
+// Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements
+#define v_hadd_f32 _mm256_hadd_ps
+#define v_hadd_f64 _mm256_hadd_pd
+
 #endif // _V_SIMD_AVX2_ARITHMETIC_H
 
 

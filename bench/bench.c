@@ -1,14 +1,15 @@
 /**/
-#include"../src/lib/vadd.c"
-#include"../src/lib/vsum.c"
-#include"../src/lib/vdot.c"
-#include"../src/lib/vmuladd.c"
-#include"../src/lib/vdaxpy.c"
-#include"../src/lib/vcmul.c"
-#include"../src/lib/vaddindex.c"
+#include "../src/lib/vadd.c"
+#include "../src/lib/vsum.c"
+#include "../src/lib/vdot.c"
+#include "../src/lib/vmuladd.c"
+#include "../src/lib/vdaxpy.c"
+#include "../src/lib/vcmul.c"
+#include "../src/lib/vaddindex.c"
+#include "../src/lib/vaddeven.c"
 #include "bench.h"
 
-void bench_add(int scale) 
+void bench_add(int scale)
 {
     FLOAT_T *input1 = getFinput(scale);
     FLOAT_T *input2 = getFinput(scale);
@@ -16,7 +17,7 @@ void bench_add(int scale)
     int loops = 10;
     double timeg;
     printf("%s with scale %d:\n", __FUNCTION__, scale);
-    for (int l=0; l<loops; l++)
+    for (int l = 0; l < loops; l++)
     {
         begin();
         usimd_add(input1, input2, output, scale);
@@ -27,13 +28,13 @@ void bench_add(int scale)
     getMFlops(scale, timeg);
 }
 
-void bench_sum(int scale) 
+void bench_sum(int scale)
 {
     FLOAT_T *input = getFinput(scale);
     int loops = 10;
     double timeg;
     printf("%s with scale %d:\n", __FUNCTION__, scale);
-    for (int l=0; l<loops; l++)
+    for (int l = 0; l < loops; l++)
     {
         begin();
         usimd_sum(scale, input, 1);
@@ -44,17 +45,17 @@ void bench_sum(int scale)
     getMFlops(scale, timeg);
 }
 
-void bench_dot(int scale) 
+void bench_dot(int scale)
 {
     FLOAT_T *input1 = getFinput(scale);
     FLOAT_T *input2 = getFinput(scale);
     int loops = 10;
     double timeg;
     printf("%s with scale %d:\n", __FUNCTION__, scale);
-    for (int l=0; l<loops; l++)
+    for (int l = 0; l < loops; l++)
     {
         begin();
-        FLOAT_T actual = usimd_dot(scale,input1, 1, input2, 1);
+        FLOAT_T actual = usimd_dot(scale, input1, 1, input2, 1);
         end();
         timeg += getsecs();
     }
@@ -62,7 +63,7 @@ void bench_dot(int scale)
     getMFlops(scale, timeg);
 }
 
-void bench_muladd(int scale) 
+void bench_muladd(int scale)
 {
     FLOAT_T *input1 = getFinput(scale);
     FLOAT_T *input2 = getFinput(scale);
@@ -70,7 +71,7 @@ void bench_muladd(int scale)
     int loops = 10;
     double timeg;
     printf("%s with scale %d:\n", __FUNCTION__, scale);
-    for (int l=0; l<loops; l++)
+    for (int l = 0; l < loops; l++)
     {
         begin();
         usimd_muladd(input1, input2, input3, scale);
@@ -89,10 +90,10 @@ void bench_cmul(int scale)
     int loops = 10;
     double timeg;
     printf("%s with scale %d:\n", __FUNCTION__, scale);
-    for (int l=0; l<loops; l++)
+    for (int l = 0; l < loops; l++)
     {
         begin();
-        usimd_cmul(input1,input2,output,scale/2);
+        usimd_cmul(input1, input2, output, scale / 2);
         end();
         timeg += getsecs();
     }
@@ -108,10 +109,10 @@ void bench_axpy(int scale)
     int loops = 10;
     double timeg;
     printf("%s with scale %d:\n", __FUNCTION__, scale);
-    for (int l=0; l<loops; l++)
+    for (int l = 0; l < loops; l++)
     {
         begin();
-        usimd_daxpy(scale,input1,input2, &alpha);
+        usimd_daxpy(scale, input1, input2, &alpha);
         end();
         timeg += getsecs();
     }
@@ -119,16 +120,34 @@ void bench_axpy(int scale)
     getMFlops(scale, timeg);
 }
 
-void bench_vaddindex(int scale) 
+void bench_vaddindex(int scale)
 {
     FLOAT_T *input = getFinput(scale);
     int loops = 10;
     double timeg;
     printf("%s with scale %d:\n", __FUNCTION__, scale);
-    for (int l=0; l<loops; l++)
+    for (int l = 0; l < loops; l++)
     {
         begin();
         usimd_addindex(scale, input);
+        end();
+        timeg += getsecs();
+    }
+    timeg /= loops;
+    getMFlops(scale, timeg);
+}
+
+void bench_vaddeven(int scale)
+{
+    FLOAT_T *input = getFinput(scale);
+    FLOAT_T *output = getFinput(scale / 2);
+    int loops = 10;
+    double timeg;
+    printf("%s with scale %d:\n", __FUNCTION__, scale);
+    for (int l = 0; l < loops; l++)
+    {
+        begin();
+        usimd_addeven(input, output, scale);
         end();
         timeg += getsecs();
     }
@@ -155,7 +174,7 @@ int main()
     bench_dot(scalex8);
     //bench_cmul(scalex4);
     bench_cmul(scalex8);*/
-    bench_vaddindex(scalex4);
-    bench_vaddindex(scalex8);
+    bench_vaddeven(scalex4);
+    bench_vaddeven(scalex8);
     return 0;
 }

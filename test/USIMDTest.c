@@ -8,6 +8,7 @@
 #include "../src/lib/vdot.c"
 #include "../src/lib/vdaxpy.c"
 #include "../src/lib/vaddindex.c"
+#include "../src/lib/vaddeven.c"
 
 void TestVadd(CuTest *tc) {
 	FLOAT_T input1[8] = {1,2,3,4,5,6,7,8};
@@ -84,6 +85,18 @@ void TestVaddindex(CuTest *tc) {
     usimd_addindex(105,input);
 	for(int i=0;i<105;i++) {
 		CuAssertDblEquals(tc,output[i], input[i] , 1e-6);
+	}
+}
+
+void TestVaddeven(CuTest *tc) {
+	FLOAT_T input[110];
+	FLOAT_T output[55];
+	for(int i=0;i<110;i++) {
+		input[i] = i+1;
+	}
+	usimd_addeven(input,output,110);
+	for(int i=0;i<55;i++) {
+		printf("%f ", output[i]);
 	}
 }
 

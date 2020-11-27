@@ -182,6 +182,13 @@ V_FINLINE double v_sum_f64(__m128d a)
 #endif
 }
 
+#ifdef V_HAVE_SSE3
+
+// Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements
+#define v_hadd_f32 _mm_hadd_ps
+#define v_hadd_f64 _mm_hadd_pd
+
+#endif
 #endif // _V_SIMD_SSE_ARITHMETIC_H
 
 

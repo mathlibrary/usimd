@@ -61,15 +61,15 @@ function NEONDouble() {
     gcc bench.c -DDOUBLE_T -DV_HAVE_NEON -o bench.o
     ./bench.o
 }
-#pureCFloat
-pureCDouble
+pureCFloat
+#pureCDouble
 if [ "$1" != "${arm_platform}" ]; then
-    #SSE2Float
-    SSE2Double
-    #SSE3Float
-    SSE3Double
-    #AVX2Float
-    AVX2Double
+    SSE2Float
+    #SSE2Double
+    SSE3Float
+    #SSE3Double
+    AVX2Float
+    #AVX2Double
 else
     NEONFloat
     NEONDouble

@@ -9,6 +9,7 @@
 #include "../src/lib/vdaxpy.c"
 #include "../src/lib/vaddindex.c"
 #include "../src/lib/vaddeven.c"
+#include "../src/lib/vfcond.c"
 
 void TestVadd(CuTest *tc) {
 	FLOAT_T input1[8] = {1,2,3,4,5,6,7,8};
@@ -91,12 +92,25 @@ void TestVaddindex(CuTest *tc) {
 void TestVaddeven(CuTest *tc) {
 	FLOAT_T input[110];
 	FLOAT_T output[55];
+	FLOAT_T expected[55];
 	for(int i=0;i<110;i++) {
 		input[i] = i+1;
 	}
+	for(int i=0;i<55;i++) {
+		expected[i] = (input[2*i]+input[2*i+1])/2;
+	}
 	usimd_addeven(input,output,110);
 	for(int i=0;i<55;i++) {
-		printf("%f ", output[i]);
+		CuAssertDblEquals(tc,expected[i], output[i] , 1e-6);
+	}
+}
+
+void TestVfcond(CuTest *tc) {
+	FLOAT_T input[20] = {1,0.1,2,0.2,0.3,4,0,4,0,5,1,0.1,2,0.2,0.3,4,0,4,0,5};
+	FLOAT_T expected[20] = {2,-0.9,3,-0.8,-0.7,5,-1,5,-1,6,2,-0.9,3,-0.8,-0.7,5,-1,5,-1,6};
+    usimd_fcond(input,20);
+	for(int i=0;i<20;i++) {
+		CuAssertDblEquals(tc,expected[i], input[i] , 1e-6);
 	}
 }
 
@@ -109,5 +123,6 @@ CuSuite* USIMDGetSuite() {
 	SUITE_ADD_TEST(suite, TestVdot);
 	SUITE_ADD_TEST(suite, TestVdaxpy);
 	SUITE_ADD_TEST(suite, TestVaddindex);
+	SUITE_ADD_TEST(suite, TestVfcond);
 	return suite;
 }

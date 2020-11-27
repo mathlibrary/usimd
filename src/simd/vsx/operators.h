@@ -112,6 +112,9 @@ V_FINLINE v_f32 v_not_f32(v_f32 a)
 V_FINLINE v_f64 v_not_f64(v_f64 a)
 { return vec_nor(a, a); }
 
+#define v_andnot_f32(A, B) v_and_f32(v_not_f32(A), B)
+#define v_andnot_f64(A, B) v_and_f32(v_not_f32(A), B)
+
 /***************************
  * Comparison
  ***************************/

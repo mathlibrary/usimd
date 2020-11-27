@@ -90,6 +90,8 @@
     V_IMPL_AVX512_FROM_SI512_PS_2ARG(v_and_f32, _mm512_and_si512)
     V_IMPL_AVX512_FROM_SI512_PD_2ARG(v_and_f64, _mm512_and_si512)
 #endif
+#define v_andnot_f32 _mm512_andnot_ps
+#define v_andnot_f64 _mm512_andnot_pd
 
 // OR
 #define v_or_u8  _mm512_or_si512

@@ -62,6 +62,8 @@ V_FINLINE __m256i v_shr_s64(__m256i a, int c)
 #define v_and_f32 _mm256_and_ps
 #define v_and_f64 _mm256_and_pd
 
+#define v_andnot_f32 _mm256_andnot_ps
+#define v_andnot_f64 _mm256_andnot_pd
 // OR
 #define v_or_u8  _mm256_or_si256
 #define v_or_s8  _mm256_or_si256
@@ -192,9 +194,9 @@ V_FINLINE __m256i v_cmpge_u32(__m256i a, __m256i b)
 #define v_cmplt_f64(A, B)  _mm256_castpd_si256(_mm256_cmp_pd(A, B, _CMP_LT_OQ))
 #define v_cmple_f32(A, B)  _mm256_castps_si256(_mm256_cmp_ps(A, B, _CMP_LE_OQ))
 #define v_cmple_f64(A, B)  _mm256_castpd_si256(_mm256_cmp_pd(A, B, _CMP_LE_OQ))
-#define v_cmpgt_f32(A, B)  _mm256_castps_si256(_mm256_cmp_ps(A, B, _CMP_GT_OQ))
-#define v_cmpgt_f64(A, B)  _mm256_castpd_si256(_mm256_cmp_pd(A, B, _CMP_GT_OQ))
-#define v_cmpge_f32(A, B)  _mm256_castps_si256(_mm256_cmp_ps(A, B, _CMP_GE_OQ))
+#define v_cmpgt_f32(A, B)  _mm256_cmp_ps(A, B, _CMP_GT_OQ)
+#define v_cmpgt_f64(A, B)  _mm256_cmp_pd(A, B, _CMP_GT_OQ)
+#define v_cmpge_f32(A, B)  _mm256_castps_si256(_mm256_cmp_ps(A, B, _CMP_GE_OQ)
 #define v_cmpge_f64(A, B)  _mm256_castpd_si256(_mm256_cmp_pd(A, B, _CMP_GE_OQ))
 
 #endif // _V_SIMD_AVX2_OPERATORS_H

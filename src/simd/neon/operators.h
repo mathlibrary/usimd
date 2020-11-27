@@ -99,6 +99,11 @@
 #define v_not_f32(A) vreinterpretq_f32_u8(vmvnq_u8(vreinterpretq_u8_f32(A)))
 #define v_not_f64(A) vreinterpretq_f64_u8(vmvnq_u8(vreinterpretq_u8_f64(A)))
 
+#define v_andnot_f32(A, B) v_and_f32(v_not_f32(A), B)
+#ifdef __aarch64__
+#define v_andnot_f64(A, B) v_and_f32(v_not_f32(A), B)
+#endif
+
 /***************************
  * Comparison
  ***************************/

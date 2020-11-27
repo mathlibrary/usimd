@@ -7,6 +7,7 @@
 #include "../src/lib/vcmul.c"
 #include "../src/lib/vaddindex.c"
 #include "../src/lib/vaddeven.c"
+#include "../src/lib/vfcond.c"
 #include "bench.h"
 
 void bench_add(int scale)
@@ -155,6 +156,23 @@ void bench_vaddeven(int scale)
     getMFlops(scale, timeg);
 }
 
+void bench_vfcond(int scale)
+{
+    FLOAT_T *input = getFinput(scale);
+    int loops = 10;
+    double timeg;
+    printf("%s with scale %d:\n", __FUNCTION__, scale);
+    for (int l = 0; l < loops; l++)
+    {
+        begin();
+        usimd_fcond(input, scale);
+        end();
+        timeg += getsecs();
+    }
+    timeg /= loops;
+    getMFlops(scale, timeg);
+}
+
 int main()
 {
     int scale = 1e6;
@@ -172,9 +190,11 @@ int main()
     bench_axpy(scalex8);
     bench_dot(scalex4);
     bench_dot(scalex8);
-    //bench_cmul(scalex4);
-    bench_cmul(scalex8);*/
+    bench_cmul(scalex4);
+    bench_cmul(scalex8);
     bench_vaddeven(scalex4);
-    bench_vaddeven(scalex8);
+    bench_vaddeven(scalex8);*/
+    bench_vfcond(scalex4);
+    bench_vfcond(scalex8);
     return 0;
 }

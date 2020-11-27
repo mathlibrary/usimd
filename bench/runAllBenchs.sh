@@ -4,19 +4,19 @@ arm_platform="arm"
 
 function pureCFloat() {
     echo "pure C + float"
-    gcc bench.c -o bench.o
+    gcc bench.c -march=native -O2 -ffast-math -o bench.o
     ./bench.o
 }
 
 function pureCDouble() {
     echo "pure C + double"
-    gcc bench.c -DDOUBLE_T -o bench.o
+    gcc bench.c -DDOUBLE_T -march=native -O2 -ffast-math -o bench.o
     ./bench.o
 }
 
 function SSE2Float() {
     echo "SSE2 enabled + float"
-    gcc bench.c -DV_HAVE_SSE2 -mfma -o bench.o
+    gcc bench.c -DV_HAVE_SSE2 -march=native -O2 -ffast-math -mfma -o bench.o
     ./bench.o
 }
 
@@ -28,25 +28,25 @@ function SSE2Double() {
 
 function SSE3Float() {
     echo "SSE3 enabled + float"
-    gcc bench.c -DV_HAVE_SSE2 -DV_HAVE_SSE3 -msse3 -o bench.o
+    gcc bench.c -DV_HAVE_SSE2 -DV_HAVE_SSE3 -march=native -O2 -ffast-math -msse3 -o bench.o
     ./bench.o
 }
 
 function SSE3Double() {
     echo "SSE3 enabled + double"
-    gcc bench.c -DDOUBLE_T -DV_HAVE_SSE2 -DV_HAVE_SSE3 -msse3 -o bench.o
+    gcc bench.c -DDOUBLE_T -DV_HAVE_SSE2 -DV_HAVE_SSE3 -march=native -O2 -ffast-math -msse3 -o bench.o
     ./bench.o
 }
 
 function AVX2Float() {
     echo "AVX2 enabled + float"
-    gcc bench.c -DV_HAVE_AVX -DV_HAVE_AVX2 -mavx2 -mfma -o bench.o
+    gcc bench.c -DV_HAVE_AVX -DV_HAVE_AVX2 -march=native -O2 -ffast-math -mavx2 -mfma -o bench.o
     ./bench.o
 }
 
 function AVX2Double() {
     echo "AVX2 enabled + double"
-    gcc bench.c -DDOUBLE_T -DV_HAVE_AVX -DV_HAVE_AVX2 -mavx2 -mfma -o bench.o
+    gcc bench.c -DDOUBLE_T -DV_HAVE_AVX -DV_HAVE_AVX2 -march=native -O2 -ffast-math -mavx2 -mfma -o bench.o
     ./bench.o
 }
 

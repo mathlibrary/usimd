@@ -63,6 +63,8 @@ V_FINLINE __m128i v_shr_s64(__m128i a, int c)
 #define v_and_f32 _mm_and_ps
 #define v_and_f64 _mm_and_pd
 
+#define v_andnot_f32 _mm_andnot_ps
+#define v_andnot_f64 _mm_andnot_pd
 // OR
 #define v_or_u8  _mm_or_si128
 #define v_or_s8  _mm_or_si128
@@ -250,8 +252,8 @@ V_FINLINE __m128i v_shr_s64(__m128i a, int c)
 #define v_cmplt_f64(a, b)  _mm_castpd_si128(_mm_cmplt_pd(a, b))
 #define v_cmple_f32(a, b)  _mm_castps_si128(_mm_cmple_ps(a, b))
 #define v_cmple_f64(a, b)  _mm_castpd_si128(_mm_cmple_pd(a, b))
-#define v_cmpgt_f32(a, b)  _mm_castps_si128(_mm_cmpgt_ps(a, b))
-#define v_cmpgt_f64(a, b)  _mm_castpd_si128(_mm_cmpgt_pd(a, b))
+#define v_cmpgt_f32(a, b)  _mm_cmpgt_ps(a, b)
+#define v_cmpgt_f64(a, b)  _mm_cmpgt_pd(a, b)
 #define v_cmpge_f32(a, b)  _mm_castps_si128(_mm_cmpge_ps(a, b))
 #define v_cmpge_f64(a, b)  _mm_castpd_si128(_mm_cmpge_pd(a, b))
 

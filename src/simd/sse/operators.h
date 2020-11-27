@@ -257,4 +257,7 @@ V_FINLINE __m128i v_shr_s64(__m128i a, int c)
 #define v_cmpge_f32(a, b)  _mm_castps_si128(_mm_cmpge_ps(a, b))
 #define v_cmpge_f64(a, b)  _mm_castpd_si128(_mm_cmpge_pd(a, b))
 
+#define v_max_f32 _mm_max_ps
+#define v_max_f64 _mm_max_pd
+
 #endif // _V_SIMD_SSE_OPERATORS_H

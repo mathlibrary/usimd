@@ -10,6 +10,7 @@
 #include "../src/lib/vaddindex.c"
 #include "../src/lib/vaddeven.c"
 #include "../src/lib/vfcond.c"
+#include "../src/lib/varrmax.c"
 
 void TestVadd(CuTest *tc) {
 	FLOAT_T input1[8] = {1,2,3,4,5,6,7,8};
@@ -114,6 +115,12 @@ void TestVfcond(CuTest *tc) {
 	}
 }
 
+void TestVarrmax(CuTest *tc) {
+	FLOAT_T input[20] = {1,3,4,1,34,651,74,23,650,23,1,3,4,1,34,652,74,23,650,23};
+	FLOAT_T expected = 652;
+	CuAssertDblEquals(tc,expected, usimd_arrmax(input,20), 1e-6);
+}
+
 CuSuite* USIMDGetSuite() {
 	CuSuite* suite = CuSuiteNew();
 	SUITE_ADD_TEST(suite, TestVadd);
@@ -123,6 +130,8 @@ CuSuite* USIMDGetSuite() {
 	SUITE_ADD_TEST(suite, TestVdot);
 	SUITE_ADD_TEST(suite, TestVdaxpy);
 	SUITE_ADD_TEST(suite, TestVaddindex);
+	SUITE_ADD_TEST(suite, TestVaddeven);
 	SUITE_ADD_TEST(suite, TestVfcond);
+	SUITE_ADD_TEST(suite, TestVarrmax);
 	return suite;
 }

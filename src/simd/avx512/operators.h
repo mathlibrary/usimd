@@ -258,4 +258,7 @@
 #define v_cmpge_f32(A, B)  _mm512_cmp_ps_mask(A, B, _CMP_GE_OQ)
 #define v_cmpge_f64(A, B)  _mm512_cmp_pd_mask(A, B, _CMP_GE_OQ)
 
+#define v_max_f32 _mm512_max_ps
+#define v_max_f64 _mm512_max_pd
+
 #endif // _V_SIMD_AVX512_OPERATORS_H

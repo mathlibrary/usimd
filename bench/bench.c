@@ -8,6 +8,7 @@
 #include "../src/lib/vaddindex.c"
 #include "../src/lib/vaddeven.c"
 #include "../src/lib/vfcond.c"
+#include "../src/lib/varrmax.c"
 #include "bench.h"
 
 void bench_add(int scale)
@@ -173,12 +174,29 @@ void bench_vfcond(int scale)
     getMFlops(scale, timeg);
 }
 
+void bench_varrmax(int scale)
+{
+    FLOAT_T *input = getFinput(scale);
+    int loops = 10;
+    double timeg;
+    printf("%s with scale %d:\n", __FUNCTION__, scale);
+    for (int l = 0; l < loops; l++)
+    {
+        begin();
+        usimd_arrmax(input, scale);
+        end();
+        timeg += getsecs();
+    }
+    timeg /= loops;
+    getMFlops(scale, timeg);
+}
+
 int main()
 {
     int scale = 1e6;
     int scalex2 = 2e6;
-    int scalex4 = 4e6;
-    int scalex8 = 8e6;
+    int scalex4 = 4e7;
+    int scalex8 = 8e7;
     /*start benching
     bench_sum(scalex4);
     bench_sum(scalex8);
@@ -193,8 +211,10 @@ int main()
     bench_cmul(scalex4);
     bench_cmul(scalex8);
     bench_vaddeven(scalex4);
-    bench_vaddeven(scalex8);*/
+    bench_vaddeven(scalex8);
     bench_vfcond(scalex4);
-    bench_vfcond(scalex8);
+    bench_vfcond(scalex8);*/
+    bench_varrmax(scalex4);
+    bench_varrmax(scalex8);
     return 0;
 }

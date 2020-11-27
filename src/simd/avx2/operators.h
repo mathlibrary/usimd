@@ -199,4 +199,7 @@ V_FINLINE __m256i v_cmpge_u32(__m256i a, __m256i b)
 #define v_cmpge_f32(A, B)  _mm256_castps_si256(_mm256_cmp_ps(A, B, _CMP_GE_OQ)
 #define v_cmpge_f64(A, B)  _mm256_castpd_si256(_mm256_cmp_pd(A, B, _CMP_GE_OQ))
 
+#define v_max_f32 _mm256_max_ps
+#define v_max_f64 _mm256_max_pd
+
 #endif // _V_SIMD_AVX2_OPERATORS_H

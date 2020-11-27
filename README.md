@@ -123,14 +123,14 @@ int MultiplyIntList(int const *l1, int n)
 #ifdef V_SIMD
     int dim4 = n >> 2;
     n &= 3;
-    v_s32 sum_vec = s_setall_s32(1);
+    v_s32 sum_vec = v_setall_s32(1);
     v_s32 data_vec;
     for(;dim4 > 0; dim4--){
-        data_vec = s_load_s32(l1);
-        sum_vec = s_mulq_s32(sum_vec, data_vec);
+        data_vec = v_load_s32(l1);
+        sum_vec = v_mulq_s32(sum_vec, data_vec);
         l1+=4;
     }
-    s = s_mulr_s32(sum_vec);
+    s = v_mul_s32(sum_vec);
 #endif
     while (n--) {
         s *= (*l1++);

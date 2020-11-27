@@ -220,4 +220,7 @@
 #define v_cmple_f32(A, B) v_cmpge_f32(B, A)
 #define v_cmple_f64(A, B) v_cmpge_f64(B, A)
 
+#define v_max_f32 vmax_f32
+#define v_max_f64 vmax_f64
+
 #endif // _V_SIMD_NEON_OPERATORS_H

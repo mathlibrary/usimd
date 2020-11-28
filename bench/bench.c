@@ -9,6 +9,7 @@
 #include "../src/lib/vaddeven.c"
 #include "../src/lib/vfcond.c"
 #include "../src/lib/varrmax.c"
+#include "../src/lib/vmatrixmul.c"
 #include "bench.h"
 
 void bench_add(int scale)
@@ -191,12 +192,39 @@ void bench_varrmax(int scale)
     getMFlops(scale, timeg);
 }
 
+void bench_matrixmul(int M, int N, int K)
+{
+    FLOAT_T **mat1 = get2Darr(M, N);
+    FLOAT_T **mat2 = get2Darr(N, K);
+    FLOAT_T **result = get2Darr(M, K);
+    int loops = 10;
+    double timeg;
+    for (int i = 0; i < M; i++)
+    {
+        for (int j = 0; j < K; j++)
+        {
+            result[i][j] = 0;
+        }
+    }
+    printf("%s with scale %dx%d:\n", __FUNCTION__, M, N);
+    for (int l = 0; l < loops; l++)
+    {
+        begin();
+        usimd_matrixmul_t_mp(mat1, mat2, result, M, N, K);
+        end();
+        timeg += getsecs();
+    }
+    timeg /= loops;
+    getMFlops(M*N, timeg);
+}
+
 int main()
 {
     int scale = 1e6;
     int scalex2 = 2e6;
     int scalex4 = 4e7;
     int scalex8 = 8e7;
+    int x1024 = 1024;
     /*start benching
     bench_sum(scalex4);
     bench_sum(scalex8);
@@ -213,8 +241,9 @@ int main()
     bench_vaddeven(scalex4);
     bench_vaddeven(scalex8);
     bench_vfcond(scalex4);
-    bench_vfcond(scalex8);*/
+    bench_vfcond(scalex8);
     bench_varrmax(scalex4);
-    bench_varrmax(scalex8);
+    bench_varrmax(scalex8);*/
+    bench_matrixmul(x1024,x1024,x1024);
     return 0;
 }

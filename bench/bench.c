@@ -210,7 +210,7 @@ void bench_matrixmul(int M, int N, int K)
     for (int l = 0; l < loops; l++)
     {
         begin();
-        usimd_matrixmul_t_mp(mat1, mat2, result, M, N, K);
+        usimd_matrixmul_t_simd(mat1, mat2, result, M, N, K);
         end();
         timeg += getsecs();
     }

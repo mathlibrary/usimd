@@ -162,11 +162,23 @@ void TestVmatrixmul(CuTest *tc)
 		{15.000000, 30.000000, 45.000000, 60.000000, 75.000000},
 		{15.000000, 30.000000, 45.000000, 60.000000, 75.000000}};
 	FLOAT_T *p[5], *q[5], *r[5];
+	FLOAT_T tmp;
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 5; j++)
 		{
+			// init result
 			result_matrix[i][j] = 0;
+		}
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = i+1; j < 5; j++)
+		{
+			//transpose matrix_b
+			tmp = matrix_b[j][i];
+			matrix_b[j][i] = matrix_b[i][j];
+			matrix_b[i][j] = tmp;
 		}
 	}
 
@@ -177,12 +189,13 @@ void TestVmatrixmul(CuTest *tc)
 		r[i] = result_matrix[i];
 	}
 
-	usimd_matrixmul(p, q, r, 5, 5, 5);
+	usimd_matrixmul_t_simd(p, q, r, 5, 5, 5);
 	// check
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 5; j++)
 		{
+			//printf("%f ",result_matrix[i][j]);
 			CuAssertDblEquals(tc, expected[i][j], result_matrix[i][j], 1e-6);
 		}
 	}

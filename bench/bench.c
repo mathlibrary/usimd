@@ -10,6 +10,7 @@
 #include "../src/lib/vfcond.c"
 #include "../src/lib/varrmax.c"
 #include "../src/lib/vmatrixmul.c"
+#include "../src/lib/vpopcnt.c"
 #include "bench.h"
 
 void bench_add(int scale)
@@ -218,6 +219,22 @@ void bench_matrixmul(int M, int N, int K)
     getMFlops(M*N, timeg);
 }
 
+void bench_vpopcount(int scale)
+{
+    uint64_t *input = getIntArr(scale);
+    int loops = 10;
+    double timeg;
+    printf("%s with scale %d:\n", __FUNCTION__, scale);
+    for (int l = 0; l < loops; l++)
+    {
+        begin();
+        harley_seal(input, scale);
+        end();
+        timeg += getsecs();
+    }
+    getMFlops(scale, timeg);
+}
+
 int main()
 {
     int scale = 1e6;
@@ -243,7 +260,8 @@ int main()
     bench_vfcond(scalex4);
     bench_vfcond(scalex8);
     bench_varrmax(scalex4);
-    bench_varrmax(scalex8);*/
-    bench_matrixmul(x1024,x1024,x1024);
+    bench_varrmax(scalex8);
+    bench_matrixmul(x1024,x1024,x1024);*/
+    bench_vpopcount(1<<25);
     return 0;
 }

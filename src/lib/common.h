@@ -1,5 +1,6 @@
 #ifndef _COMMON_H
 #include<stdio.h>
+typedef unsigned long long uint64_t;
 #define _COMMON_H
 #ifdef DOUBLE_T
     #define FLOAT_T double

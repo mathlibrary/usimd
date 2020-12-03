@@ -65,11 +65,11 @@ function NEONDouble() {
 pureCFloat
 #pureCDouble
 if [ "$1" != "${arm_platform}" ]; then
-    SSE2Float
+    #SSE2Float
     #SSE2Double
-    SSE3Float
+    #SSE3Float
     #SSE3Double
-    AVX2Float
+    #AVX2Float
     #AVX2Double
     echo "finished"
 else

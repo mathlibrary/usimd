@@ -12,6 +12,7 @@
 #include "../src/lib/vfcond.c"
 #include "../src/lib/varrmax.c"
 #include "../src/lib/vmatrixmul.c"
+#include "../src/lib/vpopcnt.c"
 
 void TestVadd(CuTest *tc)
 {
@@ -173,7 +174,7 @@ void TestVmatrixmul(CuTest *tc)
 	}
 	for (int i = 0; i < 5; i++)
 	{
-		for (int j = i+1; j < 5; j++)
+		for (int j = i + 1; j < 5; j++)
 		{
 			//transpose matrix_b
 			tmp = matrix_b[j][i];
@@ -201,6 +202,28 @@ void TestVmatrixmul(CuTest *tc)
 	}
 }
 
+void TestVpopcnt(CuTest *tc)
+{
+	uint64_t data[16] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+	uint64_t result[16] = {1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1};
+	int scale = 16;
+	int sum = 33;
+#if V_SIMD > 128
+	__m256i vdata[16];
+	for (int i = 0; i < scale; i++)
+	{
+		int index = i % 4 * 4;
+		vdata[i] = _mm256_loadu_si256(&data[index]);
+	}
+	CuAssertIntEquals(tc, sum * 4, avx_hs(vdata, scale));
+#endif
+	CuAssertIntEquals(tc, sum, popcnt_native(data, scale));
+	CuAssertIntEquals(tc, sum, popcnt_treeadd(data, scale));
+	CuAssertIntEquals(tc, sum, popcnt_Wegner(data, scale));
+	CuAssertIntEquals(tc, sum, popcnt_WWG(data, scale));
+	CuAssertIntEquals(tc, sum, harley_seal(data, scale));
+}
+
 CuSuite *USIMDGetSuite()
 {
 	CuSuite *suite = CuSuiteNew();
@@ -215,5 +238,6 @@ CuSuite *USIMDGetSuite()
 	SUITE_ADD_TEST(suite, TestVfcond);
 	SUITE_ADD_TEST(suite, TestVarrmax);
 	SUITE_ADD_TEST(suite, TestVmatrixmul);
+	SUITE_ADD_TEST(suite, TestVpopcnt);
 	return suite;
 }

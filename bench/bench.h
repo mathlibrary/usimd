@@ -4,12 +4,14 @@
 #if defined(__CYGWIN32__) || defined(__linux__)
 #include <sys/time.h>
 #endif
-
+#define LIMIT 1<<25
 #if defined(__WIN32__) || defined(__WIN64__)
 #include <windows.h>
 #ifndef DELTA_EPOCH_IN_MICROSECS
 #define DELTA_EPOCH_IN_MICROSECS 11644473600000000ULL
 #endif
+
+
 
 int gettimeofday(struct timeval *tv, void *tz)
 {
@@ -76,6 +78,22 @@ FLOAT_T *getFinput(int scale)
   for (int i = 0; i < scale; i++)
   {
     input[i] = ((FLOAT_T)rand() / (FLOAT_T)RAND_MAX) - 0.5;
+  }
+  return input;
+}
+
+uint64_t *getIntArr(int scale)
+{
+  srand((unsigned long)time(0));
+  uint64_t *input;
+  if ((input = (uint64_t *)malloc(sizeof(uint64_t) * scale)) == NULL)
+  {
+    fprintf(stderr, "Out of Memory!!\n");
+    exit(1);
+  }
+  for (int i = 0; i < scale; i++)
+  {
+    input[i] = ((uint64_t)rand()*LIMIT / (uint64_t)RAND_MAX);
   }
   return input;
 }

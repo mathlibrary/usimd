@@ -151,6 +151,14 @@ V_FINLINE v_f64 v_cmul_f64(__m512d a, __m512d b)
  * The third one is almost the same as the second one but only works for
  * intel compiler/GCC 7.1/Clang 4, we still need to support older GCC.
  ***************************/
+V_FINLINE int v_sum_u32(__m512i a)
+{
+    __m256i half = _mm256_add_epi32(_mm512_castsi512_si256(a), _mm512_extracti32x8_epi32(a, 1));
+    __m128i quarter = _mm_add_epi32(_mm256_castsi256_si128(half), _mm256_extracti128_si256(half, 1));
+    quarter = _mm_hadd_epi32(quarter, quarter);
+    return _mm_cvtsi128_si32(_mm_hadd_epi32(quarter, quarter));
+}
+
 #ifdef V_HAVE_AVX512F_REDUCE
     #define v_sum_f32 _mm512_reduce_add_ps
     #define v_sum_f64 _mm512_reduce_add_pd

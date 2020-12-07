@@ -29,4 +29,15 @@
 #define v_cvt_b32_f32(A) ((v_b32) A)
 #define v_cvt_b64_f64(A) ((v_b64) A)
 
+// expand
+V_FINLINE void v_expand_u8_u16(v_u8 data, v_u16 *low, v_u16 *high) {
+    *low = vec_unpackhu(data);
+    *high = vec_unpacklu(data);
+}
+
+V_FINLINE void v_expand_u16_u32(v_u16 data, v_u32 *low, v_u32 *high) {
+    *low = vec_unpackhu(data);
+    *high = vec_unpacklu(data);
+}
+
 #endif // _V_SIMD_VSX_CVT_H

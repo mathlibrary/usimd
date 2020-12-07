@@ -29,4 +29,15 @@
 #define v_cvt_b32_f32(BL) vreinterpretq_u32_f32(BL)
 #define v_cvt_b64_f64(BL) vreinterpretq_u64_f64(BL)
 
+// expand
+V_FINLINE void v_expand_u8_u16(v_u8 data, v_u16 *low, v_u16 *high) {
+    *low = vmovl_u8(vget_low_u8(data));
+    *high = vmovl_u8(vget_high_u8(data));
+}
+
+V_FINLINE void v_expand_u16_u32(v_u16 data, v_u32 *low, v_u32 *high) {
+    *low = vmovl_u16(vget_low_u16(data));
+    *high = vmovl_u16(vget_high_u16(data));
+}
+
 #endif // _V_SIMD_NEON_CVT_H

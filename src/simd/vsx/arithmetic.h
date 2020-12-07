@@ -117,6 +117,12 @@
 #define v_nmulsub_f64 vec_nmadd
 
 // Horizontal add: Calculates the sum of all vector elements.
+V_FINLINE int v_sum_u32(v_u32 a)
+{
+    const v_u32 rs = vec_add(a, vec_sld(a, a, 8));
+    return vec_extract(vec_add(rs, vec_sld(rs, rs, 4)), 0);
+}
+
 V_FINLINE float v_sum_f32(v_f32 a)
 {
     v_f32 sum = vec_add(a, v_combineh_f32(a, a));

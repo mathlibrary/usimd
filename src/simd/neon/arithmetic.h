@@ -132,6 +132,12 @@
 #endif // V_SIMD_F64
 
 // Horizontal add: Calculates the sum of all vector elements.
+V_FINLINE int v_sum_u32(v_u32 a)
+{
+    uint32x2_t a0 = vpadd_u32(vget_low_u32(a), vget_high_u32(a)); 
+    return (unsigned)vget_lane_u32(vpadd_u32(a0, vget_high_u32(a)),0);
+}
+
 #if V_SIMD_F64
     #define v_sum_f32 vaddvq_f32
     #define v_sum_f64 vaddvq_f64

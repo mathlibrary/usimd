@@ -159,6 +159,13 @@ V_FINLINE v_f64 v_cmul_f64(__m128d a, __m128d b)
 #endif // !V_HAVE_FMA3
 
 // Horizontal add: Calculates the sum of all vector elements.
+V_FINLINE int v_sum_u32(__m128i a)
+{
+    __m128i t = _mm_add_epi32(a, _mm_srli_si128(a, 8));
+    t = _mm_add_epi32(t, _mm_srli_si128(t, 4));
+    return (unsigned)_mm_cvtsi128_si32(t);
+}
+
 V_FINLINE float v_sum_f32(__m128 a)
 {
 #ifdef V_HAVE_SSE3

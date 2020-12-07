@@ -93,7 +93,10 @@ typedef double     v_lanetype_f64;
 #ifdef V_HAVE_SSE4_1
 #include <smmintrin.h>
 #endif
-
+/** SSE42 **/
+#ifdef V_HAVE_SSE4_2
+#include <nmmintrin.h>
+#endif
 /** AVX **/
 #ifdef V_HAVE_AVX
 #include <immintrin.h>
@@ -103,6 +106,8 @@ typedef double     v_lanetype_f64;
 #ifdef V_HAVE_NEON
 #include <arm_neon.h>
 #endif
+
+
 
 #if defined(V_HAVE_AVX512F) && !defined(V_SIMD_FORCE_256) && !defined(V_SIMD_FORCE_128)
     #include "avx512/avx512.h"

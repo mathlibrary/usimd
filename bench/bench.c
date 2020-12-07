@@ -11,6 +11,7 @@
 #include "../src/lib/varrmax.c"
 #include "../src/lib/vmatrixmul.c"
 #include "../src/lib/vpopcnt.c"
+#include "../src/lib/vcountNonZero.c"
 #include "bench.h"
 
 void bench_add(int scale)
@@ -232,6 +233,24 @@ void bench_vpopcount(int scale)
         end();
         timeg += getsecs();
     }
+    timeg /= loops;
+    getMFlops(scale, timeg);
+}
+
+void bench_vcountNonZero(int scale)
+{
+    char *input = getCharArr(scale);
+    int loops = 10;
+    double timeg;
+    printf("%s with scale %d:\n", __FUNCTION__, scale);
+    for (int l = 0; l < loops; l++)
+    {
+        begin();
+        usimd_countNonZero(input, scale);
+        end();
+        timeg += getsecs();
+    }
+    timeg /= loops;
     getMFlops(scale, timeg);
 }
 
@@ -262,6 +281,6 @@ int main()
     bench_varrmax(scalex4);
     bench_varrmax(scalex8);
     bench_matrixmul(x1024,x1024,x1024);*/
-    bench_vpopcount(1<<25);
+    bench_vcountNonZero(1<<25);
     return 0;
 }

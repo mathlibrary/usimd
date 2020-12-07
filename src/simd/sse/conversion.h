@@ -29,4 +29,17 @@
 #define v_cvt_b32_f32(A) _mm_castps_si128(A)
 #define v_cvt_b64_f64(A) _mm_castpd_si128(A)
 
+// expand
+V_FINLINE void v_expand_u8_u16(v_u8 data, v_u16 *low, v_u16 *high) {
+    const __m128i z = _mm_setzero_si128();
+    *low = _mm_unpacklo_epi8(data, z);
+    *high = _mm_unpackhi_epi8(data, z);
+}
+
+V_FINLINE void v_expand_u16_u32(v_u16 data, v_u32 *low, v_u32 *high) {
+    const __m128i z = _mm_setzero_si128();
+    *low = _mm_unpacklo_epi16(data, z);
+    *high = _mm_unpackhi_epi16(data, z);
+}
+
 #endif // _V_SIMD_SSE_CVT_H

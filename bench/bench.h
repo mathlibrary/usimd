@@ -98,6 +98,22 @@ uint64_t *getIntArr(int scale)
   return input;
 }
 
+char *getCharArr(int scale)
+{
+  srand((unsigned long)time(0));
+  char *input;
+  if ((input = (char *)malloc(sizeof(char) * scale)) == NULL)
+  {
+    fprintf(stderr, "Out of Memory!!\n");
+    exit(1);
+  }
+  for (int i = 0; i < scale; i++)
+  {
+    input[i] = ((char)rand()*255 / (char)RAND_MAX);
+  }
+  return input;
+}
+
 FLOAT_T **get2Darr(int M, int N)
 {
   FLOAT_T **input;

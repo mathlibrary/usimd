@@ -13,6 +13,7 @@
 #include "../src/lib/varrmax.c"
 #include "../src/lib/vmatrixmul.c"
 #include "../src/lib/vpopcnt.c"
+#include "../src/lib/vcountNonZero.c"
 
 void TestVadd(CuTest *tc)
 {
@@ -224,6 +225,17 @@ void TestVpopcnt(CuTest *tc)
 	CuAssertIntEquals(tc, sum, harley_seal(data, scale));
 }
 
+void TestVcountnonzero(CuTest *tc)
+{
+	uchar data[80] = {
+    1, 0, 3, 4, 0, 6, 7, 8, 9, 0,1, 0, 3, 4, 0, 6, 7, 8, 9, 0,
+    1, 0, 3, 4, 0, 6, 7, 8, 9, 0,1, 0, 3, 4, 0, 6, 7, 8, 9, 0,
+    1, 0, 3, 4, 0, 6, 7, 8, 9, 0,1, 0, 3, 4, 0, 6, 7, 8, 9, 0,
+    1, 0, 3, 4, 0, 6, 7, 8, 9, 0,1, 1, 3, 4, 0, 6, 7, 8, 9, 0};
+	int scale = 80;
+	CuAssertIntEquals(tc, 57, usimd_countNonZero(data, scale));
+}
+
 CuSuite *USIMDGetSuite()
 {
 	CuSuite *suite = CuSuiteNew();
@@ -239,5 +251,6 @@ CuSuite *USIMDGetSuite()
 	SUITE_ADD_TEST(suite, TestVarrmax);
 	SUITE_ADD_TEST(suite, TestVmatrixmul);
 	SUITE_ADD_TEST(suite, TestVpopcnt);
+	SUITE_ADD_TEST(suite, TestVcountnonzero);
 	return suite;
 }

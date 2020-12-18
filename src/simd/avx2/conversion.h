@@ -30,16 +30,18 @@
 #define v_cvt_b64_f64(BL) _mm256_castpd_si256(BL)
 
 // expand
-V_FINLINE void v_expand_u8_u16(v_u8 data, v_u16 *low, v_u16 *high) {
-    const __m256i z = _mm256_setzero_si256();
-    *low = _mm256_unpacklo_epi8(data, z);
-    *high = _mm256_unpackhi_epi8(data, z);
+V_FINLINE v_u16x2 v_expand_u8_u16(v_u8 data) {
+    v_u16x2 r;
+    r.val[0] = _mm256_cvtepu8_epi16(_mm256_castsi256_si128(data));
+    r.val[1] = _mm256_cvtepu8_epi16(_mm256_extracti128_si256(data, 1));
+    return r;
 }
 
-V_FINLINE void v_expand_u16_u32(v_u16 data, v_u32 *low, v_u32 *high) {
-    const __m256i z = _mm256_setzero_si256();
-    *low = _mm256_unpacklo_epi16(data, z);
-    *high = _mm256_unpackhi_epi16(data, z);
+V_FINLINE v_u32x2 v_expand_u16_u32(v_u16 data) {
+    v_u32x2 r;
+    r.val[0] = _mm256_cvtepu16_epi32(_mm256_castsi256_si128(data));
+    r.val[1] = _mm256_cvtepu16_epi32(_mm256_extracti128_si256(data, 1));
+    return r;
 }
 
 #endif // _V_SIMD_AVX2_CVT_H

@@ -209,15 +209,7 @@ void TestVpopcnt(CuTest *tc)
 	uint64_t result[16] = {1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1};
 	int scale = 16;
 	int sum = 33;
-#if V_SIMD > 128
-	__m256i vdata[16];
-	for (int i = 0; i < scale; i++)
-	{
-		int index = i % 4 * 4;
-		vdata[i] = _mm256_loadu_si256(&data[index]);
-	}
-	CuAssertIntEquals(tc, sum * 4, avx_hs(vdata, scale));
-#endif
+
 	CuAssertIntEquals(tc, sum, popcnt_native(data, scale));
 	CuAssertIntEquals(tc, sum, popcnt_treeadd(data, scale));
 	CuAssertIntEquals(tc, sum, popcnt_Wegner(data, scale));

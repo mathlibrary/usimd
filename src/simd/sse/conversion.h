@@ -30,16 +30,20 @@
 #define v_cvt_b64_f64(A) _mm_castpd_si128(A)
 
 // expand
-V_FINLINE void v_expand_u8_u16(v_u8 data, v_u16 *low, v_u16 *high) {
+V_FINLINE v_u16x2 v_expand_u8_u16(v_u8 data) {
+    v_u16x2 r;
     const __m128i z = _mm_setzero_si128();
-    *low = _mm_unpacklo_epi8(data, z);
-    *high = _mm_unpackhi_epi8(data, z);
+    r.val[0] = _mm_unpacklo_epi8(data, z);
+    r.val[1] = _mm_unpackhi_epi8(data, z);
+    return r;
 }
 
-V_FINLINE void v_expand_u16_u32(v_u16 data, v_u32 *low, v_u32 *high) {
+V_FINLINE v_u32x2 v_expand_u16_u32(v_u16 data) {
+    v_u32x2 r;
     const __m128i z = _mm_setzero_si128();
-    *low = _mm_unpacklo_epi16(data, z);
-    *high = _mm_unpackhi_epi16(data, z);
+    r.val[0]  = _mm_unpacklo_epi16(data, z);
+    r.val[1]  = _mm_unpackhi_epi16(data, z);
+    return r;
 }
 
 #endif // _V_SIMD_SSE_CVT_H

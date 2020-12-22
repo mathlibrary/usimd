@@ -69,10 +69,10 @@ if [ "$1" != "${arm_platform}" ]; then
     #SSE2Double
     #SSE3Float
     #SSE3Double
-    #AVX2Float
+    AVX2Float
     #AVX2Double
-    echo "finished"
 else
     NEONFloat
     NEONDouble
 fi
+echo "finished"

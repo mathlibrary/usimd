@@ -98,6 +98,22 @@ uint64_t *getIntArr(int scale)
   return input;
 }
 
+uint32_t *getInt32Arr(int scale)
+{
+  srand((unsigned long)time(0));
+  uint32_t *input;
+  if ((input = (uint32_t *)malloc(sizeof(uint32_t) * scale)) == NULL)
+  {
+    fprintf(stderr, "Out of Memory!!\n");
+    exit(1);
+  }
+  for (int i = 0; i < scale; i++)
+  {
+    input[i] = rand()%10000;
+  }
+  return input;
+}
+
 char *getCharArr(int scale)
 {
   srand((unsigned long)time(0));

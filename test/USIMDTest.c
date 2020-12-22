@@ -14,6 +14,7 @@
 #include "../src/lib/vmatrixmul.c"
 #include "../src/lib/vpopcnt.c"
 #include "../src/lib/vcountNonZero.c"
+#include "../src/lib/vsort.c"
 
 void TestVadd(CuTest *tc)
 {
@@ -228,6 +229,21 @@ void TestVcountnonzero(CuTest *tc)
 	CuAssertIntEquals(tc, 57, usimd_countNonZero(data, scale));
 }
 
+void TestVsort(CuTest *tc)
+{
+	int scale = 34;
+    uint32_t arr[34] = {3,6,7,2,3,4,21,45,6,10,3,4,21,45,6,10,8,
+                          3,6,7,2,3,4,21,45,6,10,3,4,21,45,6,10,8};
+	uint32_t output1[34], output2[34];
+	memcpy(output1,arr,sizeof(uint32_t)*scale);
+	qsort(output1,scale,sizeof(uint32_t),comp);
+	memcpy(output2,arr,sizeof(uint32_t)*scale);
+    usimd_quicksort(output2, 0, scale-1);
+	for(int i=0;i<scale;i++) {
+		CuAssertDblEquals(tc, output1[i], output1[i], 1e-6);
+	}
+}
+
 CuSuite *USIMDGetSuite()
 {
 	CuSuite *suite = CuSuiteNew();
@@ -244,5 +260,6 @@ CuSuite *USIMDGetSuite()
 	SUITE_ADD_TEST(suite, TestVmatrixmul);
 	SUITE_ADD_TEST(suite, TestVpopcnt);
 	SUITE_ADD_TEST(suite, TestVcountnonzero);
+	SUITE_ADD_TEST(suite, TestVsort);
 	return suite;
 }

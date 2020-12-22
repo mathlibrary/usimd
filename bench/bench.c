@@ -12,6 +12,7 @@
 #include "../src/lib/vmatrixmul.c"
 #include "../src/lib/vpopcnt.c"
 #include "../src/lib/vcountNonZero.c"
+#include "../src/lib/vsort.c"
 #include "bench.h"
 
 void bench_add(int scale)
@@ -254,6 +255,23 @@ void bench_vcountNonZero(int scale)
     getMFlops(scale, timeg);
 }
 
+void bench_vsort(int scale)
+{
+    int loops = 1;
+    double timeg;
+    printf("%s with scale %d:\n", __FUNCTION__, scale);
+    for (int l = 0; l < loops; l++)
+    {
+        uint32_t *input = getInt32Arr(scale);
+        begin();
+        usimd_quicksort(input,0, scale-1);
+        end();
+        timeg += getsecs();
+    }
+    timeg /= loops;
+    getMFlops(scale, timeg);
+}
+
 int main()
 {
     int scale = 1e6;
@@ -280,7 +298,8 @@ int main()
     bench_vfcond(scalex8);
     bench_varrmax(scalex4);
     bench_varrmax(scalex8);
-    bench_matrixmul(x1024,x1024,x1024);*/
-    bench_vcountNonZero(1<<25);
+    bench_matrixmul(x1024,x1024,x1024);
+    bench_vcountNonZero(1<<25);*/
+    bench_vsort(scalex4);
     return 0;
 }

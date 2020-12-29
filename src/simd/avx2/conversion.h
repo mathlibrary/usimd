@@ -29,6 +29,9 @@
 #define v_cvt_b32_f32(BL) _mm256_castps_si256(BL)
 #define v_cvt_b64_f64(BL) _mm256_castpd_si256(BL)
 
+V_FINLINE s_uint64 v_tobits_b32(v_b32 a)
+{ return (s_uint8)_mm256_movemask_ps(_mm256_castsi256_ps(a)); }
+
 // expand
 V_FINLINE v_u16x2 v_expand_u8_u16(v_u8 data) {
     v_u16x2 r;

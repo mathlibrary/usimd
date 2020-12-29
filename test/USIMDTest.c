@@ -1,5 +1,6 @@
 #include "./cutest/CuTest.h"
 #include "../src/lib/common.h"
+#include "../bench/bench.h"
 
 #include "../src/lib/vadd.c"
 #include "../src/lib/vmuladd.c"
@@ -231,10 +232,14 @@ void TestVcountnonzero(CuTest *tc)
 
 void TestVsort(CuTest *tc)
 {
-	int scale = 34;
-    uint32_t arr[34] = {3,6,7,2,3,4,21,45,6,10,3,4,21,45,6,10,8,
-                          3,6,7,2,3,4,21,45,6,10,3,4,21,45,6,10,8};
-	uint32_t output1[34], output2[34];
+	int scale = 100;
+    uint32_t *arr = getInt32Arr(scale);
+	uint32_t *output1 = getInt32Arr(scale);
+	uint32_t *output2 = getInt32Arr(scale);
+	int count = scale;
+	for(int i=0;i<scale;i++) {
+		arr[i] = count--;
+	}
 	memcpy(output1,arr,sizeof(uint32_t)*scale);
 	qsort(output1,scale,sizeof(uint32_t),comp);
 	memcpy(output2,arr,sizeof(uint32_t)*scale);

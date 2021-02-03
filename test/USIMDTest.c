@@ -1,21 +1,7 @@
 #include "./cutest/CuTest.h"
 #include "../src/lib/common.h"
 #include "../bench/bench.h"
-
-#include "../src/lib/vadd.c"
-#include "../src/lib/vmuladd.c"
-#include "../src/lib/vcmul.c"
-#include "../src/lib/vsum.c"
-#include "../src/lib/vdot.c"
-#include "../src/lib/vdaxpy.c"
-#include "../src/lib/vaddindex.c"
-#include "../src/lib/vaddeven.c"
-#include "../src/lib/vfcond.c"
-#include "../src/lib/varrmax.c"
-#include "../src/lib/vmatrixmul.c"
-#include "../src/lib/vpopcnt.c"
-#include "../src/lib/vcountNonZero.c"
-#include "../src/lib/vsort.c"
+#include "../src/lib/lib.h"
 
 void TestVadd(CuTest *tc)
 {
@@ -222,10 +208,10 @@ void TestVpopcnt(CuTest *tc)
 void TestVcountnonzero(CuTest *tc)
 {
 	uchar data[80] = {
-    1, 0, 3, 4, 0, 6, 7, 8, 9, 0,1, 0, 3, 4, 0, 6, 7, 8, 9, 0,
-    1, 0, 3, 4, 0, 6, 7, 8, 9, 0,1, 0, 3, 4, 0, 6, 7, 8, 9, 0,
-    1, 0, 3, 4, 0, 6, 7, 8, 9, 0,1, 0, 3, 4, 0, 6, 7, 8, 9, 0,
-    1, 0, 3, 4, 0, 6, 7, 8, 9, 0,1, 1, 3, 4, 0, 6, 7, 8, 9, 0};
+		1, 0, 3, 4, 0, 6, 7, 8, 9, 0, 1, 0, 3, 4, 0, 6, 7, 8, 9, 0,
+		1, 0, 3, 4, 0, 6, 7, 8, 9, 0, 1, 0, 3, 4, 0, 6, 7, 8, 9, 0,
+		1, 0, 3, 4, 0, 6, 7, 8, 9, 0, 1, 0, 3, 4, 0, 6, 7, 8, 9, 0,
+		1, 0, 3, 4, 0, 6, 7, 8, 9, 0, 1, 1, 3, 4, 0, 6, 7, 8, 9, 0};
 	int scale = 80;
 	CuAssertIntEquals(tc, 57, usimd_countNonZero(data, scale));
 }
@@ -233,20 +219,31 @@ void TestVcountnonzero(CuTest *tc)
 void TestVsort(CuTest *tc)
 {
 	int scale = 100;
-    uint32_t *arr = getInt32Arr(scale);
+	uint32_t *arr = getInt32Arr(scale);
 	uint32_t *output1 = getInt32Arr(scale);
 	uint32_t *output2 = getInt32Arr(scale);
 	int count = scale;
-	for(int i=0;i<scale;i++) {
+	for (int i = 0; i < scale; i++)
+	{
 		arr[i] = count--;
 	}
-	memcpy(output1,arr,sizeof(uint32_t)*scale);
-	qsort(output1,scale,sizeof(uint32_t),comp);
-	memcpy(output2,arr,sizeof(uint32_t)*scale);
-    usimd_quicksort(output2, 0, scale-1);
-	for(int i=0;i<scale;i++) {
+	memcpy(output1, arr, sizeof(uint32_t) * scale);
+	qsort(output1, scale, sizeof(uint32_t), comp);
+	memcpy(output2, arr, sizeof(uint32_t) * scale);
+	usimd_quicksort(output2, 0, scale - 1);
+	for (int i = 0; i < scale; i++)
+	{
 		CuAssertDblEquals(tc, output1[i], output1[i], 1e-6);
 	}
+}
+
+void TestVdistance(CuTest *tc)
+{
+	FLOAT_T input1[16] = {1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1};
+	FLOAT_T input2[16] = {1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8};
+	FLOAT_T res = usimd_distance(16, input1, input2);
+	FLOAT_T expected = 12.727922;
+	CuAssertDblEquals(tc, expected, res, 1e-6);
 }
 
 CuSuite *USIMDGetSuite()
@@ -266,5 +263,6 @@ CuSuite *USIMDGetSuite()
 	SUITE_ADD_TEST(suite, TestVpopcnt);
 	SUITE_ADD_TEST(suite, TestVcountnonzero);
 	SUITE_ADD_TEST(suite, TestVsort);
+	SUITE_ADD_TEST(suite, TestVdistance);
 	return suite;
 }

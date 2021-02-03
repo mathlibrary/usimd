@@ -1,18 +1,4 @@
-/**/
-#include "../src/lib/vadd.c"
-#include "../src/lib/vsum.c"
-#include "../src/lib/vdot.c"
-#include "../src/lib/vmuladd.c"
-#include "../src/lib/vdaxpy.c"
-#include "../src/lib/vcmul.c"
-#include "../src/lib/vaddindex.c"
-#include "../src/lib/vaddeven.c"
-#include "../src/lib/vfcond.c"
-#include "../src/lib/varrmax.c"
-#include "../src/lib/vmatrixmul.c"
-#include "../src/lib/vpopcnt.c"
-#include "../src/lib/vcountNonZero.c"
-#include "../src/lib/vsort.c"
+#include "../src/lib/lib.h"
 #include "bench.h"
 
 void bench_add(int scale)
@@ -272,6 +258,25 @@ void bench_vsort(int scale)
     getMFlops(scale, timeg);
 }
 
+void bench_distance(int scale)
+{
+    FLOAT_T *input1 = getFinput(scale);
+    FLOAT_T *input2 = getFinput(scale);
+    int loops = 10;
+    double res;
+    double timeg;
+    printf("%s with scale %d:\n", __FUNCTION__, scale);
+    for (int l = 0; l < loops; l++)
+    {
+        begin();
+        res = usimd_distance(scale, input1, input2);
+        end();
+        timeg += getsecs();
+    }
+    timeg /= loops;
+    getMFlops(scale, timeg);
+}
+
 int main()
 {
     int scale = 1e6;
@@ -299,7 +304,8 @@ int main()
     bench_varrmax(scalex4);
     bench_varrmax(scalex8);
     bench_matrixmul(x1024,x1024,x1024);
-    bench_vcountNonZero(1<<25);*/
-    bench_vsort(scalex4);
+    bench_vcountNonZero(1<<25);
+    bench_vsort(scalex4);*/
+    bench_distance(1e8);
     return 0;
 }
